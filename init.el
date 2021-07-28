@@ -132,7 +132,8 @@
     :hook (emacs-startup . recentf-mode))
 
 (use-package magit
-    :straight t)
+    :straight t
+    :commands (magit))
 
 ;; Themeing
 
