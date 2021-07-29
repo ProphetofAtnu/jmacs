@@ -135,6 +135,10 @@
     :straight t
     :commands (magit))
 
+(use-package markdown-mode
+    :straight t
+    :mode "\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'")
+
 ;; Themeing
 
 ;; (use-package ample-theme
@@ -154,6 +158,7 @@
     :straight t
     :init
     (mood-line-mode))
+
 
 (set-face-attribute 'default t :font "Fira Code-14")
 (set-frame-font "Fira Code-14" nil t)
