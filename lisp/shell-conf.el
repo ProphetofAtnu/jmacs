@@ -4,7 +4,7 @@
 (require 'use-package)
 
 ;; (setq system-uses-terminfo nil)
-(setq explicit-shell-file-name "/usr/local/bin/bash")
+;; (setq explicit-shell-file-name "/usr/local/bin/bash")
 
 (use-package shell-pop
   :straight t
