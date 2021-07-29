@@ -9,6 +9,8 @@
 
 (use-package cider
   :straight t
-  :after (clojure-mode))
+  :after (clojure-mode)
+  :config
+  (add-hook 'cider-repl-mode-hook 'company-mode))
 
 (provide 'clojure-conf)

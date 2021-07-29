@@ -182,6 +182,7 @@
 (require 'shell-conf)
 (require 'org-conf)
 (require 'python-conf)
+(require 'docker-conf)
 
 
 (load custom-file)
