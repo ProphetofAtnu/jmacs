@@ -54,6 +54,8 @@
 (local-leader-def
   :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
   "e" 'eval-last-sexp
+  "d" 'eval-defun
+  "r" 'eval-region
   "m" 'macrostep-mode)
   
 

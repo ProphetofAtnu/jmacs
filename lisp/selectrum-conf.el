@@ -16,7 +16,8 @@
     :general
     (prefix-file-map
      "r" 'consult-recent-file
-     "F" 'consult-find)
+     "F" 'consult-find
+     "b" 'consult-bookmark)
     (prefix-search-map
      "s" 'consult-line
      "r" 'consult-ripgrep

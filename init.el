@@ -61,7 +61,9 @@
     :delight
     :init 
     (setq evil-want-C-u-scroll t
-          evil-undo-system 'undo-redo)
+          evil-undo-system 'undo-redo
+          evil-ex-search-vim-style-regexp t
+          evil-search-module 'evil-search)
 
     (evil-mode))
 
@@ -106,6 +108,9 @@
     :config
     (add-hook 'visual-line-mode-hook #'evil-better-visual-line-on))
 
+(use-package avy
+    :straight t)
+
 (use-package which-key
     :straight t
     :delight
@@ -117,10 +122,20 @@
     :init
     (require 'core/bindings))
 
+(use-package evil-avy
+    :straight t
+    :general
+    (:states '(normal)
+             "s" 'evil-avy-goto-char-2
+             "g l" 'evil-avy-goto-line))
+
 
 (use-package company
     :straight t
     :hook ((prog-mode comint-mode) . company-mode)
+    :general
+    (:states '(insert emacs)
+             "M-TAB" 'company-complete)
     :config
     (setq company-minimum-prefix-length 1))
 
@@ -140,15 +155,6 @@
     :mode "\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'")
 
 ;; Themeing
-
-;; (use-package ample-theme
-;;   :init (progn (load-theme 'ample t t)
-;;                (load-theme 'ample-flat t t)
-;;                (load-theme 'ample-light t t)
-;;                (enable-theme 'ample))
-;;   :defer t
-;;   :straight t)
-
 (use-package bliss-theme
     :straight t
     :init
@@ -159,6 +165,9 @@
     :init
     (mood-line-mode))
 
+(use-package exec-path-from-shell
+    :straight t
+    :hook (emacs-startup . exec-path-from-shell-initialize))
 
 (set-face-attribute 'default t :font "Fira Code-14")
 (set-frame-font "Fira Code-14" nil t)

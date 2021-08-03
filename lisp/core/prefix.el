@@ -30,13 +30,15 @@
  :prefix-command 'prefix-file-command
  :prefix-map 'prefix-file-map
  "f" 'find-file
- "s" 'save-buffer)
+ "s" 'save-buffer
+ "o" 'find-file-other-window)
  
 
 (general-define-key
  :prefix-command 'prefix-emacs-command
  :prefix-map 'prefix-emacs-map
- "r" 'restart-emacs)
+ "r" 'restart-emacs
+ "q" 'save-buffers-kill-emacs)
 
 (general-define-key
  :prefix-command 'prefix-window-command
