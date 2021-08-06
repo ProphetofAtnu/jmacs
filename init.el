@@ -129,13 +129,13 @@
              "s" 'evil-avy-goto-char-2
              "g l" 'evil-avy-goto-line))
 
-
 (use-package company
     :straight t
     :hook ((prog-mode comint-mode) . company-mode)
     :general
     (:states '(insert emacs)
-             "M-TAB" 'company-complete)
+             "C-TAB" 'company-complete
+             "C-<tab>" 'company-complete)
     :config
     (setq company-minimum-prefix-length 1))
 
@@ -169,8 +169,8 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-14")
-(set-frame-font "Fira Code-14" nil t)
+(set-face-attribute 'default t :font "Fira Code-12")
+(set-frame-font "Fira Code-12" nil t)
 
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
@@ -192,6 +192,8 @@
 (require 'org-conf)
 (require 'python-conf)
 (require 'docker-conf)
+(require 'lsp-conf)
 
 
 (load custom-file)
+(put 'dired-find-alternate-file 'disabled nil)

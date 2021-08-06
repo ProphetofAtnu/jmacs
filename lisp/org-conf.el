@@ -13,8 +13,10 @@
              org-capture)
   :init
   (defvar org-directory "~/org")
-
-  :straight t)
+  :straight t
+  :config
+  (add-hook 'org-mode-hook 'company-mode)
+  (add-hook 'org-mode-hook 'org-display-inline-images))
   
 (use-package deft
   :straight t

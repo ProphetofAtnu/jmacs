@@ -28,7 +28,8 @@
     (prefix-buffer-map
      "b" 'consult-buffer)
     :config
-    (setq xref-show-xrefs-function 'consult-xref))
+    (setq xref-show-xrefs-function 'consult-xref
+          consult-preview-key (kbd "M-.")))
 
 (use-package embark
   :straight t
