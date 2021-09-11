@@ -8,6 +8,9 @@
 
 (use-package shell-pop
   :straight t
+  :general
+  (override
+   "C-'" 'shell-pop)
   :config
   (setq shell-pop-full-span t))
   

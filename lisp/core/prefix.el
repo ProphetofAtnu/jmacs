@@ -63,4 +63,13 @@
 (define-prefix-map search
     "o" 'occur)
 
+(define-prefix-map insert
+    "y" 'yas-insert-snippet
+    "a" 'yas-new-snippet
+    "r" 'insert-register
+    "b" 'insert-buffer
+    "!" 'auto-insert)
+
+(define-prefix-map project)
+
 (provide 'core/prefix)

@@ -148,7 +148,10 @@
 
 (use-package magit
     :straight t
-    :commands (magit))
+    :commands (magit)
+    :general
+    (:keymaps 'prefix-project-map
+              "m" 'magit))
 
 (use-package markdown-mode
     :straight t
@@ -169,8 +172,8 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-12")
-(set-frame-font "Fira Code-12" nil t)
+(set-face-attribute 'default t :font "Fira Code-14")
+(set-frame-font "Fira Code-14" nil t)
 
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
@@ -179,6 +182,38 @@
     :straight t
     :commands (helpful-symbol
                helpful-key))
+
+(use-package yasnippet
+    :straight t
+    :hook (emacs-startup . yas-global-mode)
+    :config
+    (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand))
+
+(use-package insert-time
+    :straight t
+    :general
+    (:keymaps 'prefix-insert-map
+              "t" 'insert-date-time
+              "T" 'insert-time))
+
+(use-package projectile
+    :straight t
+    :hook (emacs-startup . projectile-mode)
+    :general
+    (:keymaps 'prefix-project-map
+              "s" 'projectile-switch-project
+              "a" 'projectile-add-known-project
+              "R" 'projectile-remove-current-project-from-known-projects
+              "t" 'projectile-regenerate-tags
+              "g" 'projectile-ripgrep
+              "!" 'projectile-cleanup-known-projects
+              "x" 'projectile-run-project
+              "X" 'projectile-compile-project
+              "f" 'projectile-find-file-dwim
+              "c" 'projectile-commander
+              "C" 'projectile-kill-buffers))    
+              
+              
 
 (cond
   ((eq system-type 'darwin) (require 'macos)))
@@ -193,7 +228,7 @@
 (require 'python-conf)
 (require 'docker-conf)
 (require 'lsp-conf)
-
+(require 'racket-conf)
 
 (load custom-file)
 (put 'dired-find-alternate-file 'disabled nil)

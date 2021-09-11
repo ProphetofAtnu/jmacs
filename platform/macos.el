@@ -3,8 +3,9 @@
 
 (progn
   (setq mac-option-modifier 'meta)
-  (setq mac-command-modifier 'hyper))
-
+  (setq mac-command-modifier 'hyper)
+  (setq inferior-lisp-program "sbcl"))
+ 
 ;; Generic Set of typical mac stuff
 (global-set-key [(hyper a)] 'mark-whole-buffer)
 (global-set-key [(hyper v)] 'yank)

@@ -8,6 +8,7 @@
     :prefix "SPC"
     :non-normal-prefix "C-SPC")
 
+
 (global-leader-def
     :keymaps '(override)
   "" nil
@@ -25,7 +26,9 @@
         :prefix-map prefix-window-map
         :wk "Window")
   "h" (mount-prefix-map help "Help")
-  "s" (mount-prefix-map search "Search"))
+  "s" (mount-prefix-map search "Search")
+  "i" (mount-prefix-map insert "Insert")
+  "v" (mount-prefix-map project "Project"))
 
 (general-create-definer local-leader-def
     :states '(normal motion insert emacs override)
