@@ -12,17 +12,16 @@
     :defer t
     :hook (python-mode . lsp-deferred))
 
-;; (use-package company-anaconda
-;;     :straight t
-;;     :commands (company-anaconda))
+(use-package lsp-pyright
+    :straight t
+    :after (python))
 
-
-;; (use-package anaconda-mode
-;;   :straight t
-;;   :after (python)
-;;   :hook (python-mode . anaconda-mode)
-;;   :config
-;;   (add-to-list 'company-backends 'company-anaconda))
+(use-package python-black
+    :straight t
+    :general
+    (local-leader-def
+        :keymaps '(python-mode-map)
+      "=" 'python-black-buffer))          
 
 (use-package python-x
   :straight t

@@ -9,7 +9,6 @@
 
 (use-package org
   :defer t
-  :straight t
   :commands (org-agenda
              org-capture)
   :init

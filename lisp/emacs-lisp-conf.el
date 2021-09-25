@@ -2,6 +2,7 @@
 
 (require 'use-package)
 (require 'general)
+(require 'core/formatting)
 
 (use-package helpful
   :straight t
@@ -41,6 +42,7 @@
             (lambda () (setq-local lisp-indent-function #'common-lisp-indent-function)))
   (add-hook 'emacs-lisp-mode-hook
             '(lambda ()
+               (setq-local format-action 'parinfer-indent-buffer)              
                (setq-local evil-lookup-func #'helpful-at-point)))
   (add-hook 'emacs-lisp-mode-hook
             '(lambda ()
