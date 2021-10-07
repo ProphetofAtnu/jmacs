@@ -183,6 +183,11 @@
     :commands (helpful-symbol
                helpful-key))
 
+(use-package ace-window
+    :straight t
+    :commands (ace-window
+               ace-swap-window))
+
 (use-package yasnippet
     :straight t
     :hook (emacs-startup . yas-global-mode)

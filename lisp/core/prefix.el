@@ -43,6 +43,8 @@
 (general-define-key
  :prefix-command 'prefix-window-command
  :prefix-map 'prefix-window-map
+ "t" 'ace-swap-window
+ "w" 'ace-window
  "h" 'evil-window-left
  "j" 'evil-window-down
  "k" 'evil-window-up
