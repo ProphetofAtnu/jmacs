@@ -74,4 +74,7 @@
 
 (define-prefix-map project)
 
+(define-prefix-map utility 
+    "l" 'list-processes)
+
 (provide 'core/prefix)

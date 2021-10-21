@@ -25,6 +25,7 @@
   "w" '(:prefix-command prefix-window-command
         :prefix-map prefix-window-map
         :wk "Window")
+  "u" (mount-prefix-map utility "Utility")
   "h" (mount-prefix-map help "Help")
   "s" (mount-prefix-map search "Search")
   "i" (mount-prefix-map insert "Insert")
