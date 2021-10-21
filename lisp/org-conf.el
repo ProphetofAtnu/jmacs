@@ -36,7 +36,7 @@
   (global-leader-def
       :keymaps 'override
       "n" 'deft
-    "N" 'deft-new-file)
+      "N" 'deft-new-file)
   :config
   (add-to-list 'evil-emacs-state-modes 'deft-mode)
   (setq deft-recursive t)

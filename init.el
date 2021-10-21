@@ -161,7 +161,10 @@
 (use-package bliss-theme
     :straight t
     :init
-    (load-theme 'bliss t))
+    (load-theme 'bliss t)
+    :config
+    (set-face-background 'highlight "#3d3d3d"))
+    
 
 (use-package mood-line
     :straight t
@@ -174,7 +177,6 @@
 
 (set-face-attribute 'default t :font "Fira Code-12")
 (set-frame-font "Fira Code-12" nil t)
-
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
@@ -194,12 +196,33 @@
     :config
     (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand))
 
+(use-package tab-bar
+    :init
+  (setq tab-bar-show nil))
+
 (use-package insert-time
     :straight t
     :general
     (:keymaps 'prefix-insert-map
               "t" 'insert-date-time
               "T" 'insert-time))
+
+(use-package all-the-icons
+    :straight t)
+
+(use-package hl-spotlight
+    :straight t)
+
+(use-package hl-line+
+    :straight t)
+
+(use-package treemacs
+    :straight t
+    :commands (treemacs)
+    :general
+    (global-leader-def
+        :keymaps 'override
+        "t" 'treemacs))
 
 (use-package projectile
     :straight t
@@ -234,6 +257,7 @@
 (require 'docker-conf)
 (require 'lsp-conf)
 (require 'racket-conf)
+(require 'web-conf)
 
 (load custom-file)
 (put 'dired-find-alternate-file 'disabled nil)
