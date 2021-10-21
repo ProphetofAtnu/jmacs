@@ -258,6 +258,7 @@
 (require 'lsp-conf)
 (require 'racket-conf)
 (require 'web-conf)
+(require 'window-conf)
 
 (load custom-file)
 (put 'dired-find-alternate-file 'disabled nil)

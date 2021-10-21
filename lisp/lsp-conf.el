@@ -8,12 +8,6 @@
     :straight t
     :hook (lsp-mode . (lambda ()
                         (lsp-ui-mode)
-                        (setq-local evil-lookup-func 'lsp-describe-thing-at-point)))
-    :config
-    (add-to-list 'display-buffer-alist
-                 '("\\*lsp-help\\*" .
-                   (display-buffer-at-bottom .
-                    ((window-parameters . ((close-on-quit t
-                                                          (window-height . 0.25)))))))))
+                        (setq-local evil-lookup-func 'lsp-describe-thing-at-point))))
 
 (provide 'lsp-conf)
