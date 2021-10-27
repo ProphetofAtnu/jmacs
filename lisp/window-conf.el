@@ -11,6 +11,10 @@
          (display-buffer-reuse-mode-window display-buffer-at-bottom)
          (window-parameters (close-on-quit . t))
          (window-height . 0.25))
+        ("\\*Process List\\*"
+         (display-buffer-reuse-mode-window display-buffer-at-bottom)
+         (window-parameters (close-on-quit . t))
+         (window-height . 0.25))
         ("\\*helpful.*"
          (display-buffer-reuse-mode-window display-buffer-at-bottom)
          (window-parameters (close-on-quit . t))
