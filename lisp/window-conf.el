@@ -4,7 +4,7 @@
 
 (setq display-buffer-alist
       '(("\\*lsp-help\\*"
-         ((display-buffer-reuse-mode-window display-buffer-at-bottom))
+         (display-buffer-reuse-mode-window display-buffer-at-bottom)
          (window-parameters (close-on-quit . t))
          (window-height . 0.25))
         ("\\*Help\\*"

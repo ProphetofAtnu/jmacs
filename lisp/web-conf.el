@@ -3,7 +3,11 @@
 (use-package js2-mode
     :straight t
     :mode (("\\.js\\'" . js2-mode)
-           ("\\.jsx\\'" . js2-jsx-mode)))
+           ("\\.jsx\\'" . js2-jsx-mode))
+    :general
+    (:keymaps 'js2-mode-map
+              :modes 'insert
+              "RET" 'js2-line-break))
 
 (use-package typescript-mode
     :straight t)

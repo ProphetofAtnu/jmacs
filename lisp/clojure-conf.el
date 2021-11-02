@@ -24,12 +24,18 @@
       "w" 'cider-repl-set-ns
       "a" 'cider-apropos
       "s" 'cider-scratch
+      "S" 'cider-scratch-reset
       "n" 'cider-browse-ns
       "=" 'cider-format-buffer
       "u" 'cider-undef
       "?" 'cider-classpath
-      "z" 'cider-load-buffer-and-switch-to-repl-buffer)
-
+      "z" 'cider-load-buffer-and-switch-to-repl-buffer
+      "l" 'cider-inspect-last-sexp)
+    (:keymaps 'cider-browse-ns-mode-map
+     :states '(normal motion visual)    
+     "q" 'cider-popup-buffer-quit-function
+     "RET" 'cider-browse-ns-operate-at-point    
+     "<return>" 'cider-browse-ns-operate-at-point)    
     :config
     (add-hook 'cider-repl-mode-hook #'cider-company-enable-fuzzy-completion)
     (add-hook 'cider-mode-hook #'cider-company-enable-fuzzy-completion)

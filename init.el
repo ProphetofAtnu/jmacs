@@ -210,12 +210,6 @@
 (use-package all-the-icons
     :straight t)
 
-(use-package hl-spotlight
-    :straight t)
-
-(use-package hl-line+
-    :straight t)
-
 (use-package treemacs
     :straight t
     :commands (treemacs)
