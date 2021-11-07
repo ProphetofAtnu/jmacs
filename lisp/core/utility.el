@@ -63,4 +63,15 @@
  (mapcar #'cadr
          (-partition 2 plist))) 
 
+(defun use-local-pairs (hook pairs)
+  (add-hook hook
+            (lambda ()
+              (require 'elec-pair)
+              (make-local-variable
+               'electric-pair-pairs)
+              (dolist (p pairs)
+                (add-to-list 'electric-pair-pairs p))
+              (electric-pair-local-mode +1))))
+
+
 (provide 'core/utility)

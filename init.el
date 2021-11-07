@@ -30,6 +30,9 @@
 
 (setq create-lockfiles nil)
 
+(setq backup-directory-alist `((".*" . ,temporary-file-directory))
+      auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "platform" user-emacs-directory))
 
@@ -175,8 +178,8 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-12")
-(set-frame-font "Fira Code-12" nil t)
+(set-face-attribute 'default t :font "Fira Code-14")
+(set-frame-font "Fira Code-14" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
@@ -218,6 +221,12 @@
         :keymaps 'override
         "t" 'treemacs))
 
+(use-package hydra
+    :straight t)
+
+(use-package elec-pair
+    :init (electric-pair-mode))
+
 (use-package projectile
     :straight t
     :hook (emacs-startup . projectile-mode)
@@ -234,8 +243,6 @@
               "f" 'projectile-find-file-dwim
               "c" 'projectile-commander
               "C" 'projectile-kill-buffers))    
-              
-              
 
 (cond
   ((eq system-type 'darwin) (require 'macos)))
@@ -252,6 +259,7 @@
 (require 'lsp-conf)
 (require 'racket-conf)
 (require 'web-conf)
+(require 'scala-conf)
 (require 'window-conf)
 
 (load custom-file)
