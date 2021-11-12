@@ -72,7 +72,8 @@
 
 (use-package evil-collection
     :straight t
-    :init 
+    :config
+    (delq 'lispy evil-collection-mode-list)
     (evil-collection-init))
 
 (use-package evil-goggles
@@ -178,8 +179,8 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-14")
-(set-frame-font "Fira Code-14" nil t)
+(set-face-attribute 'default t :font "Fira Code-12")
+(set-frame-font "Fira Code-12" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
@@ -219,7 +220,7 @@
     :general
     (global-leader-def
         :keymaps 'override
-        "t" 'treemacs))
+        "t" 'treemacs-select-window))
 
 (use-package hydra
     :straight t)
@@ -247,6 +248,7 @@
 (cond
   ((eq system-type 'darwin) (require 'macos)))
 
+(require 'window-conf)
 (require 'sexp-conf)
 (require 'emacs-lisp-conf)
 (require 'selectrum-conf)
@@ -260,7 +262,6 @@
 (require 'racket-conf)
 (require 'web-conf)
 (require 'scala-conf)
-(require 'window-conf)
 
 (load custom-file)
 (put 'dired-find-alternate-file 'disabled nil)

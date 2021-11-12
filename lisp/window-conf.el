@@ -6,10 +6,12 @@
   '("\\*lsp-help\\*"
     "\\*Help\\*"
     "\\*Process List\\*"
+    "\\*cider-doc\\*"
     "\\*helpful.*"))
 
 (defvar popup-reusable-buffers
   '(help-mode
+    cider-docview-mode
     compilation-mode
     process-menu-mode
     helpful-mode))
@@ -28,11 +30,16 @@
                     bparams))
             popup-buffer-identifiers)))
 
+(defvar literal-buffer-alist-entries '())
+
 (defun compile-buffer-display-alist ()
   (setq display-buffer-alist
-        (internal-build-popup-display-list)))
+        (append (internal-build-popup-display-list)
+                literal-buffer-alist-entries)))
 
 (add-hook 'emacs-startup-hook #'compile-buffer-display-alist)
+
+(setq display-buffer-reuse-frames t)
 
 (defun js/close-coq-windows-advice (&optional WIN)
   (mapc #'delete-window

@@ -37,7 +37,10 @@
             clojure-mode
             common-lisp-mode
             scheme-mode)
-           . lispy-mode))
+           . lispy-mode)
+    :config
+    (setq lispy-completion-method 'default
+          lispy-close-quotes-at-end-p t))
 
 (use-package lispyville
     :straight t
