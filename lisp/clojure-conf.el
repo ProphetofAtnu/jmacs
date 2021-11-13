@@ -15,8 +15,8 @@
 (use-package a
     :straight t)
 
-;; (with-eval-after-load 'le-clojure
-;;   (setf (symbol-function 'lispy--clojure-middleware-load) (lambda () nil)))
+(with-eval-after-load 'le-clojure
+  (setf (symbol-function 'lispy--clojure-middleware-load) (lambda () nil)))
 
 (setq vc-follow-symlinks t)
 

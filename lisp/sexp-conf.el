@@ -5,7 +5,21 @@
 (require 'evil)
 
 ;; (use-package paredit
-;;   :straight t)
+;;     :straight t
+;;     :hook ((emacs-lisp-mode
+;;             clojure-mode
+;;             lisp-mode)
+;;            . paredit-mode)
+;;     :general
+;;     (:keymaps '(paredit-mode-map)
+;;               :states '(normal)
+;;               "z (" 'paredit-wrap-round
+;;               "z [" 'paredit-wrap-square
+;;               "z {" 'paredit-wrap-curly
+;;               "M-)" 'paredit-forward-slurp-sexp
+;;               "M-(" 'paredit-forward-barf-sexp
+;;               ))
+
 
 ;; (use-package parinfer
 ;;     :straight t
@@ -38,9 +52,20 @@
             common-lisp-mode
             scheme-mode)
            . lispy-mode)
+    :general
+    (:keymaps '(emacs-lisp-mode-map
+                lisp-mode-map
+                clojure-mode-map
+                common-lisp-mode-map
+                ielm-mode-map
+                cider-repl-mode-map
+                scheme-mode-map)
+              "C-\\" 'lispy-mode)
     :config
     (setq lispy-completion-method 'default
-          lispy-close-quotes-at-end-p t))
+          lispy-close-quotes-at-end-p t)
+    (add-to-list 'lispy-compat 'cider)
+    (add-to-list 'lispy-compat 'macrostep))
 
 (use-package lispyville
     :straight t

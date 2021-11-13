@@ -54,8 +54,13 @@
 (use-package no-littering
     :straight t)
 
+(use-package dash
+    :straight t)
+
 (use-package delight
     :straight t)
+
+(require 'core/utility)
 
 ;; Evil
 
@@ -179,8 +184,8 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-12")
-(set-frame-font "Fira Code-12" nil t)
+(set-face-attribute 'default t :font "Fira Code-14")
+(set-frame-font "Fira Code-14" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
@@ -232,6 +237,8 @@
     :straight t
     :hook (emacs-startup . projectile-mode)
     :general
+    (:keymaps 'prefix-file-map
+              "p" 'projectile-find-file)
     (:keymaps 'prefix-project-map
               "s" 'projectile-switch-project
               "a" 'projectile-add-known-project

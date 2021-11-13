@@ -3,9 +3,11 @@
 (require 'generator)
 (require 'dash)
 
+;;; Utility macros
 (defmacro +> (&rest forms)
   `(lambda (x) (-> x ,@forms)))
 
+;;; Iterator functions
 (iter-defun iter-range (&key from to)
   (let ((cur from))
     (while (< cur to)
@@ -27,6 +29,7 @@
           (iter-end-of-sequence
            (cl-return (nreverse r))))))))
 
+;;;  Time functions
 (defun format-decoded-time (string time)
   (format-time-string string (encode-time time)))
 
@@ -63,6 +66,7 @@
  (mapcar #'cadr
          (-partition 2 plist))) 
 
+;;; Configuration helpers
 (defun use-local-pairs (hook pairs)
   (add-hook hook
             (lambda ()
@@ -73,5 +77,24 @@
                 (add-to-list 'electric-pair-pairs p))
               (electric-pair-local-mode +1))))
 
+
+;;; Interactive
+(defun get-killable-buffers ()
+  (-filter (lambda (b) 
+             (not (or (get-buffer-process b)
+                      (get-buffer-window b t)
+                      (and (buffer-file-name b)
+                           (buffer-modified-p b)))))
+           (buffer-list)))
+
+(defvar killable-buffers-function #'get-killable-buffers)
+
+(defun kill-extra-buffers ()
+  "Kill buffers defined as 'safe' by calling 'killable-buffers-function'"
+  (interactive)
+  (mapc
+   #'kill-buffer
+   (funcall
+    killable-buffers-function)))
 
 (provide 'core/utility)

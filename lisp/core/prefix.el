@@ -1,6 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
 (require 'general)
+(require 'evil)
 
 (defmacro define-prefix-map (name &rest defs)
   (let ((prefix-cmd (intern (format "prefix-%s-command" name)))
@@ -23,22 +24,28 @@
  :prefix-map 'prefix-buffer-map
  "b" 'switch-to-buffer
  "d" 'kill-this-buffer
- "x" 'kill-buffer-and-window)
+ "x" 'kill-buffer-and-window
+ "k" 'kill-extra-buffers)
  
 
 (general-define-key
  :prefix-command 'prefix-file-command
  :prefix-map 'prefix-file-map
  "f" 'find-file
+ "o" 'find-file-other-window
  "s" 'save-buffer
- "o" 'find-file-other-window)
+ "S" 'evil-write-all
+ )
  
 
 (general-define-key
  :prefix-command 'prefix-emacs-command
  :prefix-map 'prefix-emacs-map
  "r" 'restart-emacs
- "q" 'save-buffers-kill-emacs)
+ "q" 'save-buffers-kill-emacs
+ "b" 'kill-buffer-and-window
+ "f" 'delete-frame
+ "p" 'posframe-delete-all)
 
 (general-define-key
  :prefix-command 'prefix-window-command

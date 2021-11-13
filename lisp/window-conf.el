@@ -17,8 +17,10 @@
     helpful-mode))
 
 (defun build-bottom-buffer-params ()
-  `((display-buffer-reuse-mode-window display-buffer-at-bottom)
+  `((display-buffer-reuse-mode-window display-buffer-in-side-window)
     (window-parameters (close-on-quit . t))
+    (side . bottom)
+    (slot . -1)
     (mode . ,popup-reusable-buffers)
     (window-height . 0.25)))
 
