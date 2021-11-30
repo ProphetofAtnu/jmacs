@@ -54,6 +54,7 @@
            . lispy-mode)
     :general
     (:keymaps '(emacs-lisp-mode-map
+                lisp-interaction-mode-map
                 lisp-mode-map
                 clojure-mode-map
                 common-lisp-mode-map

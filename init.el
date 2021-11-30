@@ -184,8 +184,8 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-14")
-(set-frame-font "Fira Code-14" nil t)
+(set-face-attribute 'default t :font "Fira Code-12")
+(set-frame-font "Fira Code-12" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
@@ -266,6 +266,7 @@
 (require 'python-conf)
 (require 'docker-conf)
 (require 'lsp-conf)
+(require 'elixir-conf)
 (require 'racket-conf)
 (require 'web-conf)
 (require 'scala-conf)
