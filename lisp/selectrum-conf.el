@@ -4,8 +4,11 @@
 (require 'use-package)
 
 (use-package selectrum
-  :straight t
-  :hook (emacs-startup . selectrum-mode))
+    :straight t
+    :hook (emacs-startup . selectrum-mode)
+    :config
+    (add-hook 'selectrum-mode-hook
+              (ido-mode -1)))
 
 (use-package selectrum-prescient
   :straight t

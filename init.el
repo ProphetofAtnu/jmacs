@@ -270,6 +270,7 @@
 (require 'racket-conf)
 (require 'web-conf)
 (require 'scala-conf)
+(require 'eww-conf)
 
 (load custom-file)
 (put 'dired-find-alternate-file 'disabled nil)

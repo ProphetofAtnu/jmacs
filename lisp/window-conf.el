@@ -1,6 +1,15 @@
 ;;; -*- lexical-binding: t; -*-
 
 (require 'dash)
+(require 'posframe)
+
+(defun display-buffer-posframe (buffer alist)
+  (let ((frame (posframe-show buffer
+                              :border-color "gray"
+                              :border-width 1
+                              :position (point)
+                              :poshandler 'posframe-poshandler-frame-top-center)))
+    (set-frame-parameter frame 'close-on-quit t)))
 
 (defvar popup-buffer-identifiers 
   '("\\*lsp-help\\*"
@@ -32,7 +41,15 @@
                     bparams))
             popup-buffer-identifiers)))
 
-(defvar literal-buffer-alist-entries '())
+(defvar literal-buffer-alist-entries
+  '(("\\*eww\\*"
+     (display-buffer-reuse-mode-window
+      display-buffer-in-previous-window
+      display-buffer-pop-up-window)
+     (inhibit-same-window . t)
+     (mode . eww-mode))
+    ("\\*Embark Actions\\*"
+     (display-buffer-posframe))))
 
 (defun compile-buffer-display-alist ()
   (setq display-buffer-alist
@@ -46,7 +63,12 @@
 (defun js/close-coq-windows-advice (&optional WIN)
   (mapc #'delete-window
         (-filter #'(lambda (w) (window-parameter w 'close-on-quit))
-                 (window-list-1))))
+                 (window-list-1)))
+  (mapc #'delete-frame
+        (-filter #'(lambda (f)
+                     (and  (frame-parameter f 'close-on-quit)
+                           (frame-parameter f 'posframe-buffer)))
+                 (frame-list))))
 
 (advice-add 'keyboard-quit :before #'js/close-coq-windows-advice)
 
