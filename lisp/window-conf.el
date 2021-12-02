@@ -4,11 +4,11 @@
 (require 'posframe)
 
 (defun display-buffer-posframe (buffer alist)
-  (let ((frame (posframe-show buffer
-                              :border-color "gray"
-                              :border-width 1
-                              :position (point)
-                              :poshandler 'posframe-poshandler-frame-top-center)))
+  (let* ((frame (posframe-show buffer
+                               :border-color "gray"
+                               :border-width 1
+                               :position (point)
+                               :poshandler 'posframe-poshandler-frame-top-center)))
     (set-frame-parameter frame 'close-on-quit t)))
 
 (defvar popup-buffer-identifiers 
@@ -61,6 +61,7 @@
 (setq display-buffer-reuse-frames t)
 
 (defun js/close-coq-windows-advice (&optional WIN)
+  "Advice to close any defined temporary windows and frame as specified by the parameter 'close-on-quit'"
   (mapc #'delete-window
         (-filter #'(lambda (w) (window-parameter w 'close-on-quit))
                  (window-list-1)))
