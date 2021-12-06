@@ -125,6 +125,14 @@
     :delight
     :hook (emacs-startup . which-key-mode))
 
+(use-package which-key-posframe
+    :straight t
+    :delight
+    :hook (which-key-mode . which-key-posframe-mode)
+    :config
+    (setq which-key-posframe-poshandler 'posframe-poshandler-frame-bottom-center))
+
+
 (use-package general
     :straight t
     :hook (emacs-startup . general-override-mode)
@@ -184,8 +192,8 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-12")
-(set-frame-font "Fira Code-12" nil t)
+(set-face-attribute 'default t :font "Fira Code-14")
+(set-frame-font "Fira Code-14" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 

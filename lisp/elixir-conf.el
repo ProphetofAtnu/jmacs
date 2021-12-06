@@ -1,16 +1,26 @@
 ;;; -*- lexical-binding: t; -*-
 
 (use-package elixir-mode
-    :straight t)
+    :straight t
+    :defer t
+    :config
+    (setq lsp-elixir-suggest-specs nil)
+    (add-to-list 'exec-path (expand-file-name "~/.install/elixir-ls/release")))
 
 (use-package lsp-mode
     :straight t
-    :commands lsp
-    :ensure t
-    :diminish lsp-mode
+    :defer t
     :hook
-    (elixir-mode . lsp)
-    :init
-    (add-to-list 'exec-path "path-to-elixir-ls/release"))
+    (elixir-mode . lsp-deferred))
+
+(use-package mix
+    :straight t
+    :general
+    (local-leader-def
+        :keymaps 'elixir-mode-map
+      "c" 'mix-compile
+      "t" 'mix-test-current-test
+      "T" 'mix-test
+      "x" 'mix-execute-task))
 
 (provide 'elixir-conf)
