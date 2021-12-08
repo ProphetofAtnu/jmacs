@@ -97,4 +97,38 @@
    (funcall
     killable-buffers-function)))
 
+(defmacro create-open-functions (base args interactive-form &rest body)
+  (let* ((base-name (symbol-name base))
+         (create-fun (intern (format "%s-create-buffer" base-name))))
+    `(prog1 (defun ,create-fun ,args
+              ,@body)
+            (defun ,base ,args ,interactive-form
+                   (switch-to-buffer
+                    (funcall (quote ,create-fun) ,@args)))
+            (defun ,(intern (format "%s-other-window" base-name))
+                ,args
+              ,interactive-form
+              (switch-to-buffer-other-window
+               (funcall (quote ,create-fun) ,@args)))
+            (defun ,(intern (format "%s-other-window-noselect" base-name))
+                ,args
+              ,interactive-form
+              (save-selected-window
+                (switch-to-buffer-other-window
+                 (funcall (quote ,create-fun) ,@args))))
+            )))
+
+(defun add-temp-hook (hook fun)
+  (let ((sym (gensym "temp-hook-")))
+    (setf (symbol-function sym)
+          (lambda (&rest args)
+            (apply fun args)
+            (remove-hook hook sym)))
+    (add-hook hook sym)))
+
+(defun get-current-bindings ()
+  (cl-loop for c being the key-seqs of (current-local-map)
+        using (key-bindings b)
+        collect (cons (mapcar 'single-key-description c) b)))
+
 (provide 'core/utility)

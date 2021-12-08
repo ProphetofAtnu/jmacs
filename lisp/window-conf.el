@@ -11,6 +11,14 @@
                                :poshandler 'posframe-poshandler-frame-top-center)))
     (set-frame-parameter frame 'close-on-quit t)))
 
+(defun show-buffer-posframe (buffer params)
+  (let* ((frame (posframe-show buffer
+                               :border-color "gray"
+                               :border-width 1
+                               :position (point)
+                               :poshandler params)))
+    (set-frame-parameter frame 'close-on-quit t)))
+
 (defvar popup-buffer-identifiers 
   '("\\*lsp-help\\*"
     "\\*Help\\*"
@@ -46,7 +54,7 @@
      (display-buffer-reuse-mode-window
       display-buffer-in-previous-window
       display-buffer-pop-up-window)
-     (inhibit-same-window . t)
+     ;; (inhibit-same-window . t)
      (mode . eww-mode))
     ("\\*Embark Actions\\*"
      (display-buffer-posframe))))
@@ -60,7 +68,7 @@
 
 (setq display-buffer-reuse-frames t)
 
-(defun js/close-coq-windows-advice (&optional WIN)
+(defun js/close-coq-windows ()
   "Advice to close any defined temporary windows and frame as specified by the parameter 'close-on-quit'"
   (mapc #'delete-window
         (-filter #'(lambda (w) (window-parameter w 'close-on-quit))
@@ -71,6 +79,8 @@
                            (frame-parameter f 'posframe-buffer)))
                  (frame-list))))
 
-(advice-add 'keyboard-quit :before #'js/close-coq-windows-advice)
+(add-hook 'keyboard-quit-hook 'js/close-coq-windows)
+;; (advice-add 'keyboard-quit :before #'js/close-coq-windows-advice)
+;; (advice-remove 'keyboard-quit #'js/close-coq-windows-advice)
 
 (provide 'window-conf)

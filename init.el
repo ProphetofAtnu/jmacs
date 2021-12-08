@@ -180,8 +180,9 @@
     :init
     (load-theme 'bliss t)
     :config
-    (set-face-background 'highlight "#3d3d3d"))
-    
+    (set-face-background 'highlight "#3d3d3d")
+    (set-face-background 'lazy-highlight "#333333"))
+
 
 (use-package mood-line
     :straight t
@@ -192,8 +193,8 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-14")
-(set-frame-font "Fira Code-14" nil t)
+(set-face-attribute 'default t :font "Fira Code-12")
+(set-frame-font "Fira Code-12" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
@@ -267,6 +268,7 @@
 (require 'sexp-conf)
 (require 'emacs-lisp-conf)
 (require 'selectrum-conf)
+(require 'java-conf)
 (require 'clojure-conf)
 (require 'clisp-conf)
 (require 'shell-conf)
@@ -279,6 +281,8 @@
 (require 'web-conf)
 (require 'scala-conf)
 (require 'eww-conf)
+(require 'utility-conf)
 
 (load custom-file)
 (put 'dired-find-alternate-file 'disabled nil)
+(put 'erase-buffer 'disabled nil)

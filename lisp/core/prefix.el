@@ -25,6 +25,7 @@
  "b" 'switch-to-buffer
  "d" 'kill-this-buffer
  "x" 'kill-buffer-and-window
+ "i" 'ibuffer-other-window
  "k" 'kill-extra-buffers)
  
 
@@ -67,7 +68,8 @@
 
 (define-prefix-map help 
     "v" 'helpful-variable
-    "f" 'helpful-callable)
+    "f" 'helpful-callable
+    "w" 'which-key-show-major-mode)
 
 (define-prefix-map search
     "o" 'occur)

@@ -3,6 +3,14 @@
 (require 'general)
 (require 'core/prefix)
 
+(defvar keyboard-quit-hook nil)
+
+(defun js/keyboard-quit-advice (&rest x)
+  "Advice to add a hook function to 'keyboard-quit'"
+  (run-hooks 'keyboard-quit-hook))
+
+(advice-add 'keyboard-quit :before #'js/keyboard-quit-advice)
+
 (general-create-definer global-leader-def
     :states '(normal motion insert emacs override)
     :prefix "SPC"
