@@ -40,7 +40,7 @@ defmodule Eiex.Lisp.AST do
       is_vector?(obj) -> interpret_vector(obj, opts)
       is_alist?(obj) -> interpret_alist(obj, opts)
       is_pair?(obj) -> interpret_pair(obj, opts)
-      !(:no_plists in opts) && is_plist?(obj)  -> interpret_plist(obj, opts)
+      !(:no_plists in opts) && is_plist?(obj) -> interpret_plist(obj, opts)
       true -> interpret_list(obj, opts)
     end
   end
@@ -80,7 +80,6 @@ defmodule Eiex.Lisp.AST do
   defp interpret_keyword(obj) do
     String.trim_leading(obj, ":") |> String.to_atom()
   end
-    
 
   defp is_string?(obj) do
     is_binary(obj) && String.starts_with?(obj, "\"") && String.ends_with?(obj, "\"")
@@ -107,7 +106,8 @@ defmodule Eiex.Lisp.AST do
   end
 
   defp is_pair?(ast) do
-    is_list?(ast) && match?([_, ".", _], ast.children)
+    is_list?(ast) &&
+      match?([_, ".", _], ast.children)
   end
 
   defp interpret_pair(ast, opts) do
@@ -155,6 +155,10 @@ defmodule Eiex.Lisp.AST do
   end
 
   defp interpret_list(ast, opts) do
-    Enum.map(ast.children, &interpret(&1, opts))
+    if :list_tuple in opts do
+      Enum.map(ast.children, &interpret(&1, opts)) |> List.to_tuple()
+    else
+      Enum.map(ast.children, &interpret(&1, opts))
+    end
   end
 end

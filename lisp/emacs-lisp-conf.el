@@ -29,7 +29,7 @@
   (setq ielm-dynamic-return nil)
   (add-hook
    'ielm-mode-hook
-   (lambda ()
+   #'(lambda ()
      (setq-local
       evil-lookup-func
       #'helpful-at-point))))
@@ -39,9 +39,9 @@
   :commands (elisp-mode)
   :config
   (add-hook 'emacs-lisp-mode-hook
-            (lambda () (setq-local lisp-indent-function #'common-lisp-indent-function)))
+            #'(lambda () (setq-local lisp-indent-function #'common-lisp-indent-function)))
   (add-hook 'emacs-lisp-mode-hook
-            '(lambda ()
+            #'(lambda ()
                (setq-local format-action 'parinfer-indent-buffer)              
                (setq-local evil-lookup-func #'helpful-at-point)))
   (add-hook 'emacs-lisp-mode-hook

@@ -30,7 +30,7 @@ defmodule Eiex.IO do
   @impl true
   def init(_opts) do
     start_input_loop()
-    {:ok, %{}}
+    {:ok, %{lisp_opts: [:list_tuple]}}
   end
 
   defp start_input_loop() do
@@ -39,7 +39,7 @@ defmodule Eiex.IO do
   end
 
   defp handle_message(data, state) do
-    with {:ok, expr} <- Eiex.Lisp.translate(data) |> IO.inspect(),
+    with {:ok, expr} <- Eiex.Lisp.translate(data, Map.get(state, :lisp_opts, [])),
       {:ok, res, s} <- Eiex.Calls.call(expr, state) do
       {res, s}
     else
