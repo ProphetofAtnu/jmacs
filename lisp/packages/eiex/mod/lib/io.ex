@@ -1,15 +1,23 @@
 defmodule Eiex.IO do
   use GenServer
 
+  @type response :: :noop
+  | {:write, iodata()}
+  | {:error, String.t()}
+
   def start_link(_opts \\ []) do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
+  end
+
+  @spec do_read(String.t()) :: response()
+  def do_read(data) do
+    GenServer.call(__MODULE__, {:message, data})
   end
 
   def loop_input(state \\ []) do
     case IO.read(1) do
       <<7>> ->
-        case GenServer.call(__MODULE__,
-              {:message, Enum.reverse(state) |> IO.iodata_to_binary}) do
+        case do_read(Enum.reverse(state) |> IO.iodata_to_binary) do
           {:write, data} -> IO.puts(data)
           _ -> :noop
         end
@@ -19,7 +27,6 @@ defmodule Eiex.IO do
     end
   end
   
-
   @impl true
   def init(_opts) do
     start_input_loop()
@@ -32,10 +39,11 @@ defmodule Eiex.IO do
   end
 
   defp handle_message(data, state) do
-    with {:ok, expr} <- Eiex.Lisp.translate(data) do
-      {{:write, expr}, state}
+    with {:ok, expr} <- Eiex.Lisp.translate(data) |> IO.inspect(),
+      {:ok, res, s} <- Eiex.Calls.call(expr, state) do
+      {res, s}
     else
-      e -> {{:write, inspect(e)}}
+      e -> {e, state}
     end
   end
 

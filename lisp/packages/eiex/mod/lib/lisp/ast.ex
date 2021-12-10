@@ -36,7 +36,7 @@ defmodule Eiex.Lisp.AST do
 
   def interpret(obj, opts) when is_node(obj) do
     cond do
-      is_root?(obj) -> interpret(hd(obj.children), opts)
+      is_root?(obj) and !Enum.empty?(obj.children) -> interpret(hd(obj.children), opts)
       is_vector?(obj) -> interpret_vector(obj, opts)
       is_alist?(obj) -> interpret_alist(obj, opts)
       is_pair?(obj) -> interpret_pair(obj, opts)
@@ -136,6 +136,7 @@ defmodule Eiex.Lisp.AST do
 
   defp is_plist?(ast) do
     is_list?(ast) &&
+      rem(length(ast.children), 2) == 0 &&
       Enum.chunk_every(ast.children, 2)
       |> Enum.map(&List.to_tuple/1)
       |> Enum.all?(fn {x, _} ->

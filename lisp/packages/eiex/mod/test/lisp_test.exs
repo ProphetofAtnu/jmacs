@@ -50,4 +50,13 @@ defmodule EiexTest.Lisp do
 
   end
 
+  test "interprets miscilanious lisp" do
+    tests = ["(this is a test)",
+             "[ 1 2 3 (4)]",
+             "(:this \"is\")",
+             "test",
+             "abc(De)fg"]
+    Enum.map(tests, &Lisp.translate/1)
+
+  end
 end
