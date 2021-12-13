@@ -2,38 +2,111 @@
 
 (require 'bindat)
 
-(defun etf-convert-float-bytes (b0 b1 b2 b3 b4 b5 b6 b7)
-  (let* ((negp (= #x80 (logand b0 #x80)))
-         (exp (logand (logior (ash b0 4) (ash b1 -4)) #x7ff))
-         (mantissa (logior #x10000000000000
-                           (ash (logand #xf b1) 48)
-                           (ash b2 40)
-                           (ash b3 32)
-                           (ash b4 24)
-                           (ash b5 16)
-                           (ash b6  8)
-                           b7))
-         (result (if (= #x7ff exp)
-                     (if (= #x10000000000000 mantissa)
-                         1.0e+INF
-                       0.0e+NaN)
-                   (ldexp (ldexp mantissa -53) (- exp 1022)))))
-    (if negp
-        (- result)
-      result)))
+;; Bits/Bytes
+(defun etf--byte-to-bits (int)
+  (cl-loop for x downfrom 7 to 0
+        collect
+        (logand 1 (ash int (- x)))))
+
+(defun etf--bytes-to-bits (bytes)
+  (seq-mapcat 'etf--byte-to-bits bytes))
+
+(defun etf--bits-to-uint (bits)
+  (cl-loop for x in bits
+        for i downfrom (1- (length bits))
+        with num = 0
+        do (setq num
+                 (logior num
+                         (ash x i)))
+        finally (return num)))
+
+(defsubst etf--8bit-to-byte (n7 n6 n5 n4 n3 n2 n1 n0)
+  (logior
+   (ash n7 7)
+   (ash n6 6)
+   (ash n5 5)
+   (ash n4 4)
+   (ash n3 3)
+   (ash n2 2)
+   (ash n1 1)
+   n0))
+
+(defun etf--uint-to-bits (i len)
+  (cl-loop for s downfrom (- len 1) to 0
+        collect (logand 1 (ash i (- s)))))
+
+;; Floats
+(defun etf--float-exp-bits (bits)
+  (- (etf--bits-to-uint (seq-subseq bits 1 12))
+     1023))
+
+(defun etf--float-sig-bits (bits)
+  (cl-loop for b in (seq-subseq bits 12)
+        for i from 1
+        with frac = 0
+        do (when (> b 0)
+             (setq frac (+ frac (expt 2 (- i)))))
+        finally (return (+ 1 frac))))
+
+(defun etf--float-from-bits (bits)
+  (*
+   (ldexp 
+    (etf--float-sig-bits bits)
+    (etf--float-exp-bits bits))
+   (expt -1 (seq-first bits))))
+
+(defun etf--float-from-bits-DEBUG (bits)
+  (cons (etf--float-sig-bits bits)
+        (etf--float-exp-bits bits)))
+
+(defun etf--float-to-bits (flt)
+  (let* ((e (logb flt))
+         (s (- flt (expt 2 e))))
+      (let ((sign (if (>= s 0) 0 1))
+            (expb (etf--uint-to-bits (+ e 1023) 11))
+            (sigb (cl-loop for i from 1 to 52
+                        for h = (* (math-abs s) 2) then (* h 2)
+                        if (>= h 1)
+                        collect 1
+                        and do (cl-decf h)
+                        else collect 0)))
+        (append (cons sign expb) sigb))))
+
+(defun etf--float-from-bytes (vec)
+  (etf--float-from-bits (etf--bytes-to-bits vec)))
+
+(defun etf--float-to-bytes (flt)
+  (apply
+   'vector
+   (etf--bits-to-bytes
+    (etf--float-to-bits flt))))
 
 (defun etf-convert-float-string (str)
-  (string-to-number str))
+  (string-to-number (string-trim str)))
+
+;; Integers
+(defun etf--int-is-negative (int)
+  (= #x80000000
+     (logand #x80000000 int)))
 
 (defun etf-convert-vector-int (vec)
   (cl-loop for byte across vec
         for shift downfrom 24 by 8
         for ctr = (logior 0 (ash byte shift))
         then (logior ctr (ash byte shift))
-        finally (return (if (etf-int-is-negative ctr)
+        finally (return (if (etf--int-is-negative ctr)
                             (logxor (ash -1 32) ctr)
                           ctr))))
 
+(defun etf-convert-int-vector (n)
+  (let ((uns (logand #xFFFFFFFF n)))
+    (vector
+     (logand (ash uns -24) #xFF)
+     (logand (ash uns -16) #xFF)
+     (logand (ash uns -8) #xFF)
+     (logand uns #xFF))))
+
+;; Bindat structures
 (defvar etf-integer
   '((integer vec 4)))
 
