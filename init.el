@@ -48,6 +48,8 @@
 (setq evil-want-keybinding nil)
 (defvar evil-disable-insert-state-bindings t)
 
+;; (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.5.1/emacs")
+
 (use-package better-defaults
     :straight t)
 
@@ -193,8 +195,8 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-12")
-(set-frame-font "Fira Code-12" nil t)
+(set-face-attribute 'default t :font "Fira Code-14")
+(set-frame-font "Fira Code-14" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
@@ -275,6 +277,7 @@
 (require 'org-conf)
 (require 'python-conf)
 (require 'docker-conf)
+(require 'erlang-conf)
 (require 'lsp-conf)
 (require 'elixir-conf)
 (require 'racket-conf)

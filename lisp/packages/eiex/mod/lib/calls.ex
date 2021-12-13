@@ -1,13 +1,27 @@
 defmodule Eiex.Calls do
 
-  def format(arg), do: inspect(arg, limit: :infinity)
+  def call(:test, state) do
+    Eiex.IO.send(:ok)
+    state
+  end
 
-  @spec call(term(), term) :: {:ok, Eiex.IO.response(), term()} | {:error, String.t()}
-  def call(:noop, state), do: {:ok, :noop, state}
+  def call({:echo, term}, state) do
+    Eiex.IO.send(term)
+    state
+  end
 
-  def call(:test, state), do: {:ok, {:write, "This is a test\n"}, state}
+  def call({:invoke, module, function, args}, state) do
+    Eiex.IO.send(apply(module, function, args))
+    state
+  end
 
-  def call({:complete, args}, state), do:
-  {:ok, {:write, format(Eiex.Complete.complete(args))}, state}
+  def call({:invoke, function, args}, state) do
+    apply(function, args)
+    state
+  end
+
+  def call(_, state) do
+    state
+  end
 
 end

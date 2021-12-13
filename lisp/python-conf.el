@@ -7,14 +7,17 @@
   :defer t)
 
 
-(use-package lsp-mode
-    :straight t
-    :defer t
-    :hook (python-mode . lsp-deferred))
+;; (use-package lsp-mode
+;;     :straight t
+;;     :defer t
+;;     :hook (python-mode . lsp-deferred))
 
-(use-package lsp-pyright
+(use-package elpy
     :straight t
-    :after (python))
+    :hook (python-mode . elpy-enable)
+    :config
+    (setq elpy-rpc-python-command "python3")
+    (setq elpy-get-info-from-shell t))
 
 (use-package python-black
     :straight t
