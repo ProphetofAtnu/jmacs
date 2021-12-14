@@ -31,6 +31,12 @@
    (ash n1 1)
    n0))
 
+(defun etf--bits-to-bytes (bits)
+  (seq-map
+   #'(lambda (x)
+       (apply 'etf--8bit-to-byte x))
+   (seq-partition bits 8)))
+
 (defun etf--uint-to-bits (i len)
   (cl-loop for s downfrom (- len 1) to 0
         collect (logand 1 (ash i (- s)))))
@@ -81,7 +87,7 @@
    (etf--bits-to-bytes
     (etf--float-to-bits flt))))
 
-(defun etf-convert-float-string (str)
+(defun etf--convert-float-string (str)
   (string-to-number (string-trim str)))
 
 ;; Integers
@@ -89,7 +95,7 @@
   (= #x80000000
      (logand #x80000000 int)))
 
-(defun etf-convert-vector-int (vec)
+(defun etf--convert-vector-int (vec)
   (cl-loop for byte across vec
         for shift downfrom 24 by 8
         for ctr = (logior 0 (ash byte shift))
@@ -98,7 +104,7 @@
                             (logxor (ash -1 32) ctr)
                           ctr))))
 
-(defun etf-convert-int-vector (n)
+(defun etf--convert-int-vector (n)
   (let ((uns (logand #xFFFFFFFF n)))
     (vector
      (logand (ash uns -24) #xFF)
@@ -192,7 +198,7 @@
 
 (defvar etf-string
   '((length u16)
-    (content str (length))))
+    (data str (length))))
 
 (defvar etf-list 
   '((length u32)
@@ -264,6 +270,93 @@
 (defvar etf-packet
   `((version u8)
     (struct etf-data)))
+
+(defvar etf-data-types-alist
+  '((70 . new-float)
+    (77  . bit-binary)
+    (82  . atom-cache-ref)
+    (88  . new-pid)
+    (89  . new-port)
+    (90  . newer-reference)
+    (97  . small-integer)
+    (98  . integer)
+    (99  . float)
+    (100  . atom)
+    (101  . reference)
+    (102  . port)
+    (103  . pid)
+    (104  . small-tuple)
+    (105  . large-tuple)
+    (106  . nil)
+    (107  . string)
+    (108  . list)
+    (109  . binary)
+    (110  . small-big)
+    (111  . large-big)
+    (112  . new-fun)
+    (113  . export)
+    (114  . new-reference)
+    (115  . atom-small)
+    (116  . map)
+    (117  . fun)
+    (118  . atom)
+    (119  . atom-small)
+    (120  . v4-port)))
+
+(defun etf-struct-type (struct)
+  (let ((code (alist-get 'type struct)))
+    (alist-get code etf-data-types-alist)))
+
+(defun etf-convert (struct)
+  (case (etf-struct-type struct)
+    (nil nil)))
+
+(defun etf--convert-bin (struct)
+  "Struct converter for etf-string and etf-binary"
+  (let-alist struct
+    (concat .data)))
+
+(defun etf--convert-int (struct)
+  (etf--convert-vector-int (alist-get 'integer struct)))
+
+(defun etf--revert-int (int)
+  `((integer . ,(etf--convert-int-vector int))))
+
+(defun etf--convert-float (struct)
+  (let ((flv (alist-get 'float struct)))
+    (if (vectorp flv)
+        (etf--float-from-bytes flv)
+      (etf--convert-float-string flv))))
+
+(defun etf--revert-float (flt)
+  (list (cons 'float (etf--float-to-bytes flt))))
+
+(defun etf--convert-atom (struct)
+  (intern (alist-get 'name struct)))
+
+(defun etf--revert-atom (arg)
+  (let* ((n (symbol-name arg))
+         (l (string-bytes n)))
+    `((length . ,l)
+      (name . ,n))))
+
+(defun etf--convert-bigint (struct)
+  (* (expt -1 (alist-get 'sign struct))
+     (cl-loop for x across  (alist-get 'data struct)
+           for y from 0
+           sum (* x (expt 256 y)))))
+
+(defun etf--revert-bigint (arg)
+  (cl-loop 
+      for offset from 0 by 8 
+      for x = (ash (abs arg) (- offset))
+      while (> x 0)
+      collect (logand x #xFF) into bin
+      finally (return
+                `((length . ,(length bin))
+                  (sign . ,(if (< arg 0)
+                            1 0))
+                  (data . ,(vconcat bin))))))
 
 (provide 'etf)
 
