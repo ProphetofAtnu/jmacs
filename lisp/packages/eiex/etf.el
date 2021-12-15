@@ -97,7 +97,7 @@
 
 (defun etf--convert-vector-int (vec)
   (cl-loop for byte across vec
-        for shift downfrom 24 by 8
+        for shift downfrom (* 8 (1- (length vec))) by 8
         for ctr = (logior 0 (ash byte shift))
         then (logior ctr (ash byte shift))
         finally (return (if (etf--int-is-negative ctr)
@@ -271,6 +271,104 @@
   `((version u8)
     (struct etf-data)))
 
+(defun etf-unpack (data)
+  (bindat-unpack etf-packet data))
+
+(defun etf-struct-type (struct)
+  (let ((code (alist-get 'type struct)))
+    (alist-get code etf-data-types-alist)))
+
+(defun etf--convert-bin (struct)
+  "Struct converter for etf-string and etf-binary"
+  (let-alist struct
+    (concat .data)))
+
+(defun etf--revert-bin (arg)
+  `((type 109)
+    (data . (string-to-vector arg))
+    (length . (string-bytes arg))))
+
+(defun etf--convert-int (struct)
+  (etf--convert-vector-int (alist-get 'integer struct)))
+
+(defun etf--revert-int (int)
+  `((type . 98)
+    (integer . ,(etf--convert-int-vector int))))
+
+(defun etf--convert-float (struct)
+  (let ((flv (alist-get 'float struct)))
+    (if (vectorp flv)
+        (etf--float-from-bytes flv)
+      (etf--convert-float-string flv))))
+
+(defun etf--revert-float (flt)
+  (list (cons 'type 70)
+        (cons 'float (etf--float-to-bytes flt))))
+
+(defun etf--convert-atom (struct)
+  (intern (alist-get 'name struct)))
+
+(defun etf--revert-atom (arg)
+  (let* ((n (symbol-name arg))
+         (l (string-bytes n)))
+    `((type . 100)
+      (length . ,l)
+      (name . ,n))))
+
+(defun etf--convert-bigint (struct)
+  (* (expt -1 (alist-get 'sign struct))
+     (cl-loop for x across  (alist-get 'data struct)
+           for y from 0
+           sum (* x (expt 256 y)))))
+
+(defun etf--revert-bigint (arg)
+  (cl-loop 
+      for offset from 0 by 8 
+      for x = (ash (abs arg) (- offset))
+      while (> x 0)
+      collect (logand x #xFF) into bin
+      finally (return
+                `((type . 111)
+                  (length . ,(length bin))
+                  (sign . ,(if (< arg 0)
+                               1 0))
+                  (data . ,(vconcat bin))))))
+
+(defun etf--convert-list (arg)
+  (mapcar #'etf-convert (alist-get 'elements arg)))
+
+(defun etf--revert-list (arg)
+  `((type . 108)
+    (length . ,(length arg))
+    (elements . ,(mapcar #'etf-revert arg))))
+
+(defun etf--convert-tuple (arg)
+  (cl-map 'vector #'etf-convert (alist-get 'elements arg)))
+
+(defun etf--revert-tuple (arg)
+  `((type . 104)
+    (arity . ,(length arg))
+    (elements . ,(mapcar #'etf-revert arg))))
+
+(defun etf--convert-map (arg)
+  (let ((hm (make-hash-table)))
+    (dolist (s (alist-get 'pairs arg) hm)
+      (let ((hk (alist-get 'key s))
+            (hv (alist-get 'val s)))
+        (puthash (etf-convert hk) (etf-convert hv) hm)))))
+
+(defun etf--revert-map-pair (key val)
+  `((key . ,(etf-revert key))
+    (val . ,(etf-revert val))))
+
+(defun etf--revert-map (arg)
+  (let ((len (hash-table-size))))
+  `((type . 116)
+    (arity . ,(hash-table-count arg))
+    (pairs . ,(cl-loop for k being the hash-keys of arg
+                    using hash-values v
+                    collect (etf--revert-pair k v)))))
+
 (defvar etf-data-types-alist
   '((70 . new-float)
     (77  . bit-binary)
@@ -303,60 +401,35 @@
     (119  . atom-small)
     (120  . v4-port)))
 
-(defun etf-struct-type (struct)
-  (let ((code (alist-get 'type struct)))
-    (alist-get code etf-data-types-alist)))
-
 (defun etf-convert (struct)
-  (case (etf-struct-type struct)
-    (nil nil)))
+  (cl-case (etf-struct-type struct)
+    ('nil nil)
+    ('new-float (etf--convert-float struct))
+    ('float (etf--convert-float-string struct))
+    ('atom (etf--convert-atom struct))
+    ('atom-small (etf--convert-atom struct))
+    ('integer (etf--convert-int struct))
+    ('small-integer (etf--convert-int struct))
+    ('binary (etf--convert-bin struct))
+    ('string (etf--convert-bin struct))
+    ('small-big (etf--convert-bigint struct))
+    ('large-big (etf--convert-bigint struct))
+    ('small-tuple (etf--convert-tuple struct))
+    ('large-tuple (etf--convert-tuple struct))
+    ('list (etf--convert-list struct))
+    ('map (etf--convert-map struct))
+    (t struct)))
 
-(defun etf--convert-bin (struct)
-  "Struct converter for etf-string and etf-binary"
-  (let-alist struct
-    (concat .data)))
-
-(defun etf--convert-int (struct)
-  (etf--convert-vector-int (alist-get 'integer struct)))
-
-(defun etf--revert-int (int)
-  `((integer . ,(etf--convert-int-vector int))))
-
-(defun etf--convert-float (struct)
-  (let ((flv (alist-get 'float struct)))
-    (if (vectorp flv)
-        (etf--float-from-bytes flv)
-      (etf--convert-float-string flv))))
-
-(defun etf--revert-float (flt)
-  (list (cons 'float (etf--float-to-bytes flt))))
-
-(defun etf--convert-atom (struct)
-  (intern (alist-get 'name struct)))
-
-(defun etf--revert-atom (arg)
-  (let* ((n (symbol-name arg))
-         (l (string-bytes n)))
-    `((length . ,l)
-      (name . ,n))))
-
-(defun etf--convert-bigint (struct)
-  (* (expt -1 (alist-get 'sign struct))
-     (cl-loop for x across  (alist-get 'data struct)
-           for y from 0
-           sum (* x (expt 256 y)))))
-
-(defun etf--revert-bigint (arg)
-  (cl-loop 
-      for offset from 0 by 8 
-      for x = (ash (abs arg) (- offset))
-      while (> x 0)
-      collect (logand x #xFF) into bin
-      finally (return
-                `((length . ,(length bin))
-                  (sign . ,(if (< arg 0)
-                            1 0))
-                  (data . ,(vconcat bin))))))
+(defun etf-revert (term)
+  (cond
+    ((integerp term) (etf--revert-int term))
+    ((bignump term) (etf--revert-bigint term))
+    ((floatp term) (etf--revert-float term))
+    ((symbolp term) (etf--revert-atom term))
+    ((stringp term) (etf--revert-bin term))
+    ((listp term) (etf--revert-list term))
+    ((vectorp term) (etf--revert-tuple term))
+    ((hash-table-p term) (etf--revert-map term))))
 
 (provide 'etf)
 
