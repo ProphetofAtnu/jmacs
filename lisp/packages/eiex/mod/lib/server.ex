@@ -21,8 +21,12 @@ defmodule Eiex.Server do
     call(__MODULE__, :client)
   end
 
-  def send(term) do
+  def do_send(term) do
     call(__MODULE__, {:send, term})
+  end
+
+  def schedule_send(term) do
+    cast(__MODULE__, {:send, term})
   end
 
   @impl true
@@ -49,12 +53,30 @@ defmodule Eiex.Server do
     end
   end
 
+  def handle_cast({:send, term}, state) do
+    with {:ok, sock} <- Map.fetch(state, :sock) do
+      :gen_tcp.send(sock, :erlang.term_to_binary(term))
+      {:noreply, state}
+    else
+      _ -> {:noreply, state}
+    end
+  end
+
+  def handle_packet(_socket, packet, state) do
+    try do
+      payload = :erlang.binary_to_term(packet) |> IO.inspect()
+      Eiex.Scheduler.schedule(payload)
+    catch
+      e, r -> IO.inspect({e, r})
+    end
+    state
+  end
+
   @impl true
   def handle_info(tcpm, state) do
     case tcpm do
-      {:tcp, _socket, packet} ->
-        IO.inspect(packet)
-        {:noreply, state}
+      {:tcp, socket, packet} ->
+        {:noreply, handle_packet(socket, packet, state)}
       {:tcp_closed, _socket} ->
         IO.puts("Socket disconnected")
         cast(self(), :accept)

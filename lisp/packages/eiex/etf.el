@@ -113,167 +113,174 @@
      (logand uns #xFF))))
 
 ;; Bindat structures
-(defvar etf-integer
+(defvar etf--integer
   '((integer vec 4)))
 
-(defvar etf-small-integer
+(defvar etf--small-integer
   '((integer vec 1)))
 
-(defvar etf-atom-small
+(defvar etf--atom-small
   '((length u8)
     (name str (length))))
 
-(defvar etf-atom
+(defvar etf--atom
   '((length u16)
     (name str (length))))
 
-(defvar etf-float
+(defvar etf--float
   '((float str 31)))
 
-(defvar etf-new-float
+(defvar etf--new-float
   '((float vec 8)))
 
-(defvar etf-atom-cache-ref
+(defvar etf--atom-cache-ref
   '((cache-index u8)))
 
-(defvar etf-bit-binary
+(defvar etf--bit-binary
   '((length u32)
     (bits u8)
     (data vec (length))))
 
-(defvar etf-pid
-  '((node struct etf-data)
+(defvar etf--pid
+  '((node struct etf--data)
     (id u32)
     (serial u32)
     (creation 8)))
 
-(defvar etf-new-pid
-  '((node struct etf-data)
+(defvar etf--new-pid
+  '((node struct etf--data)
     (id u32)
     (serial u32)
     (creation u32)))
 
-(defvar etf-v4-port
-  '((node struct etf-data)
+(defvar etf--v4-port
+  '((node struct etf--data)
     (id vec 8)
     (creation u32)))
 
-(defvar etf-port 
-  '((node struct etf-data)
+(defvar etf--port 
+  '((node struct etf--data)
     (id u32)
     (creation u8)))
 
-(defvar etf-new-port 
-  '((node struct etf-data)
+(defvar etf--new-port 
+  '((node struct etf--data)
     (id u32)
     (creation u32)))
 
-(defvar etf-newer-reference
+(defvar etf--newer-reference
   '((length u16)
-    (node struct etf-data)
+    (node struct etf--data)
     (creation u32)
-    (ids vec length u32)))
+    (ids vec (length) u32)))
 
-(defvar etf-new-reference
+(defvar etf--new-reference
   '((length u16)
-    (node struct etf-data)
+    (node struct etf--data)
     (creation u8)
-    (ids vec length u32)))
+    (ids vec (length) u32)))
 
-(defvar etf-reference
+(defvar etf--reference
   '((length u16)
-    (node struct etf-data)
+    (node struct etf--data)
     (id u32)
     (creation u8)))
 
-(defvar etf-small-tuple
+(defvar etf--small-tuple
   '((arity u8)
     (elements repeat (arity)
-     (struct etf-data))))
+     (struct etf--data))))
 
-(defvar etf-large-tuple 
+(defvar etf--large-tuple 
   '((arity u32)
     (elements repeat (arity)
-     (struct etf-data))))
+     (struct etf--data))))
 
-(defvar etf-string
+(defvar etf--string
   '((length u16)
     (data str (length))))
 
-(defvar etf-list 
+(defvar etf--list 
   '((length u32)
     (elements repeat (length)
-     (struct etf-data))
-    (tail (struct etf-data))))
+     (struct etf--data))
+    (tail struct etf--data)))
 
-(defvar etf-map-pair '((key struct etf-data)
-                       (val struct etf-data)))
+(defvar etf--map-pair '((key struct etf-data)
+                       (val struct etf--data)))
 
-(defvar etf-map '((arity u32)
+(defvar etf--map '((arity u32)
                   (pairs repeat (arity)
-                   (struct etf-map-pair))))
+                   (struct etf--map-pair))))
 
-(defvar etf-binary
+(defvar etf--binary
   '((length u32)
     (data vec (length))))
 
-(defvar etf-small-big
+(defvar etf--small-big
   '((length u8)
     (sign u8)
     (data vec (length))))
 
-(defvar etf-large-big 
+(defvar etf--large-big 
   '((length u32)
     (sign u8)
     (data vec (length))))
 
+(defvar etf--nil
+  '())
+
 ;; TODO
-(defvar etf-export '())
-(defvar etf-new-fun '())
-(defvar etf-fun '())
+(defvar etf--export '())
+(defvar etf--new-fun '())
+(defvar etf--fun '())
 
 
-(defvar etf-data
+(defvar etf--data
   '((type u8)
     (union (type)
-     (70 (struct etf-new-float))
-     (77 (struct etf-bit-binary))
-     (82 (struct etf-atom-cache-ref))
-     (88 (struct etf-new-pid))
-     (89 (struct etf-new-port))
-     (90 (struct etf-newer-reference))
-     (97 (struct etf-small-integer))
-     (98 (struct etf-integer))
-     (99 (struct etf-float))
-     (100 (struct etf-atom))
-     (101 (struct etf-reference))
-     (102 (struct etf-port))
-     (103 (struct etf-pid))
-     (104 (struct etf-small-tuple))
-     (105 (struct etf-large-tuple))
-     (106 (struct etf-nil))
-     (107 (struct etf-string))
-     (108 (struct etf-list))
-     (109 (struct etf-binary))
-     (110 (struct etf-small-big))
-     (111 (struct etf-large-big))
-     (112 (struct etf-new-fun))
-     (113 (struct etf-export))
-     (114 (struct etf-new-reference))
-     (115 (struct etf-atom-small))
-     (116 (struct etf-map))
-     (117 (struct etf-fun))
-     (118 (struct etf-atom))
-     (119 (struct etf-atom-small))
-     (120 (struct etf-v4-port)))))
+     (70 (struct etf--new-float))
+     (77 (struct etf--bit-binary))
+     (82 (struct etf--atom-cache-ref))
+     (88 (struct etf--new-pid))
+     (89 (struct etf--new-port))
+     (90 (struct etf--newer-reference))
+     (97 (struct etf--small-integer))
+     (98 (struct etf--integer))
+     (99 (struct etf--float))
+     (100 (struct etf--atom))
+     (101 (struct etf--reference))
+     (102 (struct etf--port))
+     (103 (struct etf--pid))
+     (104 (struct etf--small-tuple))
+     (105 (struct etf--large-tuple))
+     (106 (struct etf--nil))
+     (107 (struct etf--string))
+     (108 (struct etf--list))
+     (109 (struct etf--binary))
+     (110 (struct etf--small-big))
+     (111 (struct etf--large-big))
+     (112 (struct etf--new-fun))
+     (113 (struct etf--export))
+     (114 (struct etf--new-reference))
+     (115 (struct etf--atom-small))
+     (116 (struct etf--map))
+     (117 (struct etf--fun))
+     (118 (struct etf--atom))
+     (119 (struct etf--atom-small))
+     (120 (struct etf--v4-port)))))
 
 (defvar etf-packet
   `((version u8)
     (struct etf-data)))
 
-(defun etf-unpack (data)
+(defun etf--bin-unpack (data)
   (bindat-unpack etf-packet data))
 
+(defun etf--bin-pack (data)
+  (bindat-pack etf-packet data))
+
+;; Lisp transformations
 (defun etf-struct-type (struct)
   (let ((code (alist-get 'type struct)))
     (alist-get code etf-data-types-alist)))
@@ -284,9 +291,9 @@
     (concat .data)))
 
 (defun etf--revert-bin (arg)
-  `((type 109)
-    (data . (string-to-vector arg))
-    (length . (string-bytes arg))))
+  `((type . 109)
+    (data . ,(string-to-vector arg))
+    (length . ,(string-bytes arg))))
 
 (defun etf--convert-int (struct)
   (etf--convert-vector-int (alist-get 'integer struct)))
@@ -340,7 +347,9 @@
 (defun etf--revert-list (arg)
   `((type . 108)
     (length . ,(length arg))
-    (elements . ,(mapcar #'etf-revert arg))))
+    (elements . ,(mapcar #'etf--revert arg))
+    (tail 
+          (type . 106))))
 
 (defun etf--convert-tuple (arg)
   (cl-map 'vector #'etf-convert (alist-get 'elements arg)))
@@ -348,7 +357,7 @@
 (defun etf--revert-tuple (arg)
   `((type . 104)
     (arity . ,(length arg))
-    (elements . ,(mapcar #'etf-revert arg))))
+    (elements . ,(mapcar #'etf--revert arg))))
 
 (defun etf--convert-map (arg)
   (let ((hm (make-hash-table)))
@@ -358,16 +367,21 @@
         (puthash (etf-convert hk) (etf-convert hv) hm)))))
 
 (defun etf--revert-map-pair (key val)
-  `((key . ,(etf-revert key))
-    (val . ,(etf-revert val))))
+  `((key . ,(etf--revert key))
+    (val . ,(etf--revert val))))
 
 (defun etf--revert-map (arg)
-  (let ((len (hash-table-size))))
-  `((type . 116)
-    (arity . ,(hash-table-count arg))
-    (pairs . ,(cl-loop for k being the hash-keys of arg
-                    using hash-values v
-                    collect (etf--revert-pair k v)))))
+  (let ((len (hash-table-size))
+        (pairs (cl-loop for k being the hash-keys of arg
+                     using (hash-values v)
+                     collect (etf--revert-pair k v))))
+    `((type . 116)
+      (arity . ,(hash-table-count arg))
+      (pairs . ,pairs))))
+
+
+(defun etf--revert-nil (arg)
+  '((type . 106)))
 
 (defvar etf-data-types-alist
   '((70 . new-float)
@@ -402,6 +416,7 @@
     (120  . v4-port)))
 
 (defun etf-convert (struct)
+  "Convert ETF structured data into lisp data"
   (cl-case (etf-struct-type struct)
     ('nil nil)
     ('new-float (etf--convert-float struct))
@@ -420,8 +435,9 @@
     ('map (etf--convert-map struct))
     (t struct)))
 
-(defun etf-revert (term)
+(defun etf--revert (term)
   (cond
+    ((null term) (etf--revert-nil term))
     ((integerp term) (etf--revert-int term))
     ((bignump term) (etf--revert-bigint term))
     ((floatp term) (etf--revert-float term))
@@ -430,6 +446,18 @@
     ((listp term) (etf--revert-list term))
     ((vectorp term) (etf--revert-tuple term))
     ((hash-table-p term) (etf--revert-map term))))
+
+(defun etf-revert-lisp (trm)
+  "Revert a common lisp structure to a format that can be
+transformed into ETF binary data"
+  (cons '(version . 131) (etf--revert trm)))
+
+(defun etf-term-to-binary (term)
+  (let ((conv (etf-revert-lisp term)))
+    (etf-pack conv)))
+
+(defun etf-binary-to-term (bin)
+  (etf-convert (etf--bin-unpack bin)))
 
 (provide 'etf)
 

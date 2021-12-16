@@ -10,8 +10,9 @@ defmodule Eiex.Application do
     children = [
       # Starts a worker by calling: Eiex.Worker.start_link(arg)
       # {Eiex.Worker, arg}
-      # {Eiex.IO, []}
-      {Eiex.Server, []}
+      {Task.Supervisor, name: Eiex.Tasks},
+      {Eiex.Server, []},
+      {Eiex.Scheduler, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

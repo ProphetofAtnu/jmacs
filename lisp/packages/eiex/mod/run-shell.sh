@@ -5,9 +5,5 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 echo $SCRIPTPATH
 
 pushd $SCRIPTPATH
-
-stty icanon raw
-elixir --no-halt --erl "-noshell" -S mix 
-stty sane
-
+elixir --sname "eiex@localhost" --no-halt --erl "-noshell" -S mix 
 popd
