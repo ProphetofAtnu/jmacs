@@ -62,23 +62,24 @@
       (or "def" "defp")
       symbol-end))
 
-;; The first character of an identifier must be a letter or an underscore.
-;; After that, they may contain any alphanumeric character + underscore.
-;; Additionally, the final character may be either `?' or `!'.
-(rx-define ex-ident 
-  (seq (any "A-Z" "a-z" "_")
-      (zero-or-more (any "A-Z" "a-z" "0-9" "_"))
-      (optional (or "?" "!"))))
-
 (rx-define ex-kw 
     (seq symbol-start
      (or "fn" "do" "end" "after" "else" "rescue" "catch")
      symbol-end))
 
 (rx-define ex-kw-oper 
-  (seq symbol-start
-      (or "not" "and" "or" "when" "in")
-      symbol-end))
+    (seq symbol-start
+     (or "not" "and" "or" "when" "in")
+     symbol-end))
+
+;; The first character of an identifier must be a letter or an underscore.
+;; After that, they may contain any alphanumeric character + underscore.
+;; Additionally, the final character may be either `?' or `!'.
+
+(rx-define ex-ident 
+  (seq (any "A-Z" "a-z" "_")
+      (zero-or-more (any "A-Z" "a-z" "0-9" "_"))
+      (optional (or "?" "!"))))
 
 ;; Module and submodule names start with upper case letter. This
 ;; can then be followed by any combination of alphanumeric chars.
@@ -108,44 +109,15 @@
 (rx-define ex-sigils 
   (seq "~" (or "B" "C" "D" "E" "L" "N" "R" "S" "T" "U" "b" "c" "e" "r" "s" "w")))
 
-(rx-define ex-alias
-    (seq 
-     (one-or-more
-      (or ex-atom
-          ex-mod
-          ex-pseudo-var
-          ex-ident)
-      (optional "."))))
 
-(rx-define ex-bounds
-    (rx
-     (or whitespace
-         ",")))
-
-(defconst elixir-start-expr-rx
-  (rx
-   bounds
-   (group ex-alias
-          point)))
-
-(defconst 
-  (rx
-   ex-alias))
-
-(defun elixir-in-expression ()
-  (ignore-errors
-      (save-excursion
-        (re-search-backward elixir-in-expression-rx (point-at-bol))
-        (cons (match-beginning 1)
-              (match-end 1)))))
-
-(defun elixir-forward-expression ()
-  (ignore-errors
-      (save-excursion
-        (re-search-backward elixir-in-expression-rx (point-at-bol))
-        (cons (match-beginning 1)
-              (match-end 1)))))
-
-
+(defun syntax-bounds (arg)
+  (save-excursion
+   (list
+    (+
+     (point)
+     (skip-syntax-backward arg))
+    (+
+     (point)
+     (skip-syntax-forward arg)))))
 
 (provide 'elixir-thingatpt)

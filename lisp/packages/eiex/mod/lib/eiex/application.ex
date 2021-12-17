@@ -12,6 +12,7 @@ defmodule Eiex.Application do
       # {Eiex.Worker, arg}
       {Task.Supervisor, name: Eiex.Tasks},
       {Eiex.Server, []},
+      {Eiex.Runtime, []},
       {Eiex.Scheduler, []}
     ]
 
