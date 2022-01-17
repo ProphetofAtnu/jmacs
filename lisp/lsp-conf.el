@@ -5,13 +5,14 @@
     :defer t
     :hook (lsp-mode . lsp-lens-mode)
     :general
+    :config
     (local-leader-def
-        :keymaps 'lsp-mode-map
+        :definer 'minor-mode
+      :keymaps '(lsp-mode)
       "." 'lsp-execute-code-action
       "*" 'lsp-restart-workspace
       "/" 'lsp-avy-lens
       )
-    :config
     ;; Uncomment following section if you would like to tune lsp-mode performance according to
     ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
     (setq lsp-idle-delay 0.500)

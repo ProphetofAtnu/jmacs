@@ -206,7 +206,7 @@
      (struct etf--data))
     (tail struct etf--data)))
 
-(defvar etf--map-pair '((key struct etf-data)
+(defvar etf--map-pair '((key struct etf--data)
                        (val struct etf--data)))
 
 (defvar etf--map '((arity u32)
@@ -272,7 +272,7 @@
 
 (defvar etf-packet
   `((version u8)
-    (struct etf-data)))
+    (struct etf--data)))
 
 (defun etf--bin-unpack (data)
   (bindat-unpack etf-packet data))
@@ -454,7 +454,7 @@ transformed into ETF binary data"
 
 (defun etf-term-to-binary (term)
   (let ((conv (etf-revert-lisp term)))
-    (etf-pack conv)))
+    (etf--bin-pack conv)))
 
 (defun etf-binary-to-term (bin)
   (etf-convert (etf--bin-unpack bin)))

@@ -25,8 +25,18 @@ defmodule Eiex.Calls do
   #   state
   # end
 
+  def call({:runtime, act}) do
+    case act do
+      :update ->
+        Eiex.Runtime.update()
+      :stamp ->
+        Eiex.Runtime.timestamp()
+    end
+    |> Server.schedule_send()
+  end
+
   def call({:complete, arg}) do
-    Eiex.Complete.complete(arg)
+    Eiex.Runtime.complete(arg)
     |> Server.schedule_send()
   end
 

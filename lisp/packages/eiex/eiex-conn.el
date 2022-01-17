@@ -8,6 +8,7 @@
 (defvar *eiex-comm--pending-cbs* nil)
 (defvar *eiex-comm--ref-seq* 0)
 
+(defvar eiex-comm--server-connectable nil)
 
 (defvar *eiex-comm-proc* nil)
 
@@ -19,11 +20,25 @@
         c)
     (setq *eiex-comm-inbox* '())))
 
+(defun eiex-comm--server-filter (proc data)
+  (with-current-buffer (process-buffer proc)
+    (goto-char (point-max))
+    (insert data)
+    (cond
+      ((string-match-p
+        "^Accepting connections on .*" data)
+       (progn (setq eiex-comm--server-connectable t))))))
+
 (defun eiex-comm-run ()
-  (start-process
-   "eiex-server"
-   "*eiex-server-log*"
-   (expand-file-name "lisp/packages/eiex/mod/run-shell.sh" user-emacs-directory)))
+  (setq eiex-comm--server-connectable nil)
+  (make-process
+   :name "eiex-server"
+   :buffer "*eiex-server-log*"
+   :filter #'eiex-comm--server-filter
+   :command (list
+             (expand-file-name
+              "lisp/packages/eiex/mod/run-shell.sh"
+              user-emacs-directory))))
 
 (defun eiex-comm--process-filter (pr data)
   (with-current-buffer (process-buffer pr)
@@ -59,11 +74,15 @@
           *eiex-comm--pending-cbs*)
     (process-send-string proc
                          (etf-term-to-binary term))
-    (when (accept-process-output proc timeout)
-      res)))
+    (with-local-quit 
+      (when (accept-process-output proc timeout)
+        res))))
 
 (defun eiex-comm-cast (term)
   (process-send-string (eiex-comm-get-proc)
                        (etf-term-to-binary term)))
+
+(defun eiex-comm-complete (str)
+  (eiex-comm-call (vector 'complete str)))
 
 (provide 'eiex-comm)

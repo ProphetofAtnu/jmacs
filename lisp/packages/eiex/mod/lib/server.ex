@@ -45,6 +45,7 @@ defmodule Eiex.Server do
 
   @impl true
   def handle_cast(:accept, state) do
+    IO.puts("Accepting connections on #{state[:port]}")
     case :gen_tcp.accept(state[:listen_sock]) do
       {:ok, sock} -> {:noreply, %{state | sock: sock}}
       {:error, _} ->

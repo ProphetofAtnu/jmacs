@@ -34,6 +34,7 @@
  :prefix-map 'prefix-file-map
  "f" 'find-file
  "o" 'find-file-other-window
+ "a" 'auto-revert-mode
  "s" 'save-buffer
  "S" 'evil-write-all
  )

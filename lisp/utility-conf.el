@@ -12,9 +12,14 @@
 
 (use-package ranger
     :straight t
+    :commands (ranger-override-dired-mode)
     :general
     (:keymaps '(ranger-mode-map)
               "w x" 'dired-hexl-open-other-window
-              "w X" 'dired-hexl-open-other-window-noselect))
+              "w X" 'dired-hexl-open-other-window-noselect)
+    (:keymaps '(prefix-file-map)
+              "d" 'ranger)
+    :init
+    (ranger-override-dired-mode +1))
 
 (provide 'utility-conf)

@@ -14,6 +14,10 @@
 (global-set-key [(hyper w)]
                 (lambda () (interactive) (delete-window)))
 (global-set-key [(hyper z)] 'undo)
+(global-set-key [(hyper ?`)] 'ns-next-frame)
+(global-set-key [(hyper ?\;)] 'eval-expression)
+(global-set-key [(hyper t)] 'tab-new)
+(global-set-key [(hyper o)] 'other-window-prefix)
 
 
 (provide 'macos)
