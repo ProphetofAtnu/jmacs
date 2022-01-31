@@ -26,6 +26,8 @@
  "d" 'kill-this-buffer
  "x" 'kill-buffer-and-window
  "i" 'ibuffer-other-window
+ "v" 'view-buffer
+ "V" 'view-buffer-other-window
  "k" 'kill-extra-buffers)
  
 
@@ -61,6 +63,7 @@
  "s" 'evil-window-split
  "v" 'evil-window-vsplit
  "d" 'evil-window-delete
+ "D" 'ace-delete-window
  "H" 'evil-window-move-far-left
  "J" 'evil-window-move-very-bottom
  "K" 'evil-window-move-very-top
@@ -85,6 +88,7 @@
 (define-prefix-map project)
 
 (define-prefix-map utility 
-    "l" 'list-processes)
+    "l" 'list-processes
+    "v" 'vterm)
 
 (provide 'core/prefix)

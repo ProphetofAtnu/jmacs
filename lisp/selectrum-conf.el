@@ -27,18 +27,26 @@
      "a" 'consult-apropos)
     (prefix-buffer-map
      "b" 'consult-buffer)
+    (general-defs :keymaps '(override)
+      "C-M-'" 'consult-imenu)
     :config
     (setq
      consult-fontify-preserve nil
      xref-show-xrefs-function 'consult-xref
      consult-preview-key (kbd "M-.")))
 
+(use-package consult-projectile
+    :straight t 
+    :general
+    (prefix-project-map
+     "v" 'consult-projectile))
+
 (use-package embark
-  :straight t
-  :after (selectrum)
-  :general
-  (selectrum-minibuffer-map
-   "C-SPC" 'embark-act))
+    :straight t
+    :after (selectrum)
+    :general
+    (selectrum-minibuffer-map
+     "C-SPC" 'embark-act))
 
 
 (use-package embark-consult

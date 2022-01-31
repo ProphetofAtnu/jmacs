@@ -12,13 +12,28 @@
 (use-package typescript-mode
     :straight t)
 
+(defun in-npm-project ()
+  (let ((dir default-directory))
+    (cl-block nil
+      (while (not (equal dir "/.."))
+        (when  (member "package.json" (directory-files dir))
+          (cl-return t))
+        (setf dir (expand-file-name ".." dir))))))
+
+(defun detect-js-workspace-type ()
+  (if (in-npm-project)
+      (lsp-deferred)
+    (progn (setq-local lsp-enabled-clients '(deno-ls))
+           (lsp-deferred))))
+
 (use-package lsp-mode
     :straight t
-    :hook ((typescript-mode
-            json-mode
-            js2-mode
+    :hook ((json-mode
             js2-jsx-mode)
-           . lsp-deferred))
+           . lsp-deferred)
+    :init
+    (add-hook 'js2-mode-hook 'detect-js-workspace-type)
+    (add-hook 'typescript-mode-hook 'detect-js-workspace-type))
 
 (use-package web-mode
     :straight t)

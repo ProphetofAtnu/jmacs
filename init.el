@@ -107,6 +107,9 @@
     :straight t
     :hook (emacs-startup . global-evil-matchit-mode))
 
+(use-package hydra
+    :straight t)
+
 (use-package evil-commentary
     :straight t
     :bind
@@ -140,6 +143,26 @@
     :hook (emacs-startup . general-override-mode)
     :init
     (require 'core/bindings))
+
+(use-package evil-mc
+    :straight t
+    :hook (emacs-startup . global-evil-mc-mode)
+    :init
+    (require 'core/hydras)
+    :general
+    (:keymaps '(evil-mc-key-map)
+              :states '(normal)
+              "z ." 'evil-mc-make-cursor-here 
+              "z <" 'evil-mc-pause-cursors
+              "z >" 'evil-mc-resume-cursors
+              "z /" 'evil-mc-undo-all-cursors
+              "g . ." 'evil-mc-hydra/body
+              )
+    :config
+    (evil-mc-define-vars)
+    (add-to-list 'evil-mc-incompatible-minor-modes 'lispy)
+    ) 
+
 
 (use-package evil-avy
     :straight t
@@ -177,13 +200,18 @@
     :mode "\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'")
 
 ;; Themeing
-(use-package bliss-theme
+;; (use-package bliss-theme
+;;     :straight t
+;;     :init
+;;     (load-theme 'bliss t)
+;;     :config
+;;     (set-face-background 'highlight "#3d3d3d")
+;;     (set-face-background 'lazy-highlight "#333333"))
+
+(use-package cherry-blossom-theme
     :straight t
     :init
-    (load-theme 'bliss t)
-    :config
-    (set-face-background 'highlight "#3d3d3d")
-    (set-face-background 'lazy-highlight "#333333"))
+    (load-theme 'cherry-blossom t))
 
 
 (use-package mood-line
@@ -195,13 +223,15 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-14")
-(set-frame-font "Fira Code-14" nil t)
+(set-face-attribute 'default t :font "Fira Code-12")
+(set-frame-font "Fira Code-12" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
 (use-package helpful
     :straight t
+    :init
+    (defvar read-symbol-positions-list nil)
     :commands (helpful-symbol
                helpful-key))
 
@@ -227,6 +257,13 @@
               "t" 'insert-date-time
               "T" 'insert-time))
 
+(use-package tree-sitter
+    :straight t
+    :hook (emacs-startup . global-tree-sitter-mode))
+
+(use-package tree-sitter-langs
+    :straight t)
+
 (use-package all-the-icons
     :straight t)
 
@@ -237,9 +274,6 @@
     (global-leader-def
         :keymaps 'override
         "t" 'treemacs-select-window))
-
-(use-package hydra
-    :straight t)
 
 (use-package elec-pair
     :init (electric-pair-mode))

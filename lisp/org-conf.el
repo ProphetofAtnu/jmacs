@@ -7,23 +7,35 @@
 (require 'use-package)
 (require 'general)
 
+
 (use-package org
-  :defer t
-  :commands (org-agenda
-             org-capture)
-  :init
-  (defvar org-directory "~/org")
-  :general
-  (local-leader-def
-      :keymaps 'org-mode-map
-    "," 'consult-org-heading
-    "|" 'org-table-create-or-convert-from-region
-    "y" 'org-store-link
-    "i" 'org-insert-structure-template
-    "p" 'org-insert-last-stored-link)
-  :config
-  (add-hook 'org-mode-hook 'company-mode)
-  (add-hook 'org-mode-hook 'org-display-inline-images))
+    :defer t
+    :commands (org-agenda
+               org-capture)
+    :init
+    (defvar org-directory "~/org")
+    (define-prefix-map org-table)
+    :general
+    (local-leader-def
+        :keymaps 'org-mode-map
+      "," 'consult-org-heading
+      "|" 'org-table-create-or-convert-from-region
+      "y" 'org-store-link
+      "i" 'org-insert-structure-template
+      "p" 'org-insert-last-stored-link
+      "t" (mount-prefix-map org-table "Table"))
+    (general-defs
+        :keymaps 'prefix-org-table-map
+      "c" 'org-table-insert-column
+      "C" 'org-table-delete-column
+      "r" 'org-table-insert-row
+      "a" 'org-table-align
+      "h" 'org-table-insert-hline
+      "t" 'org-table-create-or-convert-from-region
+      )
+    :config
+    (add-hook 'org-mode-hook 'company-mode)
+    (add-hook 'org-mode-hook 'org-display-inline-images))
 
 (use-package evil-org
     :straight t

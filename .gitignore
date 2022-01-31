@@ -1,5 +1,12 @@
 /custom.el
 /eln-cache/
+/.python-environments/
+/elpa/
+/elpy/
+/eln-cache/
+/straight/
+/etc/
+/mssql/
 /straight/
 /var/
 /etc/
