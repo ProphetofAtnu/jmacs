@@ -23,6 +23,7 @@
       "y" 'org-store-link
       "i" 'org-insert-structure-template
       "p" 'org-insert-last-stored-link
+      "r" 'org-redisplay-inline-images
       "t" (mount-prefix-map org-table "Table"))
     (general-defs
         :keymaps 'prefix-org-table-map
@@ -34,6 +35,10 @@
       "t" 'org-table-create-or-convert-from-region
       )
     :config
+    (setq org-src-preserve-indentation t)
+    (setq org-confirm-babel-evaluate nil)
+    (setq org-display-remote-inline-images 'download)
+    (setq org-startup-with-inline-images t)
     (add-hook 'org-mode-hook 'company-mode)
     (add-hook 'org-mode-hook 'org-display-inline-images))
 

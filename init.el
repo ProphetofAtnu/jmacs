@@ -63,7 +63,6 @@
     :straight t)
 
 (require 'core/utility)
-
 ;; Evil
 
 (use-package evil 
@@ -156,9 +155,12 @@
               "z <" 'evil-mc-pause-cursors
               "z >" 'evil-mc-resume-cursors
               "z /" 'evil-mc-undo-all-cursors
-              "g . ." 'evil-mc-hydra/body
               )
     :config
+    (general-def
+        :keymaps '(evil-mc-key-map)
+      :states '(normal)
+      "g.." 'evil-mc-hydra/body)
     (evil-mc-define-vars)
     (add-to-list 'evil-mc-incompatible-minor-modes 'lispy)
     ) 
@@ -213,6 +215,8 @@
     :init
     (load-theme 'cherry-blossom t))
 
+(use-package popup
+    :straight t)
 
 (use-package mood-line
     :straight t
@@ -228,17 +232,31 @@
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
+;; help-fns--autoloaded-p fix as of 29.0.50
+;; truncates arguments after the first   
+(defun advice--compat-alleviate-rest-args (fun &rest args)
+  (funcall fun (or (car-safe args)
+                 args)))
+
 (use-package helpful
     :straight t
     :init
     (defvar read-symbol-positions-list nil)
     :commands (helpful-symbol
-               helpful-key))
+               helpful-key)
+    :config
+    (advice-add 'help-fns--autoloaded-p
+                :around
+                #'advice--compat-alleviate-rest-args))
 
 (use-package ace-window
     :straight t
     :commands (ace-window
-               ace-swap-window))
+               ace-swap-window)
+    :config
+    (setq aw-keys
+          (cl-loop for k across "asdfjkl;"
+                collect k)))
 
 (use-package yasnippet
     :straight t
@@ -263,7 +281,7 @@
 
 (use-package tree-sitter-langs
     :straight t)
-
+ 
 (use-package all-the-icons
     :straight t)
 
@@ -295,7 +313,20 @@
               "X" 'projectile-compile-project
               "f" 'projectile-find-file-dwim
               "c" 'projectile-commander
-              "C" 'projectile-kill-buffers))    
+              "C" 'projectile-kill-buffers))
+
+(use-package origami
+    :straight t
+    :hook (emacs-startup . global-origami-mode))
+
+(use-package zmq
+    :straight t)
+
+(use-package deferred
+    :straight t)
+
+(add-hook 'emacs-startup-hook
+          'global-auto-revert-mode)
 
 (cond
   ((eq system-type 'darwin) (require 'macos)))

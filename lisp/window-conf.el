@@ -57,7 +57,11 @@
      ;; (inhibit-same-window . t)
      (mode . eww-mode))
     ("\\*Embark Actions\\*"
-     (display-buffer-posframe))))
+     (display-buffer-posframe))
+    ("\\*jupyter-\\(display\\|output\\)\\*"
+     (display-buffer-reuse-mode-window
+      display-buffer-in-previous-window
+      display-buffer-pop-up-window))))
 
 (defun compile-buffer-display-alist ()
   (setq display-buffer-alist
