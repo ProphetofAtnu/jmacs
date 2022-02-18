@@ -13,6 +13,9 @@
       "*" 'lsp-restart-workspace
       "/" 'lsp-avy-lens
       )
+    (general-defs
+        :keymaps 'prefix-utility-map
+      "s" 'lsp)
     ;; Uncomment following section if you would like to tune lsp-mode performance according to
     ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
     (setq lsp-idle-delay 0.500)

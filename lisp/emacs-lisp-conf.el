@@ -60,5 +60,13 @@
   "r" 'eval-region
   "m" 'macrostep-mode)
   
+(use-package edebug
+  :init 
+  (defun edebug-wc-top-level ()
+    (interactive)
+    (which-key--show-keymap "edebug" edebug-mode-map))
+  (general-defs
+    :keymaps 'edebug-mode-map
+    "?" 'edebug-wc-top-level))
 
 (provide 'emacs-lisp-conf)

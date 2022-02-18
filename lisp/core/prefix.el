@@ -23,6 +23,7 @@
  :prefix-command 'prefix-buffer-command
  :prefix-map 'prefix-buffer-map
  "b" 'switch-to-buffer
+ "o" 'switch-window-then-display-buffer
  "d" 'kill-this-buffer
  "x" 'kill-buffer-and-window
  "i" 'ibuffer-other-window
@@ -54,16 +55,18 @@
 (general-define-key
  :prefix-command 'prefix-window-command
  :prefix-map 'prefix-window-map
- "t" 'ace-swap-window
- "w" 'ace-window
+ "t" 'switch-window-then-swap-buffer
+ "w" 'switch-window
+ "D" 'switch-window-then-delete
  "h" 'evil-window-left
  "j" 'evil-window-down
  "k" 'evil-window-up
  "l" 'evil-window-right
  "s" 'evil-window-split
+ "S" 'switch-window-then-split-vertically
  "v" 'evil-window-vsplit
+ "V" 'switch-window-then-split-horizontally
  "d" 'evil-window-delete
- "D" 'ace-delete-window
  "H" 'evil-window-move-far-left
  "J" 'evil-window-move-very-bottom
  "K" 'evil-window-move-very-top

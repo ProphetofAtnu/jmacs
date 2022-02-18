@@ -3,10 +3,13 @@ pub mod db;
 pub mod util;
 
 
+use std::lazy::SyncLazy;
+
 use db::DSN;
 use emacs::{defun, Env, IntoLisp, Result, Value};
 
 emacs::plugin_is_GPL_compatible!();
+
 
 // static LOOP: SyncLazy<Arc<Box<runner::Runner>>> =
 //     SyncLazy::new(|| Arc::new(box runner::Runner::new()));
@@ -35,7 +38,8 @@ fn run_sql_to_lisp(env: &Env, dsn: String, query: String) -> Result<Value> {
 #[defun]
 fn run_sql_in_db(dsn: String, db: String, query: String) -> Result<String> {
     let dsn_val = DSN(dsn).with_db(&db);
-    Ok(dsn_val.exec_to_string(&query)?)
+    let str_res = dsn_val.exec_to_string(&query)?;
+    Ok(str_res)
 }
 
 

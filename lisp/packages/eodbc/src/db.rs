@@ -6,7 +6,11 @@ use emacs::{FromLisp, IntoLisp, Value};
 use odbc_api::{buffers::TextRowSet, Connection, Cursor, Environment, ResultSetMetadata};
 
 static ENVIRONMENT: SyncLazy<Arc<Box<Environment>>> =
-    SyncLazy::new(|| Arc::new(box Environment::new().unwrap()));
+    SyncLazy::new(|| Arc::new({
+        let mut env = box Environment::new().unwrap();  
+        env.set_connection_pooling_matching(odbc_api::sys::AttrCpMatch::Strict);
+        env
+    }));
 
 #[derive(Debug, Clone)]
 pub struct DSN(pub String);
@@ -63,6 +67,7 @@ impl DSN {
         let DSN(cstr) = self;
         return ENVIRONMENT.connect_with_connection_string(cstr);
     }
+
 }
 
 impl DSN {
@@ -114,7 +119,7 @@ impl DSN {
 
         match result {
             Some(cursor) => {
-                let mut buffers = TextRowSet::for_cursor(5000, &cursor, Some(4096))?;
+                let mut buffers = TextRowSet::for_cursor(1000, &cursor, Some(4096))?;
                 let columns: Vec<String> = cursor
                     .column_names()?
                     .map(|x| x.unwrap_or("NULL".to_string()))

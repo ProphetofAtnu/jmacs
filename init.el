@@ -210,10 +210,18 @@
 ;;     (set-face-background 'highlight "#3d3d3d")
 ;;     (set-face-background 'lazy-highlight "#333333"))
 
+
+ ;; '(mode-line-inactive
+ ;;   ((((class color) (min-colors 88)) (:background "#111111" :foreground "#000000"))
+ ;;    (t (:weight light :box nil :background "#202339" :foreground "#000000" :inherit (mode-line)))))
+ 
+
+
 (use-package cherry-blossom-theme
     :straight t
     :init
-    (load-theme 'cherry-blossom t))
+    (load-theme 'cherry-blossom t)
+    (set-face-foreground 'mode-line-inactive "#5F5A60"))
 
 (use-package popup
     :straight t)
@@ -257,6 +265,12 @@
     (setq aw-keys
           (cl-loop for k across "asdfjkl;"
                 collect k)))
+
+(use-package switch-window
+    :straight t
+    :config
+  (setq switch-window-shortcut-style 'qwerty
+        switch-window-multiple-frames t))
 
 (use-package yasnippet
     :straight t
@@ -356,3 +370,5 @@
 (load custom-file)
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'erase-buffer 'disabled nil)
+(put 'list-timers 'disabled nil)
+(put 'list-threads 'disabled nil)

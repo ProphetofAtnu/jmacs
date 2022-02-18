@@ -13,4 +13,14 @@
 (defconst eodbc-db-cache-kinds
   '(:table :view :column :routine))
 
+(defun eodbc--output-table-buffer (data)
+  (with-current-buffer (generate-new-buffer "*eodbc-result*")
+    (dolist (row data) 
+      (insert (format "|%s|\n" (string-join row "|"))))
+    (org-table-align)
+    (goto-char (point-min))
+    (org-table-insert-hline)
+    (toggle-truncate-lines 1)
+    (display-buffer (current-buffer))))
+
 (provide 'emacs-odbc)

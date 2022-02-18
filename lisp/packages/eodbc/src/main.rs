@@ -5,34 +5,46 @@ use odbc_api::{
     Cursor, ResultSetMetadata,
 };
 
-fn main() -> anyhow::Result<()> {
+fn do_exec() -> anyhow::Result<()> {
     let dsn_t = DSN::from_parts([("DSN", "DBWEST")]);
     println!("{}", dsn_t.0);
     let dsn = dsn_t.with_db("CC");
     println!("{}", dsn.0);
 
+    
     let conn = dsn.connect()?;
 
     println!("{}", conn.database_management_system_name()?);
     println!("{}", conn.current_catalog()?);
 
-    let cursor = conn.tables(None, None, None, None)?;
+    let cur = conn.execute("SELECT * FROM sys.tables", ())?;
 
-    let cn: Vec<String> = cursor
-        .column_names()
-        .expect("Has column names")
-        .map(|x| x.unwrap_or("NONE".to_string()))
-        .collect();
-    println!("{:?}", cn);
+    if let Some(mut cursor) = cur {
+        let cn: Vec<String> = cursor
+            .column_names()
+            .expect("Has column names")
+            .map(|x| x.unwrap_or("NONE".to_string()))
+            .collect();
+        println!("{:?}", cn);
 
-    text_rows!(cursor, row, {
-        println!(
-            "{:?}",
-            row.into_iter()
-                .map(|x| String::from_utf8_lossy(x.unwrap_or("NULL".as_bytes())).to_string())
-                .collect::<Vec<String>>()
-        );
-    });
+        text_rows!(cursor, row, {
+            println!(
+                "{:?}",
+                row.into_iter()
+                    .map(|x| String::from_utf8_lossy(x.unwrap_or("NULL".as_bytes())).to_string())
+                    .collect::<Vec<String>>()
+            );
+        });
+
+        
+    }
+
+    Ok(())
+}
+
+fn main() -> anyhow::Result<()> {
+    let _ = do_exec();
+    let _ = do_exec();
 
     Ok(())
 }
