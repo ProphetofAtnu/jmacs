@@ -39,7 +39,6 @@
     (setq org-confirm-babel-evaluate nil)
     (setq org-display-remote-inline-images 'download)
     (setq org-startup-with-inline-images t)
-    (add-hook 'org-mode-hook 'company-mode)
     (add-hook 'org-mode-hook 'org-display-inline-images))
 
 (use-package evil-org

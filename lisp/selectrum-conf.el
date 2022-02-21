@@ -3,13 +3,81 @@
 (require 'general)
 (require 'use-package)
 
-(use-package selectrum
-    :straight t
-    :hook (emacs-startup . selectrum-mode))
+;; (use-package selectrum
+;;     :straight t
+;;     :hook (emacs-startup . selectrum-mode))
 
-(use-package selectrum-prescient
-  :straight t
-  :hook (selectrum-mode . selectrum-prescient-mode))
+;; (use-package selectrum-prescient
+;;   :straight t
+;;   :hook (selectrum-mode . selectrum-prescient-mode))
+
+
+;;; Enable vertico
+(use-package vertico
+    :straight t
+    :init
+    (add-to-list 'load-path
+                 (straight--build-dir "vertico" "extensions"))
+    (vertico-mode)
+    (require 'vertico-multiform)
+    (vertico-multiform-mode)
+    (setq vertico-cycle t)
+    (require 'vertico-flat)
+    (require 'vertico-grid)
+    (setq vertico-multiform-categories
+          '((file grid)
+            (command flat)))
+    (require 'vertico-directory)
+
+    (general-defs
+        :keymaps 'vertico-map
+      "C-M-o" 'vertico-multiform-flat
+      "C-M-i" 'vertico-multiform-grid
+      "C-M-u" 'vertico-multiform-vertical
+      "C-." 'vertico-multiform-vertical
+      )
+    )
+
+;; Optionally use the `orderless' completion style. See
+;; `+orderless-dispatch' in the Consult wiki for an advanced Orderless style
+;; dispatcher. Additionally enable `partial-completion' for file path
+;; expansion. `partial-completion' is important for wildcard support.
+;; Multiple files can be opened at once with `find-file' if you enter a
+;; wildcard. You may also give the `initials' completion style a try.
+(use-package orderless
+    :straight t
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+;; A few more useful configurations...
+(use-package emacs
+  :init
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; Alternatively try `consult-completing-read-multiple'.
+  (defun crm-indicator (args)
+    (cons (concat "[CRM] " (car args)) (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+  (ido-mode -1)
+  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+  ;; Vertico commands are hidden in normal buffers.
+  ;; (setq read-extended-command-predicate
+  ;;       #'command-completion-default-include-p)
+
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t))
+
 
 (use-package consult
     :straight t
@@ -43,9 +111,10 @@
 
 (use-package embark
     :straight t
-    :after (selectrum)
     :general
     (selectrum-minibuffer-map
+     "C-SPC" 'embark-act)
+    (vertico-map
      "C-SPC" 'embark-act))
 
 
@@ -68,7 +137,7 @@
   :general (:keymaps 'minibuffer-local-map
             "M-?" 'marginalia-cycle)
 
-  :after (selectrum)
+  ;; :after (selectrum)
   ;; The :init configuration is always executed (Not lazy!)
   :init
   (marginalia-mode)

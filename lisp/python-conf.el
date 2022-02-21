@@ -4,29 +4,20 @@
 (require 'general)
 
 (use-package python
-  :defer t)
-
-
-;; (use-package lsp-mode
-;;     :straight t
-;;     :defer t
-;;     :hook (python-mode . lsp-deferred))
-
-;; (use-package elpy
-;;     :straight t
-;;     :hook (python-mode . elpy-enable)
-;;     :config
-;;     (setq elpy-rpc-python-command "python3")
-;;     (setq elpy-get-info-from-shell t))
+    :defer t)
 
 (use-package company-jedi
     :straight t
-    :hook (python-mode . jedi:setup)
     :general
     (jedi-mode-map
      :states '(normal motion)
      "K" 'jedi:show-doc)
-    )
+    :hook (python-mode . jedi:setup)
+    :init
+    (defun cape-jedi-setup ()
+      (let ((jedi-capf (cape-company-to-capf 'company-jedi)))
+        (add-hook 'completion-at-point-functions jedi-capf 0 t)))
+    (add-hook 'jedi-mode-hook 'cape-jedi-setup))
 
 (use-package python-black
     :straight t

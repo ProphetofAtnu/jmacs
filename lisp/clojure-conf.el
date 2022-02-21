@@ -55,22 +55,22 @@
               "<return>" 'cider-browse-ns-operate-at-point)    
     :config
     (add-hook 'cider-repl-mode-hook #'cider-company-enable-fuzzy-completion)
-    (add-hook 'cider-mode-hook #'cider-company-enable-fuzzy-completion)
-    (add-hook 'cider-repl-mode-hook 'company-mode))
+    (add-hook 'cider-mode-hook #'cider-company-enable-fuzzy-completion))
+    ;; (add-hook 'cider-repl-mode-hook 'company-mode))
 
-(use-package spiral
-    :straight t
-    :after (clojure-mode)
-    :general
-    (local-leader-def
-        :keymaps '(spiral-mode-map)
-      "e" 'spiral-eval-top-level-form
-      "l" 'spiral-eval-last-sexp)
-    :config
-    (add-hook 'spiral-repl-mode-hook 'company-mode)
-    (require 'cider-completion)
-    (defalias 'spiral-complete--get-context-at-point
-        'cider-completion-get-context-at-point)
-    (defvar spiral-aux-sync-request-timeout spiral-sync-request-timeout))
+;; (use-package spiral
+;;     :straight t
+;;     :after (clojure-mode)
+;;     :general
+;;     (local-leader-def
+;;         :keymaps '(spiral-mode-map)
+;;       "e" 'spiral-eval-top-level-form
+;;       "l" 'spiral-eval-last-sexp)
+;;     :config
+;;     (add-hook 'spiral-repl-mode-hook 'company-mode)
+;;     (require 'cider-completion)
+;;     (defalias 'spiral-complete--get-context-at-point
+;;         'cider-completion-get-context-at-point)
+;;     (defvar spiral-aux-sync-request-timeout spiral-sync-request-timeout))
 
 (provide 'clojure-conf)

@@ -64,7 +64,8 @@
               "C-\\" 'lispy-mode)
     :config
     (setq lispy-completion-method 'default
-          lispy-close-quotes-at-end-p t)
+          lispy-close-quotes-at-end-p t
+          lispy-colon-p nil)
     (add-to-list 'lispy-compat 'cider)
     (add-to-list 'lispy-compat 'macrostep))
 

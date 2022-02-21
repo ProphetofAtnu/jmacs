@@ -20,7 +20,7 @@
     ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
     (setq lsp-idle-delay 0.500)
     (setq lsp-log-io nil)
-    (setq lsp-completion-provider :capf)
+    (setq lsp-completion-provider :none)
     (setq lsp-prefer-flymake nil))
 
 (use-package lsp-ui

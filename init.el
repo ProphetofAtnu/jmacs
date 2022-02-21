@@ -143,6 +143,23 @@
     :init
     (require 'core/bindings))
 
+(use-package corfu
+    :straight t
+    :init
+    (setq corfu-auto t
+          corfu-auto-delay 0.1
+          corfu-auto-prefix 2)
+    (corfu-global-mode))
+
+(use-package cape
+    :straight t
+    :init
+    (add-to-list 'completion-at-point-functions #'cape-symbol)
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-keyword)
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    (add-to-list 'completion-at-point-functions #'cape-sgml))
+
 (use-package evil-mc
     :straight t
     :hook (emacs-startup . global-evil-mc-mode)
@@ -173,13 +190,17 @@
              "s" 'evil-avy-goto-char-2
              "g l" 'evil-avy-goto-line))
 
+
 (use-package company
     :straight t
-    :hook ((prog-mode comint-mode) . company-mode)
     :general
-    (:states '(insert emacs)
-             "C-TAB" 'company-complete
-             "C-<tab>" 'company-complete)
+    (:keymaps '(company-mode-map)
+              :states '(insert emacs)
+              "C-TAB" 'company-complete
+              "C-<tab>" 'company-complete)
+    ;; :init
+    ;; (add-hook 'company-mode-hook
+    ;;           'override-company-with-corfu)
     :config
     (setq company-minimum-prefix-length 1))
 
@@ -196,6 +217,7 @@
     :general
     (:keymaps 'prefix-project-map
               "m" 'magit))
+
 
 (use-package markdown-mode
     :straight t
@@ -215,8 +237,6 @@
  ;;   ((((class color) (min-colors 88)) (:background "#111111" :foreground "#000000"))
  ;;    (t (:weight light :box nil :background "#202339" :foreground "#000000" :inherit (mode-line)))))
  
-
-
 (use-package cherry-blossom-theme
     :straight t
     :init
@@ -235,27 +255,27 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-12")
-(set-frame-font "Fira Code-12" nil t)
+(set-face-attribute 'default t :font "Fira Code-14")
+(set-frame-font "Fira Code-14" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
 ;; help-fns--autoloaded-p fix as of 29.0.50
 ;; truncates arguments after the first   
-(defun advice--compat-alleviate-rest-args (fun &rest args)
-  (funcall fun (or (car-safe args)
-                 args)))
+;; (defun advice--compat-alleviate-rest-args (fun &rest args)
+;;   (funcall fun (or (car-safe args)
+;;                  args)))
 
 (use-package helpful
     :straight t
     :init
     (defvar read-symbol-positions-list nil)
     :commands (helpful-symbol
-               helpful-key)
-    :config
-    (advice-add 'help-fns--autoloaded-p
-                :around
-                #'advice--compat-alleviate-rest-args))
+               helpful-key))
+    ;; :config
+    ;; (advice-add 'help-fns--autoloaded-p
+    ;;             :around
+    ;;             #'advice--compat-alleviate-rest-args))
 
 (use-package ace-window
     :straight t
@@ -365,6 +385,7 @@
 (require 'web-conf)
 (require 'scala-conf)
 (require 'eww-conf)
+(require 'swift-conf)
 (require 'utility-conf)
 
 (load custom-file)

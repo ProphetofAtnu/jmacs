@@ -14,9 +14,9 @@
 ;;   :config
 ;;   (setq shell-pop-full-span t))
   
-(use-package company
-    :hook ((eshell-mode shell-mode) . 'company-mode)
-    )
+;; (use-package company
+;;     :hook ((eshell-mode shell-mode) . 'company-mode)
+;;     )
 
 ;; (use-package eshell
 ;;     :config

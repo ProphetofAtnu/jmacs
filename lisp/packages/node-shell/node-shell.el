@@ -68,11 +68,4 @@
            :read-marker node-shell--read-marker
            :last-write-marker node-shell--last-write-start)))
 
-(defun company-node-shell (command &optional arg &rest ignored)
-  (interactive (list 'interactive))
-  (cl-case
-      (interactive (company-begin-backend 'company-node-shell))
-    (prefix ( ))
-    ))
-
 (provide 'node-shell)

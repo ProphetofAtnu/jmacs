@@ -34,16 +34,29 @@
       evil-lookup-func
       #'helpful-at-point))))
 
+(defun emacs-lisp-setup-hook ()
+  (setq-local lisp-indent-function #'common-lisp-indent-function)
+  (setq-local format-action 'parinfer-indent-buffer)              
+  (setq-local evil-lookup-func #'helpful-at-point)
+  (when corfu-global-mode
+    (setq-local completion-at-point-functions '(
+                elisp-completion-at-point
+                cape-symbol
+                cape-dabbrev
+                cape-keyword
+                cape-file t)))
+  )
 
 (use-package elisp-mode
   :commands (elisp-mode)
   :config
-  (add-hook 'emacs-lisp-mode-hook
-            #'(lambda () (setq-local lisp-indent-function #'common-lisp-indent-function)))
-  (add-hook 'emacs-lisp-mode-hook
-            #'(lambda ()
-               (setq-local format-action 'parinfer-indent-buffer)              
-               (setq-local evil-lookup-func #'helpful-at-point)))
+  (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-setup-hook)
+  ;; (add-hook 'emacs-lisp-mode-hook
+  ;;           #'(lambda () (setq-local lisp-indent-function #'common-lisp-indent-function)))
+  ;; (add-hook 'emacs-lisp-mode-hook
+  ;;           #'(lambda ()
+  ;;              (setq-local format-action 'parinfer-indent-buffer)              
+  ;;              (setq-local evil-lookup-func #'helpful-at-point)))
   (add-hook 'emacs-lisp-mode-hook
             '(lambda ()
                (let  ((auto-insert-query nil)

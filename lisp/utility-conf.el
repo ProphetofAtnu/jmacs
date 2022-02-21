@@ -18,9 +18,11 @@
               "w x" 'dired-hexl-open-other-window
               "w X" 'dired-hexl-open-other-window-noselect)
     (:keymaps '(prefix-file-map)
-              "d" 'ranger)
-    :init
-    (ranger-override-dired-mode +1))
+              "d" 'ranger))
 
+(use-package dired
+    :general
+  (dired-mode-map
+   "-" 'dired-up-directory))
 
 (provide 'utility-conf)
