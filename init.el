@@ -62,6 +62,9 @@
 (use-package delight
     :straight t)
 
+(use-package fn
+    :straight t)
+
 (require 'core/utility)
 ;; Evil
 
@@ -255,16 +258,10 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-14")
-(set-frame-font "Fira Code-14" nil t)
+(set-face-attribute 'default t :font "Fira Code-12")
+(set-frame-font "Fira Code-12" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
-
-;; help-fns--autoloaded-p fix as of 29.0.50
-;; truncates arguments after the first   
-;; (defun advice--compat-alleviate-rest-args (fun &rest args)
-;;   (funcall fun (or (car-safe args)
-;;                  args)))
 
 (use-package helpful
     :straight t
@@ -272,10 +269,6 @@
     (defvar read-symbol-positions-list nil)
     :commands (helpful-symbol
                helpful-key))
-    ;; :config
-    ;; (advice-add 'help-fns--autoloaded-p
-    ;;             :around
-    ;;             #'advice--compat-alleviate-rest-args))
 
 (use-package ace-window
     :straight t

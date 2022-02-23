@@ -19,9 +19,13 @@
          (lisp-interaction-mode . elisp-def-mode)
          (ielm-mode . elisp-def-mode)))
 
+(use-package lisp-extra-font-lock
+    :straight t
+    :hook (emacs-lisp-mode . lisp-extra-font-lock-mode))
+
 (use-package eros
-  :straight t
-  :hook (emacs-lisp-mode . eros-mode))
+    :straight t
+    :hook (emacs-lisp-mode . eros-mode))
 
 (use-package ielm
   :commands (ielm)

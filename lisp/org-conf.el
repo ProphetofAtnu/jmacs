@@ -24,6 +24,8 @@
       "i" 'org-insert-structure-template
       "p" 'org-insert-last-stored-link
       "r" 'org-redisplay-inline-images
+      "e" 'org-encrypt-entry
+      "d" 'org-decrypt-entry
       "t" (mount-prefix-map org-table "Table"))
     (general-defs
         :keymaps 'prefix-org-table-map
