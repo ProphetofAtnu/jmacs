@@ -3,11 +3,6 @@
 (require 'use-package)
 (require 'general)
 
-
-(require 'use-package)
-(require 'general)
-
-
 (use-package org
     :defer t
     :commands (org-agenda

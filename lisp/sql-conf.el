@@ -1,4 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
+(use-package lsp-mssql
+    :straight t)
 
 (use-package sql
     :config
@@ -9,5 +11,4 @@
              (expand-file-name
               "lisp/packages/eodbc"
               user-emacs-directory))
-
 (provide 'sql-conf)

@@ -46,4 +46,9 @@
       "[" 'flycheck-list-errors
       ))
 
+(use-package eglot
+    :straight t
+    :config
+    (setq eglot-autoshutdown t))
+
 (provide 'lsp-conf)

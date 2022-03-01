@@ -4,20 +4,36 @@
 (require 'general)
 
 (use-package python
-    :defer t)
+    :defer t
+    :config
+    (setq python-indent-guess-indent-offset-verbose nil))
 
-(use-package company-jedi
+;; (use-package company-jedi
+;;     :straight t
+;;     :general
+;;     (jedi-mode-map
+;;      :states '(normal motion)
+;;      "K" 'jedi:show-doc)
+;;     :hook (python-mode . jedi:setup)
+;;     :init
+;;     (defun cape-jedi-setup ()
+;;       (let ((jedi-capf (cape-company-to-capf 'company-jedi)))
+;;         (add-hook 'completion-at-point-functions jedi-capf 0 t)))
+;;     (add-hook 'jedi-mode-hook 'cape-jedi-setup))
+
+;; (use-package lsp-pyright
+;;     :straight t)
+
+;; (use-package lsp-mode
+;;     :straight t
+;;     :hook (python-mode . lsp-deferred))
+
+(use-package eglot
     :straight t
-    :general
-    (jedi-mode-map
-     :states '(normal motion)
-     "K" 'jedi:show-doc)
-    :hook (python-mode . jedi:setup)
-    :init
-    (defun cape-jedi-setup ()
-      (let ((jedi-capf (cape-company-to-capf 'company-jedi)))
-        (add-hook 'completion-at-point-functions jedi-capf 0 t)))
-    (add-hook 'jedi-mode-hook 'cape-jedi-setup))
+    :hook (python-mode . eglot-ensure)
+    :config
+    (push '(python-mode . ("pyright-langserver" "--stdio"))
+          eglot-server-programs))
 
 (use-package python-black
     :straight t

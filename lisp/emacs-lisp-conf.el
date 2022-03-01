@@ -38,6 +38,12 @@
       evil-lookup-func
       #'helpful-at-point))))
 
+(defun elisp-auto-insert-lex ()
+  (when (buffer-file-name)
+    (save-excursion
+      (add-file-local-variable-prop-line 'lexical-binding t)))
+  )
+
 (defun emacs-lisp-setup-hook ()
   (setq-local lisp-indent-function #'common-lisp-indent-function)
   (setq-local format-action 'parinfer-indent-buffer)              
@@ -49,26 +55,13 @@
                 cape-dabbrev
                 cape-keyword
                 cape-file t)))
+  ;; (elisp-auto-insert-lex)
   )
 
 (use-package elisp-mode
   :commands (elisp-mode)
   :config
-  (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-setup-hook)
-  ;; (add-hook 'emacs-lisp-mode-hook
-  ;;           #'(lambda () (setq-local lisp-indent-function #'common-lisp-indent-function)))
-  ;; (add-hook 'emacs-lisp-mode-hook
-  ;;           #'(lambda ()
-  ;;              (setq-local format-action 'parinfer-indent-buffer)              
-  ;;              (setq-local evil-lookup-func #'helpful-at-point)))
-  (add-hook 'emacs-lisp-mode-hook
-            '(lambda ()
-               (let  ((auto-insert-query nil)
-                      (auto-insert-alist
-                       '((("\\.el\\'" . "Emacs Lisp header")
-                          ""
-                          ";;; -*- lexical-binding: t; -*-\n\n" '(setq lexical-binding t)))))
-                 (auto-insert)))))
+  (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-setup-hook))
 
 (local-leader-def
   :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)

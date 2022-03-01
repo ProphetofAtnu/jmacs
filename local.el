@@ -2,6 +2,6 @@
 
 (setq lsp-mssql-connections
       [(:server "MAS-DBWEST-SQL.apm.alcoa.com"
-                :database ""
-                :user "scaggj"
-                :password "Kagamie$6")])
+                :database "CC"
+                :authenticationType "Integrated")])
+
