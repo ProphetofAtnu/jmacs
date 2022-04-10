@@ -39,7 +39,10 @@
       #'helpful-at-point))))
 
 (defun elisp-auto-insert-lex ()
-  (when (buffer-file-name)
+  (interactive)
+  (when (and
+         (eq major-mode 'emacs-lisp-mode)
+         (buffer-file-name))
     (save-excursion
       (add-file-local-variable-prop-line 'lexical-binding t)))
   )
@@ -48,13 +51,13 @@
   (setq-local lisp-indent-function #'common-lisp-indent-function)
   (setq-local format-action 'parinfer-indent-buffer)              
   (setq-local evil-lookup-func #'helpful-at-point)
-  (when corfu-global-mode
-    (setq-local completion-at-point-functions '(
-                elisp-completion-at-point
-                cape-symbol
-                cape-dabbrev
-                cape-keyword
-                cape-file t)))
+  ;; (when corfu-global-mode
+  ;;   (setq-local completion-at-point-functions '(
+  ;;               elisp-completion-at-point
+  ;;               cape-symbol
+  ;;               cape-dabbrev
+  ;;               cape-keyword
+  ;;               cape-file t)))
   ;; (elisp-auto-insert-lex)
   )
 
@@ -65,6 +68,7 @@
 
 (local-leader-def
   :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
+  "l" 'elisp-auto-insert-lex
   "e" 'eval-last-sexp
   "d" 'eval-defun
   "r" 'eval-region

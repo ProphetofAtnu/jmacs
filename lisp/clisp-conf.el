@@ -4,6 +4,26 @@
 
 (require 'general)
 
+(use-package sly-macrostep
+    :straight t
+    :after (sly))
+
+(use-package sly-quicklisp
+    :straight t
+    :after (sly))
+
+(use-package sly-hello-world
+    :straight t
+    :after (sly))
+
+(use-package sly-repl-ansi-color
+    :straight t
+    :after (sly))
+
+(use-package sly-named-readtables
+    :straight t
+    :after (sly))
+
 (use-package sly
     :straight t
     :hook (lisp-mode . sly-mode)
@@ -34,8 +54,22 @@
                          sly-fontifying-fu
                          sly-fancy-inspector)))
 
+;; (use-package slime
+;;              :straight t
+;;              :hook (common-lisp-mode . slime)
+;;              :general
+;;              (local-leader-def
+;;               :keymaps '(lisp-mode-map)
+;;               "e" 'slime-eval-defun
+;;               "," 'slime-repl)
+;;              :config
+;;              (setq inferior-lisp-program "ros -Q run")
+;;              (slime-setup '(slime-fancy slime-company)))
 
-
-
+;; (use-package slime-company
+;;              :straight t
+;;   :after (slime company)
+;;   :config (setq slime-company-completion 'fuzzy
+;;                 slime-company-after-completion 'slime-company-just-one-space))
 
 (provide 'clisp-conf)

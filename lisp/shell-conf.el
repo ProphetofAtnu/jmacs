@@ -6,13 +6,13 @@
 ;; (setq system-uses-terminfo nil)
 ;; (setq explicit-shell-file-name "/usr/local/bin/bash")
 
-;; (use-package shell-pop
-;;   :straight t
-;;   :general
-;;   (override
-;;    "C-'" 'shell-pop)
-;;   :config
-;;   (setq shell-pop-full-span t))
+(use-package shell-pop
+  :straight t
+  :general
+  (override
+   "C-'" 'shell-pop)
+  :config
+  (setq shell-pop-full-span t))
   
 ;; (use-package company
 ;;     :hook ((eshell-mode shell-mode) . 'company-mode)
@@ -26,9 +26,6 @@
     :straight t)
 
 (use-package vterm-toggle
-    :straight t
-    :general
-  (override
-   "C-'" 'vterm-toggle))
+    :straight t)
 
 (provide 'shell-conf)

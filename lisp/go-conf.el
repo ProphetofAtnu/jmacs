@@ -5,6 +5,6 @@
 
 (use-package lsp-mode
     :straight t
-    :hook (go-mode . lsp-mode))
+    :hook (go-mode . lsp-deferred))
 
 (provide 'go-conf)

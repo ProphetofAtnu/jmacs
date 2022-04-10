@@ -1,5 +1,4 @@
 ;;; -*- lexical-binding: t; -*-
-
 (require 'general)
 (require 'use-package)
 
@@ -11,6 +10,32 @@
 ;;   :straight t
 ;;   :hook (selectrum-mode . selectrum-prescient-mode))
 
+(defvar js/vertico-multiform-setup-hook nil)
+
+(defun js/vertico--reset-hooks ()
+  "Debug function to reset the vertico hook"
+  (setq js/vertico-multiform-setup-hook nil))
+
+(defun js/vertico-get-category ()
+  "Helper function for vertico multiform hooks to get the command category"
+  (completion-metadata-get
+   (completion-metadata
+    (buffer-substring (minibuffer-prompt-end)
+                      (max (minibuffer-prompt-end) (point)))
+    minibuffer-completion-table
+    minibuffer-completion-predicate)
+   'category))
+
+(defun js/vertico-multiform-hook-extension (&rest _)
+  (run-hooks 'js/vertico-multiform-setup-hook))
+
+(defun js/vertico-enable-extended-hook () 
+  (advice-add 'vertico-multiform--setup :after #'js/vertico-multiform-hook-extension))
+
+(defun js/vertico-disable-extended-hook ()
+  (advice-remove 'vertico-multiform--setup #'js/vertico-multiform-hook-extension))
+
+(defun js/vertico-file-extensions ())
 
 ;;; Enable vertico
 (use-package vertico
@@ -21,6 +46,7 @@
     (vertico-mode)
     (require 'vertico-multiform)
     (vertico-multiform-mode)
+    (js/vertico-enable-extended-hook)
     (setq vertico-cycle t)
     (require 'vertico-flat)
     (require 'vertico-grid)
@@ -36,28 +62,36 @@
       "C-M-u" 'vertico-multiform-vertical
       "C-." 'vertico-multiform-vertical
       )
-    )
+    (general-defs
+        :keymaps 'vertico-grid-map
+      "M-n" 'vertico-grid-right
+      "M-p" 'vertico-grid-left))
 
-;; Optionally use the `orderless' completion style. See
-;; `+orderless-dispatch' in the Consult wiki for an advanced Orderless style
-;; dispatcher. Additionally enable `partial-completion' for file path
-;; expansion. `partial-completion' is important for wildcard support.
-;; Multiple files can be opened at once with `find-file' if you enter a
-;; wildcard. You may also give the `initials' completion style a try.
+(use-package prescient
+    :straight t)
+(use-package company-prescient
+    :straight t
+    :hook (company-mode . company-prescient-mode))
+
 (use-package orderless
     :straight t
   :init
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
-  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+ (setq read-file-name-completion-ignore-case t
+      read-buffer-completion-ignore-case t
+      completion-ignore-case t)
   (setq completion-styles '(orderless)
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist
+  :init
+  (savehist-mode))
+
+;; Persist history over Emacs restarts. Vertico sorts by history position.
 ;; A few more useful configurations...
 (use-package emacs
-  :init
+    :init
   ;; Add prompt indicator to `completing-read-multiple'.
   ;; Alternatively try `consult-completing-read-multiple'.
   (defun crm-indicator (args)

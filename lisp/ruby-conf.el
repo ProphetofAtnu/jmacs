@@ -8,4 +8,7 @@
     :straight t
     :hook (ruby-mode . lsp-deferred))
 
+;; (use-package robe
+;;     :straight t)
+
 (provide 'ruby-conf)

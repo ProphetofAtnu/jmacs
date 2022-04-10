@@ -151,17 +151,16 @@
     :init
     (setq corfu-auto t
           corfu-auto-delay 0.1
-          corfu-auto-prefix 2)
-    (corfu-global-mode))
+          corfu-auto-prefix 2))
 
 (use-package cape
-    :straight t
-    :init
-    (add-to-list 'completion-at-point-functions #'cape-symbol)
-    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-    (add-to-list 'completion-at-point-functions #'cape-keyword)
-    (add-to-list 'completion-at-point-functions #'cape-file)
-    (add-to-list 'completion-at-point-functions #'cape-sgml))
+    :straight t)
+;;     :init
+;;     (add-to-list 'completion-at-point-functions #'cape-symbol)
+;;     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+;;     (add-to-list 'completion-at-point-functions #'cape-keyword)
+;;     (add-to-list 'completion-at-point-functions #'cape-file)
+;;     (add-to-list 'completion-at-point-functions #'cape-sgml))
 
 (use-package evil-mc
     :straight t
@@ -201,11 +200,15 @@
               :states '(insert emacs)
               "C-TAB" 'company-complete
               "C-<tab>" 'company-complete)
-    ;; :init
-    ;; (add-hook 'company-mode-hook
-    ;;           'override-company-with-corfu)
+    :init
+    (add-hook 'emacs-startup-hook
+              'global-company-mode)
     :config
     (setq company-minimum-prefix-length 1))
+
+;; (use-package company-statistics 
+;;     :straight t
+;;     :hook (company-mode . company-statistics-mode))
 
 (use-package restart-emacs
     :straight t
@@ -258,8 +261,8 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-12")
-(set-frame-font "Fira Code-12" nil t)
+(set-face-attribute 'default t :font "Fira Code-14")
+(set-frame-font "Fira Code-14" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
@@ -347,6 +350,41 @@
     :hook (emacs-startup . global-origami-mode))
 
 (use-package zmq
+    :straight t
+    :defer t)
+
+;; (use-package isearch+
+;;     :straight t)
+
+(use-package m-buffer
+    :straight t)
+
+(use-package treepy
+    :straight t)
+
+(use-package tablist
+    :straight t)
+
+(use-package ts
+    :straight t)
+
+(use-package anaphora
+    :straight t)
+
+(use-package datetime
+    :straight t)
+
+(use-package iedit
+    :straight t
+    :general
+    (:keymaps 'isearch-mode-map
+              "C-;" 'iedit-mode-from-isearch
+              ))
+
+(use-package visual-regexp
+    :straight t)
+
+(use-package visual-regexp-steroids
     :straight t)
 
 (use-package deferred
@@ -365,6 +403,7 @@
 (require 'java-conf)
 (require 'clojure-conf)
 (require 'clisp-conf)
+(require 'scheme-conf)
 (require 'shell-conf)
 (require 'org-conf)
 (require 'python-conf)
@@ -379,8 +418,11 @@
 (require 'scala-conf)
 (require 'eww-conf)
 (require 'swift-conf)
+(require 'go-conf)
+(require 'ruby-conf)
 (require 'sql-conf)
 (require 'dotnet-conf)
+(require 'nim-conf)
 (require 'utility-conf)
 
 (load custom-file)
@@ -390,3 +432,4 @@
 (put 'list-timers 'disabled nil)
 (put 'list-threads 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
