@@ -29,3 +29,4 @@
     :straight t)
 
 (provide 'shell-conf)
+

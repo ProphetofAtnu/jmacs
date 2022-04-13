@@ -3,82 +3,34 @@
 (require 'use-package)
 (require 'general)
 
-;; (straight-use-package `(pymacs
-;;                         :type git
-;;                         :host github
-;;                         :repo "pymacs2/Pymacs"
-;;                         :pre-build ,(cl-letf
-;;                                         (((symbol-function
-;;                                            #'el-get-package-directory)
-;;                                           (lambda (package)
-;;                                             (straight--repos-dir
-;;                                              (format "%S" package))))
-;;                                          (el-get-install-info
-;;                                           (straight--el-get-install-info))
-;;                                          (el-get-emacs
-;;                                           (straight--el-get-emacs))
-;;                                          (el-get-dir
-;;                                           (straight--repos-dir)))
-;;                                       `(("python3"
-;;                                          "setup.py"
-;;                                          "--quiet"
-;;                                          "build")))
-;;                         :files (:defaults)))
-
-;; (use-package pymacs
-;;     :straight t
-;;     :config
-;;     (setq pymacs-python-command "python3"))
-
-
-;; (use-package python-mode
-;;     :straight t
-;;     :init
-;;     (add-to-list 'load-path
-;;                  (expand-file-name "completion" (straight--repos-dir "python-mode")))
-;;     :config
-;;     (add-to-list
-;;      'pymacs-load-path
-;;      (expand-file-name
-;;       "completion"
-;;       (straight--repos-dir
-;;        "python-mode")))
-;;     (add-hook
-;;      'python-mode-hook
-;;      (lambda ()
-;;        (require 'pycomplete)
-;;        (add-hook 'completion-at-point-functions #'py-complete-completion-at-point nil t)))
-;;     (setq py-python-command "python3"
-;;           py-install-directory
-;;           (straight--repos-dir "python-mode")
-;;           py-load-pymacs-p nil
-;;           py-indent-no-completion-p t
-;;           py-complete-function 'py-complete))
-
-;; (use-package python
-;;     :defer t
-;;     :config
-;;     (setq python-indent-guess-indent-offset-verbose nil))
-
-;; (use-package company-jedi
+;; (use-package elpy
 ;;     :straight t
 ;;     :general
-;;     (jedi-mode-map
-;;      :states '(normal motion)
-;;      "K" 'jedi:show-doc)
-;;     :hook (python-mode . jedi:setup)
+;;     (local-leader-def
+;;         :keymaps 'elpy-mode-map
+;;       "d" 'elpy-shell-send-statement)
 ;;     :init
-;;     (defun cape-jedi-setup ()
-;;       (let ((jedi-capf (cape-company-to-capf 'company-jedi)))
-;;         (add-hook 'completion-at-point-functions jedi-capf 0 t)))
-;;     (add-hook 'jedi-mode-hook 'cape-jedi-setup))
+;;     (elpy-enable)
+;;     (delq 'elpy-module-company elpy-modules)
+;;     (delq 'elpy-module-flymake elpy-modules)
+;;     (add-to-list 'popup-buffer-identifiers "\\*Python Doc\\*")
+;;     :config
+;;     (add-hook 'elpy-mode-hook
+;;               #'(lambda ()
+;;                   (setq-local evil-lookup-func #'elpy-doc)
+;;                   (add-hook 'completion-at-point-functions
+;;                             (cape-company-to-capf 'elpy-company-backend) 0 t))))
 
-;; (use-package lsp-pyright
-;;     :straight t)
-
-;; (use-package lsp-mode
+;; (use-package anaconda-mode
 ;;     :straight t
-;;     :hook (python-mode . lsp-deferred))
+;;     :hook (python-mode . anaconda-mode))
+
+(use-package lsp-pyright
+  :straight t)
+
+(use-package lsp-mode
+    :straight t
+    :hook (python-mode . lsp-deferred))
 
 ;; (use-package eglot
 ;;     :straight t
@@ -119,8 +71,8 @@
        (julia . t)
        (python . t)
        (jupyter . t)))
-    (add-hook
-     'jupyter-repl-mode-hook 'company-mode)
+    ;; (add-hook
+    ;;  'jupyter-repl-mode-hook 'company-mode)
     (local-leader-def
         :definer 'minor-mode
       :keymaps '(jupyter-org-interaction-mode)

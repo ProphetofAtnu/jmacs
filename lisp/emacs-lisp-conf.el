@@ -42,10 +42,12 @@
   (interactive)
   (when (and
          (eq major-mode 'emacs-lisp-mode)
-         (buffer-file-name))
+         (buffer-file-name)
+         (not (save-excursion
+                 (goto-char (point-min))
+                 (looking-at ".*lexical-binding: t;"))))
     (save-excursion
-      (add-file-local-variable-prop-line 'lexical-binding t)))
-  )
+      (add-file-local-variable-prop-line 'lexical-binding t))))
 
 (defun emacs-lisp-setup-hook ()
   (setq-local lisp-indent-function #'common-lisp-indent-function)
@@ -58,7 +60,7 @@
   ;;               cape-dabbrev
   ;;               cape-keyword
   ;;               cape-file t)))
-  ;; (elisp-auto-insert-lex)
+  (elisp-auto-insert-lex)
   )
 
 (use-package elisp-mode

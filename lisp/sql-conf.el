@@ -2,12 +2,12 @@
 (use-package lsp-mssql
     :straight t)
 
-(use-package sqlite3
-    :straight t
-    :init
-    (require 'sqlite3))
-(use-package emacsql
-    :straight t)
+;; (use-package sqlite3
+;;     :straight t
+;;     :init
+;;     (require 'sqlite3))
+;; (use-package emacsql
+;;     :straight t)
 
 ;; (use-package emacsql-libsqlite3
 ;;     :straight t)

@@ -40,6 +40,7 @@
  "a" 'auto-revert-mode
  "s" 'save-buffer
  "S" 'evil-write-all
+ "j" 'dired-jump-other-window
  )
  
 

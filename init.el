@@ -34,6 +34,7 @@
       auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "util" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "platform" user-emacs-directory))
 
 (setq visible-bell nil
@@ -148,19 +149,43 @@
 
 (use-package corfu
     :straight t
+    :bind
+    (:map corfu-map
+          ("TAB" . corfu-next)
+          ([tab] . corfu-next)
+          ("S-TAB" . corfu-previous)
+          ([backtab] . corfu-previous))
     :init
     (setq corfu-auto t
           corfu-auto-delay 0.1
-          corfu-auto-prefix 2))
+          corfu-auto-prefix 2)
+    (setq tab-always-indent 'complete)
+    (defun corfu-enable-in-minibuffer ()
+      "Enable Corfu in the minibuffer if `completion-at-point' is bound."
+      (when (where-is-internal #'completion-at-point (list (current-local-map)))
+        ;; (setq-local corfu-auto nil) Enable/disable auto completion
+        (corfu-mode 1)))
+    (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
+    (add-hook 'eshell-mode-hook
+              (lambda ()
+                (setq-local corfu-auto nil)
+                (corfu-mode)))
+    (corfu-global-mode))
 
 (use-package cape
-    :straight t)
-;;     :init
-;;     (add-to-list 'completion-at-point-functions #'cape-symbol)
-;;     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-;;     (add-to-list 'completion-at-point-functions #'cape-keyword)
-;;     (add-to-list 'completion-at-point-functions #'cape-file)
-;;     (add-to-list 'completion-at-point-functions #'cape-sgml))
+    :straight t
+    :config ;; Silence the pcomplete capf, no errors or messages!
+    (advice-add
+     'pcomplete-completions-at-point
+     :around #'cape-wrap-silent)
+    ;; Ensure that pcomplete does not write to the buffer
+    ;; and behaves as a pure `completion-at-point-function'.
+    (advice-add
+     'pcomplete-completions-at-point
+     :around #'cape-wrap-purify)
+    :init
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev t)
+    (add-to-list 'completion-at-point-functions #'cape-keyword))
 
 (use-package evil-mc
     :straight t
@@ -201,8 +226,8 @@
               "C-TAB" 'company-complete
               "C-<tab>" 'company-complete)
     :init
-    (add-hook 'emacs-startup-hook
-              'global-company-mode)
+    ;; (add-hook 'emacs-startup-hook
+    ;;           'global-company-mode)
     :config
     (setq company-minimum-prefix-length 1))
 
@@ -261,8 +286,8 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-14")
-(set-frame-font "Fira Code-14" nil t)
+(set-face-attribute 'default t :font "Fira Code-12")
+(set-frame-font "Fira Code-12" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
@@ -287,6 +312,12 @@
     :config
   (setq switch-window-shortcut-style 'qwerty
         switch-window-multiple-frames t))
+
+(use-package tempel
+    :straight t
+    :bind (("M-+" . tempel-complete)
+           ;; Alternative tempel-expand
+           ("M-*" . tempel-insert)))
 
 (use-package yasnippet
     :straight t
@@ -353,8 +384,8 @@
     :straight t
     :defer t)
 
-;; (use-package isearch+
-;;     :straight t)
+(use-package markdown-mode
+    :straight t)
 
 (use-package m-buffer
     :straight t)
@@ -393,6 +424,9 @@
 (add-hook 'emacs-startup-hook
           'global-auto-revert-mode)
 
+(require 'elisp-sql-capf)
+(add-hook 'emacs-startup-hook
+          'elisp-sql-capf-mode)
 (cond
   ((eq system-type 'darwin) (require 'macos)))
 
