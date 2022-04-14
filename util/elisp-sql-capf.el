@@ -42,57 +42,132 @@
 (defconst elisp-sql-function-flag (ash 1 1))
 (defconst elisp-sql-bound-flag (ash 1 0))
 
-(defvar elisp-sql-debounce-time 10)
+(defvar elisp-sql-database-file-type 'file
+  "Either `memory' or `file', depending on the storage strategy the
+database should use.")
+
+(defvar elisp-sql-persistant-file
+  (expand-file-name "var/elisp-sqlite.db" user-emacs-directory))
+
+(defvar elisp-sql--database-memory-name ":memory:")
+
+(defvar elisp-sql-debounce-time 5)
 (defvar elisp-sql-verbose nil)
 
+(defvar *elisp-sql-update-thread* nil)
+(defvar *elisp-sql-update-timer* nil)
+
+(defun elisp-sql-log (str &rest args)
+  (when elisp-sql-verbose
+    (with-current-buffer (get-buffer-create "*elisp-sql-log*")
+      (goto-char (point-max))
+      (insert (concat (current-time-string) " -> " (apply #'format str args)))
+      (newline))))
+
+
+(defvar elisp-sql-debug-assert-sqlite-macro t
+  "If enabled, `with-sqlite-connection' asserts the sqlite DB closes
+with `assert-db-closed'.")
+
+(defun assert-db-closed (db)
+  (condition-case e
+      (sqlite-execute db "SELECT 1")
+    (error
+     (string=
+      (cadr e)
+      "Database closed"))))
+
+(defmacro with-sqlite-connection (db uri &rest body)
+  (let ((sym (gensym "sqlc")))
+    `(let ((,db (sqlite-open ,uri))
+           (,sym nil))
+       (unwind-protect
+            (setf ,sym (progn ,@body))
+         (sqlite-close ,db))
+       ,sym)))
+
+(defun elisp-sql-db-uri ()
+  (cl-case elisp-sql-database-file-type 
+    ('file elisp-sql-persistant-file)
+    ('memory elisp-sql--database-memory-name)))
+
+(defun elisp-sql--ensure-file-dir ()
+  (unless (file-exists-p
+           (file-name-directory
+            elisp-sql-persistant-file))
+    (make-directory
+     (file-name-directory
+      elisp-sql-persistant-file)
+     t)))
+           
+(defun elisp-sql--check-db (db)
+  (member "symbols" (mapcar
+                   #'car
+                   (sqlite-select db
+                    "SELECT name FROM pragma_table_list"))))
+
+(defun elisp-sql-open-db ()
+  (when (eq  elisp-sql-database-file-type 'file)
+    (elisp-sql--ensure-file-dir))
+  (sqlite-open (elisp-sql-db-uri)))
+
 (defun create-sql-obarray ()
-  (let ((db (sqlite-open)))
+  (let ((db (elisp-sql-open-db)))
     (sqlite-pragma db "case_sensitive_like=1")
-    (sqlite-execute
-     db
-     "CREATE TABLE symbols(
-        name TEXT, bound INTEGER, func INTEGER,
-        macro INTEGER, keyword INTEGER, special INTEGER,
-        flags INTEGER GENERATED ALWAYS AS (bound | (func << 1) | (macro << 2) | (keyword << 3) | (special << 4)) STORED);")
-    (sqlite-execute
-     db
-     "CREATE INDEX symbols_name_types ON symbols(name, flags)")
+    (unless (elisp-sql--check-db db)
+      (sqlite-execute
+       db
+       "CREATE TABLE symbols(name TEXT,flags INTEGER);")
+      (sqlite-execute
+       db
+       "CREATE INDEX symbols_name_types ON symbols(name, flags)")
+      (elisp-sql-log "Initialized database, table + index"))
+    (cl-assert (elisp-sql--check-db db))
     db))
 
+
+(defun elisp-sql-calculate-flags (sym)
+  (logior 
+   (ash (if (boundp sym) 1 0) 0)
+   (ash (if (functionp sym) 1 0) 1)
+   (ash (if (macrop sym) 1 0) 2)
+   (ash (if (keywordp sym) 1 0) 3)
+   (ash (if (special-form-p sym) 1 0) 4)))
+
 (defun update-sql-obarray (db)
-  (condition-case nil 
+  (condition-case e
       (progn
-        (thread-yield)
+        (elisp-sql-log "Starting update transaction...")
         (sqlite-transaction db)
         (sqlite-execute db "DELETE FROM symbols")
-        (seq-do
+        (mapatoms
          (lambda (i)
-           (let ((sym (intern-soft i)))
-             (sqlite-execute
-              db
-              "INSERT INTO symbols(name, bound, func, macro, keyword, special) VALUES (?, ?, ?, ?, ?, ?)"
-              (list i
-                    (if (boundp sym)
-                        1 0)
-                    (if (functionp sym)
-                        1 0)
-                    (if (macrop sym)
-                        1 0)
-                    (if (keywordp sym)
-                        1 0)
-                    (if (special-form-p sym)
-                        1 0))))
-           (thread-yield))
-         (all-completions "" (elisp--completion-local-symbols)))
+           (when (symbolp i)
+             (let ((n (symbol-name i))
+                   (flags (elisp-sql-calculate-flags i)))
+               (when (and n (> flags 0))
+                 (sqlite-execute
+                  db
+                  "INSERT INTO symbols(name, flags) VALUES (?, ?)"
+                  (list n flags)))))))
         (sqlite-commit db)
-        (when elisp-sql-verbose
-          (message "Committed update")))
+        (elisp-sql-log "Committed symbol update")
+        'ok)
     (error (progn
-             (message "Rolled back update")
-             (sqlite-rollback db)))))
+             (elisp-sql-log "Rolled back update %s" e)
+             (sqlite-rollback db)
+             nil))))
 
 (defvar *elisp-sql-obarray* (create-sql-obarray))
 (defvar *elisp-sql-update-ts* (float-time))
+
+(defun elisp-sql--reset-file-db-hard ()
+  (sqlite-close *elisp-sql-obarray*)
+  (delete-file elisp-sql-persistant-file)
+  (elisp-sql-log "Reset obarray file: %s, exists?; %s"
+                 elisp-sql-persistant-file
+                 (file-exists-p elisp-sql-persistant-file))
+  (setq *elisp-sql-obarray* (create-sql-obarray)))
 
 (defun elisp-sql-last-updated-time ()
   (- (float-time) *elisp-sql-update-ts*))
@@ -225,23 +300,37 @@
   (when-let ((flg (get-text-property 0 'symbol-flags cap)))
     (format "(%s)" flg)))
 
-(defun elisp-sql-check-update-in-thread ()
-  (when (> (- (float-time) *elisp-sql-update-ts*)
-           elisp-sql-debounce-time)
-    (setq *elisp-sql-update-ts* (float-time))
-    (make-thread 
-     #'(lambda ()
-         (update-sql-obarray *elisp-sql-obarray*))
-     "Elisp Obarray Updates")))
+(defun elisp-sql-check-update-deferred (&optional from-timer)
+  (when (and
+         (or from-timer (null *elisp-sql-update-timer*))
+         (not (and *elisp-sql-update-thread*
+                   (thread-live-p *elisp-sql-update-thread*)))
+         (> (- (float-time) *elisp-sql-update-ts*)
+            elisp-sql-debounce-time))
+    (setq *elisp-sql-update-thread*
+          (make-thread 
+           #'(lambda ()
+               (with-sqlite-connection
+                   db (elisp-sql-db-uri)
+                   (cl-case
+                       (while-no-input (update-sql-obarray db))
+                     ('ok (progn
+                            (elisp-sql-log "Update thread completed")
+                            (when *elisp-sql-update-timer*
+                              (cancel-timer *elisp-sql-update-timer*)
+                              (setq *elisp-sql-update-timer* nil))
+                            (setq *elisp-sql-update-ts* (float-time))))
+                     (t (progn
+                          (sqlite-rollback db)
+                          (elisp-sql-log "Update thread rescheduled")
+                          (unless *elisp-sql-update-timer*
+                            (setq *elisp-sql-update-timer*
+                                  (run-with-idle-timer
+                                   1 t #'elisp-sql-check-update-deferred t))))))))
+           "Elisp Obarray Updates"))))
 
 (defun elisp-sql-completion-at-point ()
-  (when (> (- (float-time) *elisp-sql-update-ts*)
-           elisp-sql-debounce-time)
-    (setq *elisp-sql-update-ts* (float-time))
-    (make-thread 
-     #'(lambda ()
-         (update-sql-obarray *elisp-sql-obarray*))
-     "Elisp Obarray Updates"))
+  (elisp-sql-check-update-deferred)
   (if-let ((ctx (elisp-sql-context-immediate))
            (start (elisp-sql--start-boundry))
            (end (elisp-sql--end-boundry)))
@@ -269,7 +358,7 @@ GENERATED columns)."
   :global t
   (if elisp-sql-capf-mode
       (progn
-        (elisp-sql-check-update-in-thread)
+        (elisp-sql-check-update-deferred)
         (advice-add 'elisp-completion-at-point :override #'elisp-sql-completion-at-point))
     (advice-remove 'elisp-completion-at-point #'elisp-sql-completion-at-point)))
 

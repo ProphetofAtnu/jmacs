@@ -425,8 +425,9 @@
           'global-auto-revert-mode)
 
 (require 'elisp-sql-capf)
-(add-hook 'emacs-startup-hook
-          'elisp-sql-capf-mode)
+;; (add-hook 'emacs-startup-hook
+;;           'elisp-sql-capf-mode)
+
 (cond
   ((eq system-type 'darwin) (require 'macos)))
 
