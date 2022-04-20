@@ -286,8 +286,8 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-12")
-(set-frame-font "Fira Code-12" nil t)
+(set-face-attribute 'default t :font "Fira Code-13")
+(set-frame-font "Fira Code-13" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
