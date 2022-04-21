@@ -15,6 +15,11 @@
 ;;     (delq 'elpy-module-flymake elpy-modules)
 ;;     (add-to-list 'popup-buffer-identifiers "\\*Python Doc\\*")
 ;;     :config
+;;     ;; (add-to-list 'python-shell-completion-native-disabled-interpreters
+;;     ;;              "jupyter")
+;;     ;; (setq python-shell-interpreter "jupyter"
+;;     ;;   python-shell-interpreter-args "console --simple-prompt"
+;;     ;;   python-shell-prompt-detect-failure-warning nil)
 ;;     (add-hook 'elpy-mode-hook
 ;;               #'(lambda ()
 ;;                   (setq-local evil-lookup-func #'elpy-doc)

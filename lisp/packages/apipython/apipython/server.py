@@ -2,6 +2,8 @@ import asyncio
 import importlib
 import json
 from typing import Awaitable, Callable, Any, Dict
+
+from .subproc_eval import SubprocessEvaluator, create_isolate
 from .transport import Message, Response
 from .ref import Registry
 from .helpers import HandlerFunc, Plugin
@@ -19,6 +21,7 @@ class Server:
 
     def _setup_extension_handlers(self):
         self._handler_base['help'] = self._help
+        self._handler_base['create_isolate'] = create_isolate
 
     def use(self, plugin: Plugin):
         mems = plugin.provides()

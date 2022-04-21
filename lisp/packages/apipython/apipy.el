@@ -13,8 +13,16 @@
 (defvar apipy-ctr 0)
 (defvar apipy--handlers (make-hash-table))
 
+(defvar apipy--data-directory (if load-file-name
+                                  ;; File is being loaded.
+                                  (file-name-directory
+                                   load-file-name)
+                                ;; File is being evaluated using, for example, `eval-buffer'.
+                                default-directory))
 
 (defvar *apipy-kernel* nil)
+
+(defvar *apipy-isolate-context* nil)
 
 (defun apipy-ensure-kernel ()
   (or *apipy-kernel*
@@ -51,7 +59,7 @@
   (make-process
    :name "apipython"
    :buffer (generate-new-buffer "*apipython*")
-   :command (list "python3" (expand-file-name "~/Code/apipython/run.py"))
+   :command (list "python3" (expand-file-name "run.py" apipy--data-directory))
    :filter #'apipy--process-filter))
 
 (cl-defun apipy-build-message (method
@@ -158,7 +166,7 @@
 
 (defun apipy-new-buffer (proc)
   (let ((self (apipy-send-sync
-               proc "create_buffer")))
+               proc "eval/create_buffer")))
     (make-apipy-remote-buffer :proc proc :ref self)))
 
 (defun apipy-delete-buffer (buf)
@@ -208,6 +216,18 @@
     (progn
       (setq-local apipy--remote-buffer
                   (apipy-new-buffer (apipy-ensure-kernel))))))
+
+(defmacro with-apipy-buf (proc ref &rest body)
+  (let ((sym (gensym)))
+    `(if apipy--remote-buffer
+         (let* ((,sym (apipy--ensure-backing-buffer))
+                (,proc (apipy-remote-buffer-proc
+                        ,sym))
+                (,ref (apipy-remote-buffer-ref
+                       ,sym)))
+           ,@body)
+       (error "Buffer is not backed")))
+  )
 
 
 (defun apipy-sanity-check-buffer (&optional loud)
@@ -321,10 +341,29 @@
                         "complete_at"
                         :target ref
                         :args (list
-                               (buffer-hash)
                                (line-number-at-pos)
-                               (current-column))
+                               (current-column)
+                               (buffer-hash))
                         :transform #'apipy--complete-format))))
+
+(defun apipy-call-complete-in ()
+  (with-apipy-buf proc ref
+                  (apipy-send-thunk proc
+                                    "complete_in"
+                                    :target ref
+                                    :args (list
+                                           (buffer-substring-no-properties
+                                            (point-min)
+                                            (point-max))
+                                           (line-number-at-pos)
+                                           (current-column))
+                                    :transform #'apipy--complete-format)))
+
+(defun apipy-kernel-run (str)
+  (apipy-send-thunk
+   (apipy-ensure-kernel)
+   "eval/run"
+   :args (list str)))
 
 (defun apipy-bounds-of-compl ()
   (save-excursion
@@ -338,12 +377,12 @@
 (defun apipy-completion-at-point ()
   (unless (or (syntax-ppss-context (syntax-ppss))
               apipy--buffer-dirty)
-    (let ((cmpl (apipy-call-complete))
+    (let ((cmpl (apipy-call-complete-in))
           (bounds (apipy-bounds-of-compl)))
       (append
        bounds
        (list
-        (completion-table-dynamic
+        (completion-table-with-cache
          (lambda (&rest _)
            (thunk-force cmpl)))
         :annotation-function #'apipy--complete-annotate)))))
