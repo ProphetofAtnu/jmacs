@@ -143,6 +143,12 @@
     (prefix-project-map
      "v" 'consult-projectile))
 
+(use-package consult-dir
+    :straight t
+    :general
+    (prefix-file-map
+     "d" 'consult-dir))
+
 (use-package embark
     :straight t
     :general

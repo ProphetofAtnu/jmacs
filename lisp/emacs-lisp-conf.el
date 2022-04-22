@@ -45,7 +45,7 @@
          (buffer-file-name)
          (not (save-excursion
                  (goto-char (point-min))
-                 (looking-at ".*lexical-binding: t;"))))
+                 (looking-at ".*lexical-binding: t"))))
     (save-excursion
       (add-file-local-variable-prop-line 'lexical-binding t))))
 

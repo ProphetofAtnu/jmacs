@@ -16,9 +16,15 @@
     :general
     (:keymaps '(ranger-mode-map)
               "w x" 'dired-hexl-open-other-window
-              "w X" 'dired-hexl-open-other-window-noselect)
-    (:keymaps '(prefix-file-map)
-              "d" 'ranger))
+              "w X" 'dired-hexl-open-other-window-noselect))
+
+(evil-define-text-object evil-entire-buffer (count &optional beg end type)
+  (flatten-list (bounds-of-thing-at-point 'buffer)))
+
+(general-defs
+    :keymaps '(evil-inner-text-objects-map
+               evil-outer-text-objects-map)
+    "e" 'evil-entire-buffer)
 
 (use-package dired
     :general
