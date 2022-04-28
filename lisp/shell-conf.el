@@ -22,6 +22,11 @@
 ;;     :config
 ;;   (add-hook 'eshell-mode-hook (l)))
 
+(use-package bash-completion
+    :straight t
+    :init
+    (add-hook 'shell-dynamic-complete-functions #'bash-completion-dynamic-complete))
+
 (use-package vterm
     :straight t)
 
