@@ -1,6 +1,8 @@
 ;;; -*- lexical-binding: t; -*-
 
 (require 'general)
+(require 'dired-sw)
+(require 'core/interactive)
 (require 'core/prefix)
 
 (defvar keyboard-quit-hook nil)
@@ -33,6 +35,7 @@
   "w" '(:prefix-command prefix-window-command
         :prefix-map prefix-window-map
         :wk "Window")
+  "t" 'dired-jump-in-side-window
   "u" (mount-prefix-map utility "Utility")
   "h" (mount-prefix-map help "Help")
   "s" (mount-prefix-map search "Search")

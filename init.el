@@ -187,6 +187,7 @@
     (add-to-list 'completion-at-point-functions #'cape-dabbrev t)
     (add-to-list 'completion-at-point-functions #'cape-keyword))
 
+
 (use-package evil-mc
     :straight t
     :hook (emacs-startup . global-evil-mc-mode)
@@ -274,20 +275,43 @@
     (load-theme 'cherry-blossom t)
     (set-face-foreground 'mode-line-inactive "#5F5A60"))
 
+(use-package modus-themes
+    :straight t)
+
 (use-package popup
     :straight t)
 
-(use-package mood-line
+(use-package zoxide
+    :straight t
+    :general
+    (prefix-file-map
+     "z" 'zoxide-find-file
+     "r" 'zoxide-travel
+     "c" 'zoxide-cd))
+
+(use-package dired-hacks-utils
+    :straight t)
+
+(straight-use-package 'dired-hacks)
+
+(use-package dired-narrow)
+(use-package dired-subtree)
+
+(use-package doom-modeline
     :straight t
     :init
-    (mood-line-mode))
+    (doom-modeline-mode)
+    :config
+    (setq doom-modeline-height 0)
+    (setq inhibit-compacting-font-caches t))
+
 
 (use-package exec-path-from-shell
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-13")
-(set-frame-font "Fira Code-13" nil t)
+(set-face-attribute 'default t :font "Fira Code-14")
+(set-frame-font "Fira Code-14" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
@@ -348,11 +372,7 @@
 
 (use-package treemacs
     :straight t
-    :commands (treemacs)
-    :general
-    (global-leader-def
-        :keymaps 'override
-        "t" 'treemacs-select-window))
+    :commands (treemacs))
 
 (use-package elec-pair
     :init (electric-pair-mode))
@@ -397,6 +417,9 @@
     :straight t)
 
 (use-package ts
+    :straight t)
+
+(use-package svg-lib
     :straight t)
 
 (use-package anaphora

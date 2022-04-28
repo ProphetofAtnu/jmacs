@@ -4,7 +4,7 @@ import asyncio
 
 sys.path += os.path.dirname(os.path.realpath(__file__))
 
-import apipython
+import pyel.server
 
 if __name__ == '__main__':
-    asyncio.run(apipython.run())
+    asyncio.run(pyel.server.run_server())

@@ -73,6 +73,7 @@
       (push (cons :id tid) msg))
     (cons tid (concat (json-encode msg) "\n"))))
 
+
 (defun apipy--read-message (proc)
   (with-current-buffer (process-buffer proc)
     (when (> apipy--unread-lines 0)

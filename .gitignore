@@ -12,3 +12,4 @@
 /etc/
 /deps/
 /FsAutoComplete/
+__pycache__

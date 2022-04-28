@@ -3,6 +3,8 @@
 
 (progn
   (setq mac-option-modifier 'meta)
+  (setq window-resize-pixelwise t)
+  (setq frame-resize-pixelwise t)
   (setq mac-command-modifier 'hyper)
   (setq inferior-lisp-program "sbcl"))
  
