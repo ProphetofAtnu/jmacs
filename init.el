@@ -24,6 +24,8 @@
 
 (setq use-package-compute-statistics t)
 
+(straight-use-package 'dired-hacks)
+
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
 (tool-bar-mode -1)
@@ -170,7 +172,7 @@
               (lambda ()
                 (setq-local corfu-auto nil)
                 (corfu-mode)))
-    (corfu-global-mode))
+    (global-corfu-mode))
 
 (use-package cape
     :straight t
@@ -337,6 +339,10 @@
   (setq switch-window-shortcut-style 'qwerty
         switch-window-multiple-frames t))
 
+(use-package dired-filter)
+(use-package dired-narrow)
+(use-package dired-subtree)
+
 (use-package tempel
     :straight t
     :bind (("M-+" . tempel-complete)
@@ -373,6 +379,13 @@
 (use-package treemacs
     :straight t
     :commands (treemacs))
+
+(use-package dired-sidebar
+    :straight t
+    :general 
+    (global-leader-def
+        :keymaps 'override
+      "t" 'dired-sidebar-toggle-sidebar))
 
 (use-package elec-pair
     :init (electric-pair-mode))

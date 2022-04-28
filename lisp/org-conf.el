@@ -38,6 +38,18 @@
     (setq org-startup-with-inline-images t)
     (add-hook 'org-mode-hook 'org-display-inline-images))
 
+(use-package org-download
+    :straight t
+    :hook (org-mode . org-download-enable)
+    :general
+    (local-leader-def
+        :keymaps 'org-mode-map
+      "d" 'nil
+      "d c" 'org-download-clipboard
+      "d s" 'org-download-screenshot)
+    :config
+    (setq org-download-method 'attach))
+
 (use-package evil-org
     :straight t
     :hook (org-mode . evil-org-mode))

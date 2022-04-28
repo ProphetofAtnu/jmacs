@@ -1,7 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 
 (require 'general)
-(require 'dired-sw)
 (require 'core/interactive)
 (require 'core/prefix)
 

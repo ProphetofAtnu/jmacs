@@ -60,7 +60,7 @@
   ;;               cape-dabbrev
   ;;               cape-keyword
   ;;               cape-file t)))
-  (elisp-auto-insert-lex)
+  ;; (elisp-auto-insert-lex)
   )
 
 (use-package elisp-mode
