@@ -1,5 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 
+(menu-bar-mode +1)
 
 (progn
   (setq mac-option-modifier 'meta)

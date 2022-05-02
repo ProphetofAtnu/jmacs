@@ -9,8 +9,11 @@
   :commands (helpful-at-point)) 
 
 (use-package macrostep
-  :straight t
-  :commands (macrostep-mode))
+    :straight t
+    :commands (macrostep-mode))
+
+(defun yas-use-elisp-snippets ()
+  (setq-local yas--extra-modes '(emacs-lisp-mode)))
 
 (use-package elisp-def
   :delight
@@ -28,15 +31,16 @@
     :hook (emacs-lisp-mode . eros-mode))
 
 (use-package ielm
-  :commands (ielm)
-  :config
-  (setq ielm-dynamic-return nil)
-  (add-hook
-   'ielm-mode-hook
-   #'(lambda ()
-     (setq-local
-      evil-lookup-func
-      #'helpful-at-point))))
+    :commands (ielm)
+    :config
+    (setq ielm-dynamic-return nil)
+    (add-hook 'ielm-mode-hook #'yas-use-elisp-snippets)
+    (add-hook
+     'ielm-mode-hook
+     #'(lambda ()
+         (setq-local
+          evil-lookup-func
+          #'helpful-at-point))))
 
 (defun elisp-auto-insert-lex ()
   (interactive)
@@ -44,8 +48,8 @@
          (eq major-mode 'emacs-lisp-mode)
          (buffer-file-name)
          (not (save-excursion
-                 (goto-char (point-min))
-                 (looking-at ".*lexical-binding: t"))))
+                (goto-char (point-min))
+                (looking-at ".*lexical-binding: t"))))
     (save-excursion
       (add-file-local-variable-prop-line 'lexical-binding t))))
 
@@ -69,20 +73,26 @@
   (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-setup-hook))
 
 (local-leader-def
-  :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
+    :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
   "l" 'elisp-auto-insert-lex
   "e" 'eval-last-sexp
   "d" 'eval-defun
   "r" 'eval-region
-  "m" 'macrostep-mode)
-  
+  "m" 'macrostep-mode
+  "f" (mount-prefix-map elisp-refactor "Elisp Refactor"))
+
+(require 'elr)
+
+(define-prefix-map elisp-refactor
+    "i" 'elr-inline-defun)
+
 (use-package edebug
-  :init 
+    :init 
   (defun edebug-wc-top-level ()
     (interactive)
     (which-key--show-keymap "edebug" edebug-mode-map))
   (general-defs
-    :keymaps 'edebug-mode-map
+      :keymaps 'edebug-mode-map
     "?" 'edebug-wc-top-level))
 
 (provide 'emacs-lisp-conf)

@@ -7,27 +7,6 @@
 (defmacro +> (&rest forms)
   `(lambda (x) (-> x ,@forms)))
 
-;;; Iterator functions
-(iter-defun iter-range (&key from to)
-  (let ((cur from))
-    (while (< cur to)
-      (iter-yield cur)
-      (cl-incf cur))))
-
-(iter-defun iter-range-to (to)
-  (let ((cur 0))
-    (while (< cur to)
-      (iter-yield cur)
-      (cl-incf cur))))
-
-(defun into-list (iter)
-  (let ((r '()))
-    (cl-block nil
-      (while t
-        (condition-case x
-            (push (iter-next iter) r)
-          (iter-end-of-sequence
-           (cl-return (nreverse r))))))))
 
 ;;;  Time functions
 (defun format-decoded-time (string time)
@@ -118,9 +97,10 @@
                  (funcall (quote ,create-fun) ,@args))))
             )))
 
+
 (defun add-temp-hook (hook fun)
   (let ((sym (gensym "temp-hook-")))
-    (setf (symbol-function sym)
+    (fset sym
           (lambda (&rest args)
             (apply fun args)
             (remove-hook hook sym)))
@@ -130,5 +110,25 @@
   (cl-loop for c being the key-seqs of (current-local-map)
         using (key-bindings b)
         collect (cons (mapcar 'single-key-description c) b)))
+
+;;; Markers
+(defmacro with-marker-location (marker &rest body)
+  `(with-current-buffer (marker-buffer ,marker)
+     (save-excursion
+       (goto-char (marker-position ,marker))
+       ,@body)))
+
+(defmacro with-moving-marker (marker &rest body)
+  `(with-current-buffer (marker-buffer ,marker)
+     (save-excursion
+       (goto-char (marker-position ,marker))
+       (let  ((res (progn ,@body)))
+         (move-marker ,marker (point))
+         res))))
+
+
+(defun marker-eobp (mark)
+  (with-current-buffer (marker-buffer mark)
+    (= (marker-position mark) (point-max))))
 
 (provide 'core/utility)

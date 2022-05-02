@@ -39,6 +39,11 @@
 (add-to-list 'load-path (expand-file-name "util" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "platform" user-emacs-directory))
 
+(byte-recompile-directory (expand-file-name "util" user-emacs-directory) 0)
+(byte-recompile-directory (expand-file-name "lisp/core" user-emacs-directory) 0)
+
+
+
 (setq visible-bell nil
       ring-bell-function #'ignore
       inhibit-startup-screen t
@@ -291,14 +296,6 @@
      "r" 'zoxide-travel
      "c" 'zoxide-cd))
 
-(use-package dired-hacks-utils
-    :straight t)
-
-(straight-use-package 'dired-hacks)
-
-(use-package dired-narrow)
-(use-package dired-subtree)
-
 (use-package doom-modeline
     :straight t
     :init
@@ -353,6 +350,10 @@
     :straight t
     :hook (emacs-startup . yas-global-mode)
     :config
+    (general-def
+        'yas-minor-mode-map
+        "SPC"
+      yas-maybe-expand)
     (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand))
 
 (use-package tab-bar

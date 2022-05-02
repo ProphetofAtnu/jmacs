@@ -14,3 +14,4 @@
 /FsAutoComplete/
 __pycache__
 /completions
+*.elc
