@@ -32,6 +32,8 @@
       "t" 'org-table-create-or-convert-from-region
       )
     :config
+    (require 'org-ext)
+    (org-headline-emphasize-minor-mode 1)
     (setq org-src-preserve-indentation t)
     (setq org-confirm-babel-evaluate nil)
     (setq org-display-remote-inline-images 'download)
@@ -74,6 +76,5 @@
   (setq deft-directory
         (expand-file-name "deft" org-directory)))
   
-
 
 (provide 'org-conf)

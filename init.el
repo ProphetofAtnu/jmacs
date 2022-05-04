@@ -25,6 +25,17 @@
 (setq use-package-compute-statistics t)
 
 (straight-use-package 'dired-hacks)
+(straight-use-package 'general)
+(straight-use-package 'hydra)
+(straight-use-package 'm-buffer)
+(straight-use-package 'treepy)
+(straight-use-package 'tablist)
+(straight-use-package 'ts)
+(straight-use-package 'svg-lib)
+(straight-use-package 'anaphora)
+(straight-use-package 'datetime)
+(straight-use-package 'deferred)
+(straight-use-package 'evil-mc)
 
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
@@ -39,9 +50,6 @@
 (add-to-list 'load-path (expand-file-name "util" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "platform" user-emacs-directory))
 
-(byte-recompile-directory (expand-file-name "util" user-emacs-directory) 0)
-(byte-recompile-directory (expand-file-name "lisp/core" user-emacs-directory) 0)
-
 
 
 (setq visible-bell nil
@@ -51,6 +59,9 @@
       sentence-end-double-space nil
       gc-cons-threshold 100000000
       read-process-output-max (* 1024 1024))
+
+(byte-recompile-directory (expand-file-name "util" user-emacs-directory) 0)
+(byte-recompile-directory (expand-file-name "lisp/core" user-emacs-directory) 0)
 
 (setq evil-want-integration t)
 (setq evil-want-keybinding nil)
@@ -277,13 +288,14 @@
  ;;    (t (:weight light :box nil :background "#202339" :foreground "#000000" :inherit (mode-line)))))
  
 (use-package cherry-blossom-theme
-    :straight t
-    :init
-    (load-theme 'cherry-blossom t)
-    (set-face-foreground 'mode-line-inactive "#5F5A60"))
+    :straight t)
+    ;; (load-theme 'cherry-blossom t)
+    ;; (set-face-foreground 'mode-line-inactive "#5F5A60"))
 
 (use-package modus-themes
-    :straight t)
+    :straight t
+    :config 
+    (load-theme 'modus-vivendi t))
 
 (use-package popup
     :straight t)
@@ -309,8 +321,8 @@
     :straight t
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
-(set-face-attribute 'default t :font "Fira Code-14")
-(set-frame-font "Fira Code-14" nil t)
+(set-face-attribute 'default t :font "Fira Code-13")
+(set-frame-font "Fira Code-13" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
@@ -421,27 +433,6 @@
 (use-package markdown-mode
     :straight t)
 
-(use-package m-buffer
-    :straight t)
-
-(use-package treepy
-    :straight t)
-
-(use-package tablist
-    :straight t)
-
-(use-package ts
-    :straight t)
-
-(use-package svg-lib
-    :straight t)
-
-(use-package anaphora
-    :straight t)
-
-(use-package datetime
-    :straight t)
-
 (use-package iedit
     :straight t
     :general
@@ -453,9 +444,6 @@
     :straight t)
 
 (use-package visual-regexp-steroids
-    :straight t)
-
-(use-package deferred
     :straight t)
 
 (add-hook 'emacs-startup-hook
@@ -494,6 +482,7 @@
 (require 'ruby-conf)
 (require 'sql-conf)
 (require 'dotnet-conf)
+(require 'latex-conf)
 (require 'nim-conf)
 (require 'utility-conf)
 

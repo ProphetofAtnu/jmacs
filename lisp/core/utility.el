@@ -2,6 +2,8 @@
 
 (require 'generator)
 (require 'dash)
+(require 'general)
+(require 'hydra)
 
 ;;; Utility macros
 (defmacro +> (&rest forms)
