@@ -5,11 +5,6 @@
 (require 'general)
 (require 'hydra)
 
-;;; Utility macros
-(defmacro +> (&rest forms)
-  `(lambda (x) (-> x ,@forms)))
-
-
 ;;;  Time functions
 (defun format-decoded-time (string time)
   (format-time-string string (encode-time time)))

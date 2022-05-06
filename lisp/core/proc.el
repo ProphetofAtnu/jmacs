@@ -20,4 +20,35 @@
              (if stack (pop stack)
                :wait))))))))
 
+(defun call-with-buffer (shell-cmd output &optional buffer)
+  (with-current-buffer (or buffer
+                           (current-buffer))
+    (call-shell-region (point-min)
+                       (point-max)
+                       shell-cmd
+                       nil
+                       (with-current-buffer
+                           (get-buffer-create output)
+                         (erase-buffer)
+                         (current-buffer)))))
+
+(defun run-shell-command-on-buffer (command)
+  (interactive
+   (list (read-shell-command "Pipe to: ")))
+  (let ((out (format "*%s-cmd*" (buffer-name)))
+        (inhibit-read-only t))
+    (call-with-buffer command out)
+    (with-current-buffer out
+      (special-mode))
+    (display-buffer out)))
+
+(defun run-shell-command-on-other-buffer (buffer command)
+  (interactive
+   (list
+    (read-buffer "Buffer: ")
+    (read-shell-command "Pipe to: ")))
+  (with-current-buffer buffer
+    (run-shell-command-on-buffer command)))
+
+
 (provide 'core/proc)
