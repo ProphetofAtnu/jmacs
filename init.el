@@ -24,6 +24,8 @@
 
 (setq use-package-compute-statistics t)
 
+(defvar evil-want-keybinding nil)
+
 (straight-use-package 'dired-hacks)
 (straight-use-package 'general)
 (straight-use-package 'hydra)
@@ -48,9 +50,8 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "util" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "util/tools" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "platform" user-emacs-directory))
-
-
 
 (setq visible-bell nil
       ring-bell-function #'ignore
@@ -63,8 +64,12 @@
 (byte-recompile-directory (expand-file-name "util" user-emacs-directory) 0)
 (byte-recompile-directory (expand-file-name "lisp/core" user-emacs-directory) 0)
 
+(defvar js/should-load-and-compile-directories
+  (list
+   (expand-file-name "util" user-emacs-directory)
+   (expand-file-name "lisp/core" user-emacs-directory)))
+
 (setq evil-want-integration t)
-(setq evil-want-keybinding nil)
 (defvar evil-disable-insert-state-bindings t)
 
 ;; (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.5.1/emacs")

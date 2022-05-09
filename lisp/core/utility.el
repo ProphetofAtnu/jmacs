@@ -4,6 +4,13 @@
 (require 'dash)
 (require 'general)
 (require 'hydra)
+(require 'time-date)
+
+;;; General Requirements from the "utils" folder
+(require 'buffer-tools)
+(require 'iter-tools)
+(require 'thread-tools)
+(require 'xml-tools)
 
 ;;;  Time functions
 (defun format-decoded-time (string time)
@@ -127,5 +134,36 @@
 (defun marker-eobp (mark)
   (with-current-buffer (marker-buffer mark)
     (= (marker-position mark) (point-max))))
+
+(defun format-data-human-readable (bytes-count format &optional metric?)
+  (let ((factor (if metric?
+                    1000.0
+                  1024.0)))
+    (cl-case format
+      ('KiB (/ bytes-count factor))
+      ('KB (/ bytes-count factor))
+      ('kb (/ bytes-count factor))
+      ('MiB (/ bytes-count (expt factor 2)))
+      ('MB (/ bytes-count (expt factor 2)))
+      ('mb (/ bytes-count (expt factor 2)))
+      ('GiB (/ bytes-count (expt factor 3)))
+      ('GB (/ bytes-count (expt factor 3)))
+      ('gb (/ bytes-count (expt factor 3))))))
+
+(defun bytes-parse-string (fmt &optional metric?)
+  (save-match-data
+    (unless (string-match "\\([[:digit:]]+\\)\\([KkMmGg]\\)[iI]?[bB]" fmt)
+      (error "byte string unparseable %s" fmt))
+    (let ((num (string-to-number
+                (match-string 1 fmt)))
+          (spec
+           (string-to-char (downcase (match-string 2 fmt))))
+          (factor (if metric?
+                      1000
+                    1024)))
+      (cl-case spec
+        (?k (* num factor))
+        (?b (* num (expt factor 2)))
+        (?g (* num (expt factor 3)))))))
 
 (provide 'core/utility)

@@ -1,5 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 (require 'cl-macs)
+(require 'thread)
 
 (cl-defstruct tfuture
   "Threaded future for use with the builtin emacs threading system"
@@ -63,3 +64,5 @@ associated with the item, it is returned as is"
      #'(lambda ()
          (future-complete future (funcall func))))
     future))
+
+(provide 'thread-tools)

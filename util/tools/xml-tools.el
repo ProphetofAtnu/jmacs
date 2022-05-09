@@ -1,5 +1,9 @@
 ;; -*- lexical-binding: t; -*-
 
+(require 'xml)
+(require 'tlist-tools)
+
+;;; Utility Functions
 (defun xml-find-nodes (predicate xml &optional transform)
   (let (nodes
         (tfn (or transform
@@ -14,4 +18,4 @@
       (walker (car xml))
       (nreverse nodes))))
 
-(provide 'xml-util)
+(provide 'xml-tools)

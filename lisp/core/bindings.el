@@ -22,6 +22,7 @@
     :keymaps '(override)
   "" nil
   "SPC" 'execute-extended-command
+  "g" 'keyboard-escape-quit
   "b" '(:prefix-command prefix-buffer-command
         :prefix-map prefix-buffer-map
         :wk "Buffer")
