@@ -23,7 +23,8 @@
 (require 'use-package)
 
 (setq use-package-compute-statistics t)
-
+(defvar evil-want-integration t)
+(defvar evil-disable-insert-state-bindings t)
 (defvar evil-want-keybinding nil)
 
 (straight-use-package 'dired-hacks)
@@ -38,6 +39,7 @@
 (straight-use-package 'datetime)
 (straight-use-package 'deferred)
 (straight-use-package 'evil-mc)
+(straight-use-package 'dash)
 
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
@@ -69,8 +71,6 @@
    (expand-file-name "util" user-emacs-directory)
    (expand-file-name "lisp/core" user-emacs-directory)))
 
-(setq evil-want-integration t)
-(defvar evil-disable-insert-state-bindings t)
 
 ;; (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.5.1/emacs")
 

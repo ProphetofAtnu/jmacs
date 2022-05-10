@@ -1,5 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 
+(require 'seq)
+
 (defun juxt (&rest funcs)
   (lambda (arg)
     (mapcar (lambda (func)
@@ -13,6 +15,20 @@
 
 (defun update-car (func lst)
   (cons (funcall func (car lst)) (cdr lst)))
+
+(defmacro map-place (place func sequence)
+  "Call seq-map on the `place' of each item, represented by token
+`$'"
+  `(seq-map (lambda ($)
+             (funcall ,func ,(gv-get place (lambda (g _) g))))
+           ,sequence))
+
+(defun seq-index (seq)
+  (let ((ctr -1))
+    (seq-map
+     (lambda (i)
+       (cons (cl-incf ctr) i))
+     seq)))
 
 (defun map-nth-incl (nth func lst)
   "Call func on every `nth' item in `lst', starting with the car."
@@ -45,11 +61,15 @@
       co)))
 
 (defmacro lambda-first (&rest body)
+  "Thread first, but the first form is the argument to the returned
+lambda."
   `(lambda (arg)
      (thread-first arg
                    ,@body)))
 
 (defmacro lambda-last (&rest body)
+  "Thread last, but the first form is the argument to the returned
+lambda."
   `(lambda (arg)
      (thread-last arg
                    ,@body)))

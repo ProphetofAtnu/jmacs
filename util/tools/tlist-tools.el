@@ -9,26 +9,6 @@
   (tabulated-list-print)
   (tabulated-list-init-header))
 
-(defsetf
-    column-width
-    (column-name)
-    (v)
-  `(setf
-    (nth 1 (aref
-            tabulated-list-format
-            (tlist-get-column-idx ,column-name)))
-    ,v))
-
-(defsetf
-    column-sortable
-    (column-name)
-    (v)
-  `(setf
-    (nth 2 (aref
-            tabulated-list-format
-            (tlist-get-column-idx ,column-name)))
-    ,v))
-
 (defun plist-table-data (plists)
   (let* ((keys (seq-uniq 
                 (rem-indexes #'cl-oddp (flatten-list plists))))
@@ -88,8 +68,6 @@
 (cl-defun tlist-initialize (columns data)
   (let ((cols (tlist-headers-make columns))
         (data (tlist-data-format data)))
-
-
     (setq-local tabulated-list-format cols)
     (setq-local tabulated-list-entries data)
     (tabulated-list-mode)

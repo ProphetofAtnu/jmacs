@@ -17,12 +17,12 @@
     :prefix "SPC"
     :non-normal-prefix "C-SPC")
 
+(keymap-global-set "C-M-g" 'keyboard-escape-quit)
 
 (global-leader-def
     :keymaps '(override)
   "" nil
   "SPC" 'execute-extended-command
-  "g" 'keyboard-escape-quit
   "b" '(:prefix-command prefix-buffer-command
         :prefix-map prefix-buffer-map
         :wk "Buffer")
