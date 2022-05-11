@@ -1,19 +1,15 @@
 ;; -*- lexical-binding: t; -*-
+(require 'dash)
+(require 'org)
 
-;; (with-current-buffer (get-buffer "gm-case-study.org")
-;;   (goto-char (point-min))
-;;   (let (match
-;;         (regions nil))
-;;     (while (setf
-;;             match
-;;             (text-property-search-forward
-;;              'htmlize-link))
-;;       (push (list
-;;              (cadr (prop-match-value match))
-;;              (prop-match-beginning match)
-;;              (prop-match-end match))
-;;             regions))
-;;     (reverse regions)))
+(defvar org-ext-ctx-handlers
+  (let ((ht (make-hash-table)))
+    (puthash :link #'org-link-open ht)
+    (puthash :checkbox #'org-toggle-checkbox ht)
+    (puthash :todo-keyword #'org-todo ht)
+    (puthash :priority #'org-priority ht)
+    (puthash :headline-stars #'org-cycle ht)
+    ht))
 
 (defun org-ext-get-prop-uri (match)
   (if (prop-match-p match)
@@ -97,5 +93,53 @@
        (set-face-attribute 'org-level-6 nil :height 'unspecified)
        (set-face-attribute 'org-level-7 nil :height 'unspecified)
        (set-face-attribute 'org-level-7 nil :height 'unspecified))))
+
+
+;; :headline         anywhere in a headline
+;; :headline-stars   on the leading stars in a headline
+;; :todo-keyword     on a TODO keyword (including DONE) in a headline
+;; :tags             on the TAGS in a headline
+;; :priority         on the priority cookie in a headline
+;; :item             on the first line of a plain list item
+;; :item-bullet      on the bullet/number of a plain list item
+;; :checkbox         on the checkbox in a plain list item
+;; :table            in an Org table
+;; :table-special    on a special filed in a table
+;; :table-table      in a table.el table
+;; :clocktable       in a clocktable
+;; :src-block        in a source block
+;; :link             on a hyperlink
+;; :keyword          on a keyword: SCHEDULED, DEADLINE, CLOSE, COMMENT.
+;; :latex-fragment   on a LaTeX fragment
+;; :latex-preview    on a LaTeX fragment with overlaid preview image
+
+(dolist (osm
+          '(:link :todo-keyword :checkbox :tags :headline-stars
+            :table-special :priority :src-block :latex-fragment :latex-preview))
+  (put osm 'org-ext-prio 10))
+
+(dolist (osm
+          '(:keyword :headline :item :item-bullet :table-table :table :clocktable))
+  (put osm 'org-ext-prio 0))
+
+(defun org-ext--prio-sorter (sym1 sym2)
+  (let ((p1 (get sym1 'org-ext-prio))
+        (p2 (get sym2 'org-ext-prio)))
+    (> (or p1 -1) (or p2 -1))))
+
+(defun org-ext--context-prioritize ()
+  (sort
+   (mapcar #'car (org-context))
+   #'org-ext--prio-sorter))
+
+(defun org-ext-dynamic-ret ()
+  (interactive)
+  (let ((ctx (org-ext--context-prioritize)))
+    (if-let ((hndlr (cl-block nil
+                      (dolist (c ctx)
+                        (when-let ((hndlr (gethash c org-ext-ctx-handlers)))
+                          (cl-return hndlr))))))
+          (funcall-interactively hndlr)
+      nil)))
 
 (provide 'org-ext)

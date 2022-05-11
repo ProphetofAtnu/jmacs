@@ -37,7 +37,9 @@
         :wk "Window")
   "t" 'dired-jump-in-side-window
   "u" (mount-prefix-map utility "Utility")
+  "j" (mount-prefix-map jump "Jump")
   "h" (mount-prefix-map help "Help")
+  "o" (mount-prefix-map frame "Frame")
   "s" (mount-prefix-map search "Search")
   "i" (mount-prefix-map insert "Insert")
   "v" (mount-prefix-map project "Project"))

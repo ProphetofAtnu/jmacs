@@ -3,6 +3,14 @@
 (require 'use-package)
 (require 'general)
 
+(use-package org-ext
+    :general
+  (:keymaps 'org-mode-map
+            :states '(normal)
+            "RET" 'org-ext-dynamic-ret))
+
+
+
 (use-package org
     :defer t
     :commands (org-agenda
@@ -17,10 +25,16 @@
       "|" 'org-table-create-or-convert-from-region
       "y" 'org-store-link
       "i" 'org-insert-structure-template
+      "s" 'org-sort
+      "S" 'org-sort-entries
       "p" 'org-insert-last-stored-link
       "r" 'org-redisplay-inline-images
-      "e" 'org-encrypt-entry
-      "d" 'org-decrypt-entry
+      "R" 'org-toggle-inline-images
+      "c" '(:ignore t :wk "Crypto")
+      "c e" 'org-encrypt-entry
+      "c d" 'org-decrypt-entry
+      "z" 'org-add-note
+      "n" 'org-narrow-to-element
       "t" (mount-prefix-map org-table "Table"))
     (general-defs
         :keymaps 'prefix-org-table-map
@@ -46,7 +60,7 @@
     :general
     (local-leader-def
         :keymaps 'org-mode-map
-      "d" 'nil
+      "d" '(:ignore t :wk "Download")
       "d c" 'org-download-clipboard
       "d s" 'org-download-screenshot)
     :config
@@ -55,7 +69,7 @@
 (use-package evil-org
     :straight t
     :hook (org-mode . evil-org-mode))
-  
+
 (use-package deft
   :straight t
   :commands (deft)

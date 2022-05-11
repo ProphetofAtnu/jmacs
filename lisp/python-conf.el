@@ -61,29 +61,29 @@
   :config
   (python-x-setup))
 
-(use-package jupyter
-    :straight t
-    :config
-    (require 'ob-jupyter)
-    (setq org-babel-default-header-args:jupyter-python
-          '((:async . "yes")
-            (:session . "py")
-            (:kernel . "python3")))
-    (setq jupyter-org-adjust-image-size nil)
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)
-       (julia . t)
-       (python . t)
-       (jupyter . t)))
-    ;; (add-hook
-    ;;  'jupyter-repl-mode-hook 'company-mode)
-    (local-leader-def
-        :definer 'minor-mode
-      :keymaps '(jupyter-org-interaction-mode)
-      "b" 'jupyter-org-insert-src-block)
-    (jupyter-org-define-key (kbd "C-M-RET") 'jupyter-eval-defun)
-    (jupyter-org-define-key (kbd "C-M-<return>") 'jupyter-eval-defun))
+;; (use-package jupyter
+;;     :straight t
+;;     :config
+;;     (require 'ob-jupyter)
+;;     (setq org-babel-default-header-args:jupyter-python
+;;           '((:async . "yes")
+;;             (:session . "py")
+;;             (:kernel . "python3")))
+;;     (setq jupyter-org-adjust-image-size nil)
+;;     (org-babel-do-load-languages
+;;      'org-babel-load-languages
+;;      '((emacs-lisp . t)
+;;        (julia . t)
+;;        (python . t)
+;;        (jupyter . t)))
+;;     ;; (add-hook
+;;     ;;  'jupyter-repl-mode-hook 'company-mode)
+;;     (local-leader-def
+;;         :definer 'minor-mode
+;;       :keymaps '(jupyter-org-interaction-mode)
+;;       "b" 'jupyter-org-insert-src-block)
+;;     (jupyter-org-define-key (kbd "C-M-RET") 'jupyter-eval-defun)
+;;     (jupyter-org-define-key (kbd "C-M-<return>") 'jupyter-eval-defun))
 
 (use-package org
     :defer t

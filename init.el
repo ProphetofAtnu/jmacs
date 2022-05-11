@@ -38,8 +38,8 @@
 (straight-use-package 'anaphora)
 (straight-use-package 'datetime)
 (straight-use-package 'deferred)
-(straight-use-package 'evil-mc)
 (straight-use-package 'dash)
+(straight-use-package 'evil)
 
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
@@ -89,35 +89,38 @@
 (use-package fn
     :straight t)
 
+(use-package popup
+    :straight t)
+
 (require 'core/utility)
 ;; Evil
 
 (use-package evil 
     :straight t
     :delight
+    :hook (emacs-startup . evil-mode)
     :init 
     (setq evil-want-C-u-scroll t
           evil-undo-system 'undo-redo
           evil-ex-search-vim-style-regexp t
-          evil-search-module 'evil-search)
-
-    (evil-mode))
+          evil-search-module 'evil-search))
 
 (use-package evil-collection
     :straight t
+    :hook (evil-mode . evil-collection-init)
     :config
-    (delq 'lispy evil-collection-mode-list)
-    (evil-collection-init))
+    (delq 'lispy evil-collection-mode-list))
 
 (use-package evil-goggles
     :straight t
     :delight
+    :hook (evil-mode . evil-goggles-mode)
     :config
-    (evil-goggles-use-diff-faces)
-    (evil-goggles-mode))
+    (evil-goggles-use-diff-faces))
 
 (use-package evil-surround
     :straight t
+    :after (evil)
     :commands
     (evil-surround-edit
      evil-Surround-edit
@@ -131,13 +134,14 @@
 
 (use-package evil-matchit
     :straight t
-    :hook (emacs-startup . global-evil-matchit-mode))
+    :hook (evil-mode . global-evil-matchit-mode))
 
 (use-package hydra
     :straight t)
 
 (use-package evil-commentary
     :straight t
+    :after (evil)
     :bind
     (:map evil-normal-state-map)
     ("gc" . evil-commentary))
@@ -213,7 +217,7 @@
 
 (use-package evil-mc
     :straight t
-    :hook (emacs-startup . global-evil-mc-mode)
+    :hook (evil-mode . global-evil-mc-mode)
     :init
     (require 'core/hydras)
     :general
@@ -236,6 +240,7 @@
 
 (use-package evil-avy
     :straight t
+    :after (evil)
     :general
     (:states '(normal)
              "s" 'evil-avy-goto-char-2
@@ -301,9 +306,6 @@
     :straight t
     :config 
     (load-theme 'modus-vivendi t))
-
-(use-package popup
-    :straight t)
 
 (use-package zoxide
     :straight t
@@ -405,6 +407,14 @@
         :keymaps 'override
       "t" 'dired-sidebar-toggle-sidebar))
 
+(use-package winner
+    :general
+  ('winner-mode-map
+   "C-M-<" 'winner-undo
+   "C-M->" 'winner-redo
+   )
+  :hook (emacs-startup . winner-mode))
+
 (use-package elec-pair
     :init (electric-pair-mode))
 
@@ -435,6 +445,9 @@
     :straight t
     :defer t)
 
+(setq frame-resize-pixelwise t
+      window-resize-pixelwise t)
+
 (use-package markdown-mode
     :straight t)
 
@@ -445,16 +458,10 @@
               "C-;" 'iedit-mode-from-isearch
               ))
 
-(use-package visual-regexp
-    :straight t)
-
-(use-package visual-regexp-steroids
-    :straight t)
-
 (add-hook 'emacs-startup-hook
           'global-auto-revert-mode)
 
-(require 'elisp-sql-capf)
+;; (require 'elisp-sql-capf)
 ;; (add-hook 'emacs-startup-hook
 ;;           'elisp-sql-capf-mode)
 

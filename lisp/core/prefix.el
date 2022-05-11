@@ -77,7 +77,12 @@
 (define-prefix-map help 
     "v" 'helpful-variable
     "f" 'helpful-callable
+    "i" 'info
     "w" 'which-key-show-major-mode)
+
+(define-prefix-map jump
+    "d" 'dired-jump
+    "D" 'dired-jump-other-window)
 
 (define-prefix-map search
     "o" 'occur)
@@ -88,6 +93,11 @@
     "r" 'insert-register
     "b" 'insert-buffer
     "!" 'auto-insert)
+
+(define-prefix-map frame
+    "n" 'make-frame
+    "m" 'make-frame-on-monitor
+    "f" 'toggle-frame-maximized)
 
 (define-prefix-map project)
 

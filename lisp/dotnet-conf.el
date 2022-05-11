@@ -9,6 +9,7 @@
     :straight t)
 
 (use-package lsp-mode
-    :straight t)
+    :straight t
+    :hook (csharp-mode . lsp-deferred))
 
 (provide 'dotnet-conf)

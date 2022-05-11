@@ -119,15 +119,24 @@
     (prefix-file-map
      "r" 'consult-recent-file
      "F" 'consult-find
+     "l" 'consult-locate
      "b" 'consult-bookmark)
     (prefix-search-map
      "s" 'consult-line
      "r" 'consult-ripgrep
+     "h" 'consult-outline
+     "f" 'consult-focus-lines
      "m" 'consult-multi-occur
      "g" 'consult-grep)
     (prefix-help-map
-     "a" 'consult-apropos)
+     "a" 'consult-apropos
+     "m" 'consult-man)
+    (prefix-jump-map
+     "m" 'consult-mark
+     "M" 'consult-global-mark
+     "b" 'consult-bookmark)
     (prefix-buffer-map
+     "s" 'consult-line-multi
      "b" 'consult-buffer)
     (general-defs :keymaps '(override)
       "C-M-'" 'consult-imenu)
