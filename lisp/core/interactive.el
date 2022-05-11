@@ -31,4 +31,19 @@
     (message "Added %s from %d to %d" pl beg end)))
 
 
+(defun ielm-pop-with-current-buffer ()
+  (interactive)
+  (let ((cur (current-buffer))
+        (il (save-window-excursion
+              (ielm "*ielm*")
+              (get-buffer "*ielm*"))))
+    (with-current-buffer
+        il
+      (ielm-change-working-buffer
+       cur))
+    (pop-to-buffer il
+     '((display-buffer-reuse-window display-buffer-at-bottom)
+       (direction . below)
+       (window-height . 0.2)))))
+
 (provide 'core/interactive)

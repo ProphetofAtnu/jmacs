@@ -31,4 +31,10 @@
   (dired-mode-map
    "-" 'dired-up-directory))
 
+(general-define-key
+ :states '(normal motion)
+ :keymaps 'Info-mode-map
+ "o" 'ace-link
+ )
+
 (provide 'utility-conf)

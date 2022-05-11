@@ -5,8 +5,8 @@
 (require 'core/formatting)
 
 (use-package helpful
-  :straight t
-  :commands (helpful-at-point)) 
+    :straight t
+    :commands (helpful-at-point)) 
 
 (use-package macrostep
     :straight t

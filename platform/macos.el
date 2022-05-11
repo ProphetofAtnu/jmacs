@@ -3,6 +3,7 @@
 (menu-bar-mode +1)
 
 (progn
+  (setq confirm-kill-emacs #'y-or-n-p)
   (setq mac-option-modifier 'meta)
   (setq window-resize-pixelwise t)
   (setq frame-resize-pixelwise t)
