@@ -40,6 +40,7 @@
 (straight-use-package 'deferred)
 (straight-use-package 'dash)
 (straight-use-package 'evil)
+(straight-use-package 'switch-window)
 
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
@@ -205,6 +206,13 @@
     (advice-add
      'pcomplete-completions-at-point
      :around #'cape-wrap-silent)
+    (dolist (i 
+              '(evil-ex-elisp-completion-at-point
+                evil-ex-command-completion-at-point
+                evil-ex-argument-completion-at-point))
+      (advice-add
+       i
+       :around #'cape-wrap-silent))
     ;; Ensure that pcomplete does not write to the buffer
     ;; and behaves as a pure `completion-at-point-function'.
     (advice-add

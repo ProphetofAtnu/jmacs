@@ -3,6 +3,8 @@
 (require 'dash)
 (require 'posframe)
 
+(require 'window-tools)
+
 (defun display-buffer-posframe (buffer alist)
   (let* ((frame (posframe-show buffer
                                :border-color "gray"
@@ -86,5 +88,19 @@
 (add-hook 'keyboard-quit-hook 'js/close-coq-windows)
 ;; (advice-add 'keyboard-quit :before #'js/close-coq-windows-advice)
 ;; (advice-remove 'keyboard-quit #'js/close-coq-windows-advice)
+
+(general-defs
+    :keymaps 'prefix-window-map
+  "r" 'rehome-window)
+
+(use-package switch-window
+    :straight t
+    :general
+    ('prefix-window-map
+     "f" 'switch-window-then-find-file
+     "b" 'switch-window-then-display-buffer
+     )
+    ('prefix-file-map
+     "J" 'switch-window-then-dired))
 
 (provide 'window-conf)

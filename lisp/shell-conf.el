@@ -24,12 +24,43 @@
 
 (use-package bash-completion
     :straight t
+    :commands (bash-completion-dynamic-complete-nocomint)
     :init
     (add-hook 'shell-dynamic-complete-functions #'bash-completion-dynamic-complete))
 
 (use-package vterm
     :straight t
     :commands (vterm vterm-other-window))
+
+(defun shell-scratch-create ()
+  (interactive)
+  (let ((sh-buf (get-buffer-create (generate-new-buffer "*shell-scratch*"))))
+    (with-current-buffer sh-buf
+      (sh-mode))
+    (pop-to-buffer sh-buf)))
+
+
+(defun bash-comp--ll-escaped-p ()
+  (save-excursion
+    (and  (zerop (forward-line -1))
+          (eq ?\\ (char-before (point-at-eol))))))
+
+(defun bash-comp--last-nonesc ()
+  (save-excursion
+    (goto-char (point-at-bol))
+    (while (bash-comp--ll-escaped-p)
+      (forward-line -1))
+    (point)))
+
+(defun bash-completion-capf ()
+  (bash-completion-dynamic-complete-nocomint
+   (bash-comp--last-nonesc)
+   (point) t))
+
+(defun bash-comp-capf-setup ()
+  (add-hook 'completion-at-point-functions #'bash-completion-capf nil t))
+
+(add-hook 'sh-mode-hook #'bash-comp-capf-setup)
 
 (with-eval-after-load 'vterm
   (defun vterm-send-region-to-shell (beg end)
@@ -38,7 +69,10 @@
            (vterm (match-buffers '(major-mode . vterm-mode)))
            (vterm-buf (car vterm)))
       (with-current-buffer vterm-buf
-        (vterm-send-string sub t))))
+        (vterm-send-string (if (string-suffix-p "\n" sub)
+                               sub
+                             (concat sub "\n"))
+                           t))))
 
   (defun vterm-send-line-to-shell (beg end)
     (interactive "r")
@@ -54,7 +88,7 @@
       :keymaps '(sh-mode-map)
     "v" '(:ignore t :wk "Vterm")
     "v r" 'vterm-send-region-to-shell
-    "v l" 'vterm-send-region-to-shell
+    "v l" 'vterm-send-line-to-shell
     )
 
   (general-defs
