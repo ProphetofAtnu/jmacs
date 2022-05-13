@@ -2,7 +2,7 @@
 
 (require 'dash)
 (require 'posframe)
-
+(require 'hydra)
 (require 'window-tools)
 
 (defun display-buffer-posframe (buffer alist)

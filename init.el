@@ -240,7 +240,7 @@
     (general-def
         :keymaps '(evil-mc-key-map)
       :states '(normal)
-      "g.." 'evil-mc-hydra/body)
+      "g . ." 'evil-mc-hydra/body)
     (evil-mc-define-vars)
     (add-to-list 'evil-mc-incompatible-minor-modes 'lispy)
     ) 

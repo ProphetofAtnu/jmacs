@@ -12,4 +12,7 @@
     :straight t
     :hook (csharp-mode . lsp-deferred))
 
+(use-package powershell
+    :straight t)
+
 (provide 'dotnet-conf)

@@ -11,6 +11,7 @@
       :keymaps '(lsp-mode)
       "." 'lsp-execute-code-action
       "*" 'lsp-restart-workspace
+      "`" 'lsp-treemacs-symbols
       "/" 'lsp-avy-lens
       )
     (general-defs
