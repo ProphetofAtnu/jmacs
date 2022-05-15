@@ -1,9 +1,11 @@
 import importlib
 import ast
 import json
-from typing import Dict, Any, Optional
+from typing import Any, Optional
 import contextlib
 import io
+
+from .endpoints import Endpoint, export
 
 
 def eval_never_printing(code, glob, local):
@@ -23,8 +25,18 @@ def exec_never_printing(code, glob, local):
     ):
         exec(code, glob, local)
 
+def run_never_printing(code, glob, loc):
+    results = []
+    for stmt in ast.parse(code).body:
+        if isinstance(stmt, ast.Expr):
+            results.append(
+                eval_never_printing(ast.unparse(stmt), glob, loc)
+            )
+        else:
+            exec_never_printing(ast.unparse(stmt), glob, loc)
+    return results
 
-class World:
+class World(Endpoint, name="world"):
     def __init__(self) -> None:
         self.globals = {}
         self.locals = {}
@@ -45,11 +57,6 @@ class World:
         with open(pth) as file:
             return self.run(file)
 
-    def make_ref(self, obj: Any):
-        oid = id(obj)
-        self._reg[oid] = obj
-        return oid
-
     def lexical_set(self, key, value, glob):
         if glob:
             self.globals[key] = value
@@ -59,11 +66,13 @@ class World:
     def lexical_scope(self, key) -> Optional[Any]:
         return self.locals.get(key, self.globals.get(key, None))
 
+    @export
     def flush(self, everything: bool):
         self.locals = {}
         if everything:
             self.flush_refs()
 
+    @export
     def import_module(self, module, reload=False):
         if reload:
             mod = importlib.reload(module)
@@ -73,16 +82,23 @@ class World:
             self.globals[mod.__name__] = mod
         return mod
 
+    def make_ref(self, obj: Any):
+        oid = id(obj)
+        self._reg[oid] = obj
+        return oid
+
     def resolve(self, id: int) -> Optional[Any]:
         return self._reg.get(id, None)
 
     def flush_refs(self):
         self._reg = {}
 
+    @export
     def remove_ref(self, obj):
         oid = id(obj)
         del self._reg[oid]
 
+    @export
     def count_refs(self):
         return len(self._reg.items())
 

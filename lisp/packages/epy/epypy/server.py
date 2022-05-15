@@ -1,13 +1,12 @@
 from asyncio import tasks
-from asyncio.futures import Future
-
-from apipython.transport import stdio_pipe_connect
-from .core import ApiCore
-import importlib
+from .endpoints import Dispatcher
+from .transport import RpcCall, stdio_pipe_connect
 from .transport import ErrorResponse, Response
 from .world import World
-from typing import Dict, List, Any
+from typing import List
 import asyncio
+
+from . import code
 
 
 class Server:
@@ -17,8 +16,7 @@ class Server:
         self.reader = read
         self.writer = write
         self.pending: List[tasks.Task] = []
-        self.world = World()
-        self.core = ApiCore(self.world)
+        self.world: World = Dispatcher.get_instance("world")
 
     async def write_response(self, res: Response | ErrorResponse):
         enc = self.world.encode(res)
@@ -26,13 +24,10 @@ class Server:
         self.writer.write(byt)
         await self.writer.drain()
 
-    async def dispatch(self, msg: Dict[str, Any]):
-        mid = msg.pop("id")
-        do = msg.pop("do")
-        if handler := getattr(self.core, do, None):
-            result = handler(**msg)
-            return await self.write_response(Response(id=mid, result=result))
-        raise Exception("No handler")
+    async def dispatch(self, msg: RpcCall):
+        mid = msg.get("id")
+        res = await Dispatcher.accept(msg)
+        return await self.write_response(Response(id=mid, result=res))
 
     async def process(self, msg):
         pmsg = dict()
@@ -48,7 +43,7 @@ class Server:
                 ErrorResponse(id=pmsg.get("id", -1), error=str(err))
             )
 
-    def cleanup(self, future):
+    def cleanup(self, _):
         self.pending = [p for p in self.pending if p.done()]
 
     async def run(self):

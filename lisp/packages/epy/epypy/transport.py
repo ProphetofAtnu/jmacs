@@ -12,24 +12,17 @@ async def stdio_pipe_connect():
     writer = asyncio.StreamWriter(w_transport, w_protocol, reader, loop)
     return reader, writer
 
-class CallMessage(TypedDict):
-    id: int
-    target: Optional[Any]
+class RpcInvocation(TypedDict):
     method: str
-    args: Optional[List[Any]]
-    kwargs: Optional[Dict[str, Any]]
+    args: List[Any]
+    kwargs: Dict[str, Any]
 
-class GetMessage(TypedDict):
-    id: int
-    target: Optional[Any]
-    get: str
+class RpcCast(RpcInvocation):
+    endpoint: str
 
-class SetMessage(TypedDict):
-    id: int
-    target: Optional[Any]
-    get: str
-    value: Any
-
+class RpcCall(RpcCast):
+    id: Any
+    
 class Response(TypedDict):
     id: int
     result: Any
