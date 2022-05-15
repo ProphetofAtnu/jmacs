@@ -112,6 +112,9 @@ should make something into a plist."
 (defun epy-run-idle-flush-on-new-messages (ep-proc)
   (run-with-idle-timer epy-idle-flush-delay-time nil #'epy-flush ep-proc))
 
+(defun epy-run-flush-direct-on-new-messages (ep-proc)
+  (epy-flush ep-proc))
+
 ;; (epy-process :name 'test)
 
 (defun epy-capf-annotation-func (item)
