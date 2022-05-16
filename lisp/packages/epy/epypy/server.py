@@ -1,9 +1,9 @@
 from asyncio import tasks
 from .endpoints import Dispatcher
-from .transport import RpcCall, stdio_pipe_connect
-from .transport import ErrorResponse, Response
+from .transport import Broadcast, RpcCall, stdio_pipe_connect
+from .transport import ErrorResponse, Response, Broadcast
 from .world import World
-from typing import List
+from typing import List, Optional
 import asyncio
 
 from . import code
@@ -18,7 +18,7 @@ class Server:
         self.pending: List[tasks.Task] = []
         self.world: World = Dispatcher.get_instance("world")
 
-    async def write_response(self, res: Response | ErrorResponse):
+    async def write_response(self, res: Response | ErrorResponse | Broadcast):
         enc = self.world.encode(res)
         byt = enc.encode() + b"\n"
         self.writer.write(byt)
@@ -51,6 +51,13 @@ class Server:
             task = asyncio.create_task(self.process(msg))
             self.pending.append(task)
             task.add_done_callback(self.cleanup)
+
+
+# _SERVER_SINGLETON_: Optional['Server'] = None
+
+# def broadcast(type, data):
+#     if _SERVER_SINGLETON_:
+#         _SERVER_SINGLETON_.write_response(Broadcast(type=type, result=data))
 
 
 async def run_server():

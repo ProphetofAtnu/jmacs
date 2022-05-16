@@ -2,9 +2,8 @@
 
 
 (defvar epy-dir-name (expand-file-name "lisp/packages/epy" user-emacs-directory))
-
 (defvar epy-idle-flush-delay-time .1)
-(defvar-local epy-capf-source nil)
+
 
 (defun epy-create-process (&optional name buffer)
   (let ((default-directory epy-dir-name))
@@ -19,7 +18,7 @@
    (buffer :initform nil)
    (unread :initform 0 :accessor epy-unread)
    (ctr :initform 0)
-   (on-new-messages :initform nil)
+   (on-message :initform nil :initarg :on-message)
    (cb-table :initform (make-hash-table))
    (on-closed :initform nil)))
 
@@ -27,23 +26,21 @@
   (lambda (proc str)
     (with-current-buffer (process-buffer proc)
       (goto-char (point-max))
-      (with-slots (on-new-messages unread) ep
+      (with-slots (on-message unread) ep
        (seq-do (lambda (c)
                  (insert-char c)
                  (if (eq c ?\n)
                      (cl-incf unread)))
                str)
-       (when (and (> unread 0) on-new-messages)
-         (funcall on-new-messages ep))))))
+       (when (and (> unread 0) on-message)
+         (funcall on-message ep))))))
 
 (defun epy--process-sentinel (ep)
   (lambda (proc str)
     (when (string-prefix-p
            "finished"
            str)
-      (mapcar
-       (lambda (cb) (funcall cb))
-       (oref ep on-closed)))))
+      (run-hooks (oref ep on-closed)))))
 
 (cl-defmethod initialize-instance :after ((class epy-process) &rest slots)
   (with-slots (name buffer proc) class
@@ -67,7 +64,7 @@ should make something into a plist."
   thing)
 
 (cl-defmethod epy-flush (epyp)
-  (with-slots (unread buffer cb-table on-new-messages) epyp
+  (with-slots (unread buffer cb-table on-message) epyp
     (with-current-buffer buffer
       (goto-char (point-min))
       (condition-case nil
@@ -107,61 +104,22 @@ should make something into a plist."
         "\n")))))
 
 (defun epy-run-flush-on-new-messages (ep-proc)
+  "For use in the `on-message' handler of epy-process. When a
+message is recieved, it is queued to be handled in the next loop
+with a timer."
   (run-with-timer 0 nil #'epy-flush ep-proc))
 
 (defun epy-run-idle-flush-on-new-messages (ep-proc)
+  "For use in the `on-message' handler of epy-process. When a
+message is recieved, an idle timer is queued as determined by the
+variable `epy-idle-flush-delay-time'."
   (run-with-idle-timer epy-idle-flush-delay-time nil #'epy-flush ep-proc))
 
 (defun epy-run-flush-direct-on-new-messages (ep-proc)
+  "For use in the `on-message' handler of epy-process. When a
+message is recieved, epy-flush is run directly in the lexical context
+of the process filter."
   (epy-flush ep-proc))
 
-;; (epy-process :name 'test)
-
-(defun epy-capf-annotation-func (item)
-  (when-let ((p (get-text-property 0 'py-kind item)))
-    (format "   %s" p)))
-
-(defun epy-completion-table-with-cb ()
-  (let* ((cline (1+ (current-line)))
-         (ccol (current-column))
-         (buff (buffer-substring-no-properties (point-min) (point-max)))
-         (data nil)
-         (waiting t)
-         (done-cb
-           (lambda (result)
-             (setf
-              data (mapcar (-lambda ((cstr desc))
-                               (propertize cstr 'py-kind desc))
-                           result))
-             (setq waiting nil))))
-    (run-with-timer 0 nil #'epy-send
-                    epy-capf-source (list
-                                     :endpoint "code"
-                                     :method "capf"
-                                     :args (list buff cline ccol))
-                    done-cb)
-    (lambda (str)
-      (while-no-input
-        (when waiting
-          (accept-process-output (oref epy-capf-source proc) 0 500 t)))
-      data)))
-
-
-(defvar-local epy--capf-last-locs nil)
-
-(defun epy-capf-local-bounds ()
-    (save-excursion
-     (let ((beg (progn
-                  (skip-syntax-backward "w_")
-                  (point)))
-           (end (progn (skip-syntax-forward "w_")
-                       (point))))
-       (cons beg end))))
-
-(defun epy-completion-at-point ()
-  (-let (((beg . end) (epy-capf-local-bounds)) 
-         (ct (completion-table-dynamic (epy-completion-table-with-cb))))
-      (list beg end ct
-            :annotation-function #'epy-capf-annotation-func)))
 
 (provide 'epy)

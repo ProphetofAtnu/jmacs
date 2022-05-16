@@ -27,6 +27,10 @@ class Response(TypedDict):
     id: int
     result: Any
     
+class Broadcast(TypedDict):
+    kind: str
+    data: Any
+    
 class ErrorResponse(TypedDict):
     id: int
     error: Any
