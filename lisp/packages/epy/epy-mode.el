@@ -23,9 +23,9 @@
          (done-cb
            (lambda (result)
              (setf
-              data (mapcar (-lambda ((cstr desc))
-                               (propertize cstr 'py-kind desc))
-                           result))
+              data (cl-loop for (cstr desc) in result
+                         collect (propertize cstr 'py-kind desc))
+              )
              (setq waiting nil))))
     (run-with-timer 0 nil #'epy-send
                     epy-mode--buffer-source (list
@@ -71,5 +71,6 @@
       (when epy-mode--buffer-source
         (with-slots (proc) epy-mode--buffer-source
           (kill-process proc))))))
+
 
 (provide 'epy-mode)

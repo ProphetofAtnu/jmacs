@@ -81,10 +81,13 @@
   "m" 'macrostep-mode
   "f" (mount-prefix-map elisp-refactor "Elisp Refactor"))
 
-(require 'elr)
-
-(define-prefix-map elisp-refactor
-    "i" 'elr-inline-defun)
+(use-package emr
+    :straight t
+    :general
+    (local-leader-def
+        :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
+      "," 'emr-show-refactor-menu
+      "l" 'emr-el-extract-to-let))
 
 (use-package edebug
     :init 

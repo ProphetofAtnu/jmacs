@@ -41,6 +41,7 @@
 (straight-use-package 'dash)
 (straight-use-package 'evil)
 (straight-use-package 'switch-window)
+(straight-use-package 'emr)
 
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
