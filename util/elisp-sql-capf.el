@@ -57,6 +57,10 @@ database should use.")
 (defvar *elisp-sql-update-thread* nil)
 (defvar *elisp-sql-update-timer* nil)
 
+(defvar *elisp-sql-obarray* nil)
+(defvar *elisp-sql-registered* (make-hash-table))
+(defvar *elisp-sql-update-ts* (float-time))
+
 (defun elisp-sql-log (str &rest args)
   (when elisp-sql-verbose
     (with-current-buffer (get-buffer-create "*elisp-sql-log*")
@@ -139,10 +143,13 @@ with `assert-db-closed'.")
       (progn
         (elisp-sql-log "Starting update transaction...")
         (sqlite-transaction db)
-        (sqlite-execute db "DELETE FROM symbols")
+        ;; (sqlite-execute db "DELETE FROM symbols")
         (mapatoms
          (lambda (i)
-           (when (symbolp i)
+           (when (and
+                  (symbolp i)
+                  (gethash i *elisp-sql-registered* t))
+             (puthash i nil *elisp-sql-registered*)
              (let ((n (symbol-name i))
                    (flags (elisp-sql-calculate-flags i)))
                (when (and n (> flags 0))
@@ -157,9 +164,6 @@ with `assert-db-closed'.")
              (elisp-sql-log "Rolled back update %s" e)
              (sqlite-rollback db)
              nil))))
-
-(defvar *elisp-sql-obarray* (create-sql-obarray))
-(defvar *elisp-sql-update-ts* (float-time))
 
 (defun elisp-sql--reset-file-db-hard ()
   (sqlite-close *elisp-sql-obarray*)
@@ -298,7 +302,7 @@ with `assert-db-closed'.")
 
 (defun elisp-sql--annotate (cap)
   (when-let ((flg (get-text-property 0 'symbol-flags cap)))
-    (format "(%s)" flg)))
+    (format "   (%s)" flg)))
 
 (defun elisp-sql-check-update-deferred (&optional from-timer)
   (when (and
@@ -336,7 +340,7 @@ with `assert-db-closed'.")
            (end (elisp-sql--end-boundry)))
       (cl-destructuring-bind (beg . kind) ctx
         (list start end
-              (completion-table-with-cache
+              (completion-table-dynamic
                (elisp-sql-completer
                 (buffer-substring-no-properties
                  start end)
@@ -358,6 +362,8 @@ GENERATED columns)."
   :global t
   (if elisp-sql-capf-mode
       (progn
+        (unless *elisp-sql-obarray*
+          (setq *elisp-sql-obarray* (create-sql-obarray)))
         (elisp-sql-check-update-deferred)
         (advice-add 'elisp-completion-at-point :override #'elisp-sql-completion-at-point))
     (advice-remove 'elisp-completion-at-point #'elisp-sql-completion-at-point)))

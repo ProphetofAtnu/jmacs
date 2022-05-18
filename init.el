@@ -399,6 +399,9 @@
     :straight t
     :hook (emacs-startup . global-tree-sitter-mode))
 
+(use-package tree-sitter-indent
+    :straight t)
+
 (use-package tree-sitter-langs
     :straight t)
  
