@@ -4,6 +4,9 @@
     :straight t
     )
 
+(use-package dante
+    :straight t)
+
 (use-package lsp-haskell
     :straight t)
 

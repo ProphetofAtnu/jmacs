@@ -46,22 +46,12 @@
 
 (use-package lispy
     :straight t
-    :hook ((emacs-lisp-mode
-            lisp-mode
-            clojure-mode
-            common-lisp-mode
-            scheme-mode)
-           . lispy-mode)
-    :general
-    (:keymaps '(emacs-lisp-mode-map
-                lisp-interaction-mode-map
-                lisp-mode-map
-                clojure-mode-map
-                common-lisp-mode-map
-                ielm-mode-map
-                cider-repl-mode-map
-                scheme-mode-map)
-              "C-\\" 'lispy-mode)
+    ;; :hook ((emacs-lisp-mode
+    ;;         lisp-mode
+    ;;         clojure-mode
+    ;;         common-lisp-mode
+    ;;         scheme-mode)
+    ;;        . lispy-mode)
     :config
     (setq lispy-completion-method 'default
           lispy-close-quotes-at-end-p t
@@ -73,4 +63,39 @@
     :straight t
     :hook (lispy-mode . lispyville-mode))
 
+
+(defun symex-show-bindings ()
+  (interactive)
+  (let ((buf (get-buffer-create " *bindings*"))
+        (km (make-sparse-keymap)))
+    (with-current-buffer buf
+      (erase-buffer)
+      (insert 
+       (cl-loop for x being the key-seqs of symex-editing-mode-map using (key-bindings y)
+             when (eq (aref x 0 ) 'symex-state)
+             collect (format "%s -> %S" (key-description (cl-subseq x 1)) y) into strings 
+             finally (return
+                       (string-join (mapcar (lambda (x) (string-join x "\t"))(seq-partition strings 3))
+                                    "\n"))))
+      (align-regexp (point-min) (point-max) "\\(^\\|\\s-*\\)\t" 1 1 t))
+    (posframe-show buf 
+                   :poshandler #'posframe-poshandler-frame-top-center)
+    (set-transient-map nil nil #'posframe-hide-all)))
+
+(use-package symex
+    :straight t
+    :general
+    (:keymaps '(emacs-lisp-mode-map
+                lisp-interaction-mode-map
+                lisp-mode-map
+                clojure-mode-map
+                common-lisp-mode-map
+                ielm-mode-map
+                cider-repl-mode-map
+                scheme-mode-map)
+              "C-\\" 'symex-mode-interface)
+    :config
+    (symex-initialize))
+
 (provide 'sexp-conf)
+

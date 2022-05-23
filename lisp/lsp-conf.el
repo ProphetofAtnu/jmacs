@@ -13,7 +13,7 @@
       "*" 'lsp-restart-workspace
       "`" 'lsp-treemacs-symbols
       "/" 'lsp-avy-lens
-      )
+      "=" 'lsp-format-buffer)
     (general-defs
         :keymaps 'prefix-utility-map
       "s" 'lsp)
