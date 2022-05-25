@@ -78,8 +78,8 @@
   "e" 'eval-last-sexp
   "d" 'eval-defun
   "r" 'eval-region
-  "m" 'macrostep-mode
-  "f" (mount-prefix-map elisp-refactor "Elisp Refactor"))
+  "b" 'eval-buffer
+  "m" 'macrostep-mode)
 
 (use-package emr
     :straight t

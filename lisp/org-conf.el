@@ -52,6 +52,7 @@
     (setq org-confirm-babel-evaluate nil)
     (setq org-display-remote-inline-images 'download)
     (setq org-startup-with-inline-images t)
+    (org-babel-do-load-languages 'shell t)
     (add-hook 'org-mode-hook 'org-display-inline-images))
 
 (use-package org-download

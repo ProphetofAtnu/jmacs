@@ -4,46 +4,6 @@
 (require 'general)
 (require 'evil)
 
-;; (use-package paredit
-;;     :straight t
-;;     :hook ((emacs-lisp-mode
-;;             clojure-mode
-;;             lisp-mode)
-;;            . paredit-mode)
-;;     :general
-;;     (:keymaps '(paredit-mode-map)
-;;               :states '(normal)
-;;               "z (" 'paredit-wrap-round
-;;               "z [" 'paredit-wrap-square
-;;               "z {" 'paredit-wrap-curly
-;;               "M-)" 'paredit-forward-slurp-sexp
-;;               "M-(" 'paredit-forward-barf-sexp
-;;               ))
-
-
-;; (use-package parinfer
-;;     :straight t
-;;     :general
-;;     (:keymaps 'parinfer-mode-map
-;;               "S-<tab>" 'parinfer-smart-tab:dwim-left
-;;               "<tab>" 'parinfer-smart-tab:dwim-right-or-complete)
-;;     (local-leader-def
-;;         :keymaps '(lisp-mode-shared-map)
-;;       "p" 'parinfer-toggle-mode)
-;;     :init
-;;     (progn
-;;       (setq parinfer-extensions
-;;             '(defaults       ; should be included.
-;;               pretty-parens  ; different paren styles for different modes.
-;;               evil
-;;               paredit
-;;               smart-yank))   ; Yank behavior depend on mode.
-;;       (add-hook 'clojure-mode-hook #'parinfer-mode)
-;;       (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
-;;       (add-hook 'common-lisp-mode-hook #'parinfer-mode)
-;;       (add-hook 'scheme-mode-hook #'parinfer-mode)
-;;       (add-hook 'lisp-mode-hook #'parinfer-mode)))
-
 (use-package lispy
     :straight t
     ;; :hook ((emacs-lisp-mode
@@ -66,8 +26,7 @@
 
 (defun symex-show-bindings ()
   (interactive)
-  (let ((buf (get-buffer-create " *bindings*"))
-        (km (make-sparse-keymap)))
+  (let ((buf (get-buffer-create " *bindings*")))
     (with-current-buffer buf
       (erase-buffer)
       (insert 
@@ -79,23 +38,34 @@
                                     "\n"))))
       (align-regexp (point-min) (point-max) "\\(^\\|\\s-*\\)\t" 1 1 t))
     (posframe-show buf 
+                   :internal-border-width 1
                    :poshandler #'posframe-poshandler-frame-top-center)
     (set-transient-map nil nil #'posframe-hide-all)))
 
+(defun symex--ext-hl-line ()
+  (if symex-editing-mode
+      (hl-line-mode +1)
+    (hl-line-mode -1)))
+
 (use-package symex
     :straight t
+    :custom
+    (symex-common-lisp-backend 'sly)
     :general
     (:keymaps '(emacs-lisp-mode-map
                 lisp-interaction-mode-map
                 lisp-mode-map
                 clojure-mode-map
                 common-lisp-mode-map
-                ielm-mode-map
+                ielm-map
                 cider-repl-mode-map
                 scheme-mode-map)
               "C-\\" 'symex-mode-interface)
     :config
-    (symex-initialize))
+    (symex-initialize)
+    (add-hook 'symex-editing-mode-hook #'symex--ext-hl-line)
+    (setq evil-symex-state-cursor 'hollow)
+    (evil-define-key 'symex symex-editing-mode-map "\M-?" #'symex-show-bindings))
 
 (provide 'sexp-conf)
 

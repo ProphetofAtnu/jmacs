@@ -56,6 +56,7 @@
 (add-to-list 'load-path (expand-file-name "util" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "util/tools" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "platform" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "lisp/packages/epy" user-emacs-directory))
 
 (setq visible-bell nil
       ring-bell-function #'ignore
@@ -338,6 +339,7 @@
     :hook (emacs-startup . exec-path-from-shell-initialize))
 
 (set-face-attribute 'default t :font "Fira Code-13")
+(set-face-font 'fixed-pitch "Fira Code-13")
 (set-frame-font "Fira Code-13" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)

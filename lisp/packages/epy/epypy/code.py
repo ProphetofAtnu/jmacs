@@ -21,7 +21,8 @@ class Code(Endpoint, name="code"):
 
     @export
     def run(self, code):
-        return [str(r) for r in run_never_printing(code, self.globals, self.locals)]
+        res, stdo = run_never_printing(code, self.globals, self.locals)
+        return ([str(r) for r in res], stdo)
 
     @export
     def capf(self, code, line, col):

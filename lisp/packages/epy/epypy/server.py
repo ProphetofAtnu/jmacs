@@ -3,9 +3,8 @@ from .endpoints import Dispatcher
 from .transport import Broadcast, RpcCall, stdio_pipe_connect
 from .transport import ErrorResponse, Response, Broadcast
 from .world import World
-from typing import List, Optional
+from typing import List
 import asyncio
-
 from . import code
 
 

@@ -14,7 +14,7 @@ def eval_never_printing(code, glob, local):
         contextlib.redirect_stdout(dev),
         contextlib.redirect_stderr(dev),
     ):
-        return eval(code, glob, local)
+        return (eval(code, glob, local), dev.getvalue())
 
 
 def exec_never_printing(code, glob, local):
@@ -24,17 +24,21 @@ def exec_never_printing(code, glob, local):
         contextlib.redirect_stderr(dev),
     ):
         exec(code, glob, local)
+        return dev.getvalue()
 
 def run_never_printing(code, glob, loc):
     results = []
+    stdo = ""
     for stmt in ast.parse(code).body:
         if isinstance(stmt, ast.Expr):
+            res, pstr = eval_never_printing(ast.unparse(stmt), glob, loc)
             results.append(
-                eval_never_printing(ast.unparse(stmt), glob, loc)
+                res
             )
+            stdo += pstr
         else:
-            exec_never_printing(ast.unparse(stmt), glob, loc)
-    return results
+            stdo += exec_never_printing(ast.unparse(stmt), glob, loc)
+    return (results, stdo)
 
 class World(Endpoint, name="world"):
     def __init__(self) -> None:

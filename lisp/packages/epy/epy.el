@@ -1,9 +1,10 @@
 ;; -*- lexical-binding: t; -*-
 
-
 (defvar epy-dir-name (expand-file-name "lisp/packages/epy" user-emacs-directory))
 (defvar epy-idle-flush-delay-time .1)
 
+(defun epy--ends-with-nl (str)
+  (string-suffix-p "\n" str))
 
 (defun epy-create-process (&optional name buffer)
   (let ((default-directory epy-dir-name))
@@ -27,20 +28,23 @@
     (with-current-buffer (process-buffer proc)
       (goto-char (point-max))
       (with-slots (on-message unread) ep
-       (seq-do (lambda (c)
-                 (insert-char c)
-                 (if (eq c ?\n)
-                     (cl-incf unread)))
-               str)
-       (when (and (> unread 0) on-message)
-         (funcall on-message ep))))))
+        (cl-loop for lne in (string-lines str)
+              do (insert lne)
+              when (epy--ends-with-nl str)
+              do (cl-incf unread))
+        (when (and (> unread 0) on-message)
+          (funcall on-message ep))))))
 
 (defun epy--process-sentinel (ep)
   (lambda (proc str)
-    (when (string-prefix-p
-           "finished"
-           str)
-      (run-hooks (oref ep on-closed)))))
+    (when (or
+           (string-prefix-p
+            "finished"
+            str)
+           (string-prefix-p
+            "killed"
+            str))
+      (mapcar #'funcall (oref ep on-closed)))))
 
 (cl-defmethod initialize-instance :after ((class epy-process) &rest slots)
   (with-slots (name buffer proc) class
@@ -102,6 +106,9 @@ should make something into a plist."
           (epy-format msg)
           :id id))
         "\n")))))
+
+(cl-defmethod epy-live-p ((process epy-process))
+  (process-live-p (oref process proc)))
 
 (defun epy-run-flush-on-new-messages (ep-proc)
   "For use in the `on-message' handler of epy-process. When a

@@ -140,6 +140,9 @@
      "b" 'consult-buffer)
     (general-defs :keymaps '(override)
       "C-M-'" 'consult-imenu)
+    (general-defs
+        :states '(normal motion visual)
+      "g'" 'consult-outline)
     :config
     (setq
      consult-fontify-preserve nil
