@@ -55,6 +55,7 @@
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "util" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "util/tools" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "util/elisp-sql-capf" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "platform" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lisp/packages/epy" user-emacs-directory))
 

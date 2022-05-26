@@ -10,6 +10,12 @@
                          (hexl-mode 1)
                          (current-buffer)))
 
+(use-package citre
+    :straight t
+    :defer t
+    :init
+    (require 'citre-config))
+
 (use-package ranger
     :straight t
     :commands (ranger-override-dired-mode)
