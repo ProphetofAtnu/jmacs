@@ -14,7 +14,8 @@
     :straight t
     :defer t
     :init
-    (require 'citre-config))
+    (require 'citre-config)
+    (setq citre-enable-capf-integration nil))
 
 (use-package ranger
     :straight t

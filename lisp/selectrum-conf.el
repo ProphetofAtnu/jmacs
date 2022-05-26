@@ -75,13 +75,20 @@
 
 (use-package orderless
     :straight t
-  :init
- (setq read-file-name-completion-ignore-case t
-      read-buffer-completion-ignore-case t
-      completion-ignore-case t)
-  (setq completion-styles '(orderless)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
+    :init
+    (setq read-file-name-completion-ignore-case t
+          read-buffer-completion-ignore-case t
+          completion-ignore-case t)
+    (setq completion-styles '(orderless)
+          completion-category-defaults nil
+          completion-category-overrides '((file (styles partial-completion))))
+    ;; (defun just-one-face (fn &rest args)
+    ;;   (let ((orderless-match-faces [completions-common-part]))
+    ;;     (apply fn args)))
+
+    ;; (advice-add 'company-capf--candidates :around #'just-one-face)
+    
+    )
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist

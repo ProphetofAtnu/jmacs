@@ -201,7 +201,8 @@
               (lambda ()
                 (setq-local corfu-auto nil)
                 (corfu-mode)))
-    (global-corfu-mode))
+    ;; (global-corfu-mode)
+    )
 
 (use-package cape
     :straight t
@@ -261,13 +262,12 @@
 (use-package company
     :straight t
     :general
-    (:keymaps '(company-mode-map)
-              :states '(insert emacs)
-              "C-TAB" 'company-complete
-              "C-<tab>" 'company-complete)
+    (:keymaps 'company-active-map
+              "TAB" 'company-complete-common-or-cycle
+              "<tab>" 'company-complete-common-or-cycle)
     :init
-    ;; (add-hook 'emacs-startup-hook
-    ;;           'global-company-mode)
+    (add-hook 'emacs-startup-hook
+              'global-company-mode)
     :config
     (setq company-minimum-prefix-length 1))
 
@@ -288,7 +288,6 @@
     :general
     (:keymaps 'prefix-project-map
               "m" 'magit))
-
 
 (use-package markdown-mode
     :straight t
