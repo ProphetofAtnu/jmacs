@@ -23,4 +23,7 @@
       "T" 'mix-test
       "x" 'mix-execute-task))
 
+(setq-mode-local elixir-mode
+                 tab-width 2)
+
 (provide 'elixir-conf)

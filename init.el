@@ -190,13 +190,13 @@
     (setq corfu-auto t
           corfu-auto-delay 0.1
           corfu-auto-prefix 2)
-    (setq tab-always-indent 'complete)
+    (setq tab-always-indent nil)
     (defun corfu-enable-in-minibuffer ()
       "Enable Corfu in the minibuffer if `completion-at-point' is bound."
       (when (where-is-internal #'completion-at-point (list (current-local-map)))
         ;; (setq-local corfu-auto nil) Enable/disable auto completion
         (corfu-mode 1)))
-    (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
+    ;; (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
     (add-hook 'eshell-mode-hook
               (lambda ()
                 (setq-local corfu-auto nil)
@@ -269,6 +269,12 @@
     (add-hook 'emacs-startup-hook
               'global-company-mode)
     :config
+    (defun company-enable-in-minibuffer ()
+      "Enable Corfu in the minibuffer if `completion-at-point' is bound."
+      (when (where-is-internal #'completion-at-point (list (current-local-map)))
+        ;; (setq-local corfu-auto nil) Enable/disable auto completion
+        (company-mode 1)))
+    (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
     (setq company-minimum-prefix-length 1))
 
 ;; (use-package company-statistics 
