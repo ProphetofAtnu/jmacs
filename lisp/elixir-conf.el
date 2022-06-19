@@ -1,5 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
+(require 'mode-local)
+
 (use-package elixir-mode
     :straight t
     :defer t

@@ -30,6 +30,16 @@
                         (lsp-ui-mode)
                         (setq-local evil-lookup-func 'lsp-describe-thing-at-point))))
 
+(use-package treemacs
+    :straight t
+    :general
+  (local-leader-def
+      :definer 'minor-mode
+    :keymaps '(lsp-mode)
+    "TAB" 'treemacs
+    "C-<tab>" 'treemacs-display-current-project-exclusively)
+  )
+
 (use-package posframe
     :straight t)
 

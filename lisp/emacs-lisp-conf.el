@@ -26,6 +26,9 @@
     :straight t
     :hook (emacs-lisp-mode . lisp-extra-font-lock-mode))
 
+(use-package inspector
+    :straight t)
+
 (use-package eros
     :straight t
     :hook (emacs-lisp-mode . eros-mode))
@@ -41,6 +44,10 @@
          (setq-local
           evil-lookup-func
           #'helpful-at-point))))
+
+(defun elisp-add-directory-to-load-path (directory)
+  (interactive "D")
+  (add-to-list 'load-path directory))
 
 (defun elisp-auto-insert-lex ()
   (interactive)
@@ -79,6 +86,7 @@
   "d" 'eval-defun
   "r" 'eval-region
   "b" 'eval-buffer
+  "L" 'elisp-add-directory-to-load-path
   "m" 'macrostep-mode)
 
 (use-package emr

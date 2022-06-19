@@ -2,6 +2,12 @@
 
 (menu-bar-mode +1)
 
+(defvar macos-font "Fira Code-13:antialias=true")
+
+(set-face-attribute 'default t :font macos-font)
+(set-face-font 'fixed-pitch macos-font)
+(set-frame-font macos-font nil t)
+
 (progn
   (setq confirm-kill-emacs #'y-or-n-p)
   (setq mac-option-modifier 'meta)

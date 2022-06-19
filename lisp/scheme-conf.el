@@ -15,6 +15,9 @@
 
 (defconst geiser-gambit-minimum-version "4.9.3")
 
+(use-package geiser-guile
+    :straight t)
+
 (use-package geiser-gambit
     :straight t)
 

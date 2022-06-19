@@ -31,7 +31,7 @@
 (general-defs
     :keymaps '(evil-inner-text-objects-map
                evil-outer-text-objects-map)
-    "e" 'evil-entire-buffer)
+  "e" 'evil-entire-buffer)
 
 (use-package dired
     :general

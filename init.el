@@ -75,6 +75,13 @@
    (expand-file-name "util" user-emacs-directory)
    (expand-file-name "lisp/core" user-emacs-directory)))
 
+(use-package exec-path-from-shell
+    :straight t
+    :hook (emacs-startup . exec-path-from-shell-initialize)
+    :init
+    (setq exec-path-from-shell-variables
+          '("LDFLAGS" "CPPFLAGS" "PATH" "MANPATH")))
+
 
 ;; (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.5.1/emacs")
 
@@ -178,6 +185,26 @@
     :init
     (require 'core/bindings))
 
+(use-package fussy
+    :straight t
+  :config
+  (push 'fussy completion-styles)
+  (setq
+   ;; For example, project-find-file uses 'project-files which uses
+   ;; substring completion by default. Set to nil to make sure it's using
+   ;; flx.
+   completion-category-defaults nil
+   completion-category-overrides nil))
+
+(use-package fuz
+  :ensure nil
+  :straight (fuz :type git :host github :repo "rustify-emacs/fuz.el")
+  :config
+  (setq fussy-score-fn 'fussy-fuz-score)
+  (unless (require 'fuz-core nil t)
+    (fuz-build-and-load-dymod)))
+
+
 (use-package corfu
     :straight t
     :bind
@@ -190,18 +217,18 @@
     (setq corfu-auto t
           corfu-auto-delay 0.1
           corfu-auto-prefix 2)
-    (setq tab-always-indent nil)
+    (setq tab-always-indent 'complete)
     (defun corfu-enable-in-minibuffer ()
       "Enable Corfu in the minibuffer if `completion-at-point' is bound."
       (when (where-is-internal #'completion-at-point (list (current-local-map)))
         ;; (setq-local corfu-auto nil) Enable/disable auto completion
         (corfu-mode 1)))
-    ;; (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
+    (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
     (add-hook 'eshell-mode-hook
               (lambda ()
                 (setq-local corfu-auto nil)
                 (corfu-mode)))
-    ;; (global-corfu-mode)
+    (global-corfu-mode)
     )
 
 (use-package cape
@@ -265,16 +292,17 @@
     (:keymaps 'company-active-map
               "TAB" 'company-complete-common-or-cycle
               "<tab>" 'company-complete-common-or-cycle)
-    :init
-    (add-hook 'emacs-startup-hook
-              'global-company-mode)
+    ;; :init
+    ;; (add-hook 'emacs-startup-hook
+    ;;           'global-company-mode)
     :config
     (defun company-enable-in-minibuffer ()
       "Enable Corfu in the minibuffer if `completion-at-point' is bound."
       (when (where-is-internal #'completion-at-point (list (current-local-map)))
         ;; (setq-local corfu-auto nil) Enable/disable auto completion
         (company-mode 1)))
-    (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
+    ;; (add-hook 'minibuffer-setup-hook #'company-enable-in-minibuffer)
+    (delq 'company-semantic company-backends)
     (setq company-minimum-prefix-length 1))
 
 ;; (use-package company-statistics 
@@ -294,6 +322,12 @@
     :general
     (:keymaps 'prefix-project-map
               "m" 'magit))
+
+;; straight-use-package
+;; (use-package parrot
+;;     :straight
+;;   (parrot :type git :host github :repo "dp12/parrot")
+;;   )
 
 (use-package markdown-mode
     :straight t
@@ -339,14 +373,6 @@
     (setq doom-modeline-height 0)
     (setq inhibit-compacting-font-caches t))
 
-
-(use-package exec-path-from-shell
-    :straight t
-    :hook (emacs-startup . exec-path-from-shell-initialize))
-
-(set-face-attribute 'default t :font "Fira Code-13")
-(set-face-font 'fixed-pitch "Fira Code-13")
-(set-frame-font "Fira Code-13" nil t)
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
@@ -486,7 +512,10 @@
 ;;           'elisp-sql-capf-mode)
 
 (cond
-  ((eq system-type 'darwin) (require 'macos)))
+  ((eq system-type 'darwin) (require 'macos))
+  (t (progn (set-face-attribute 'default t :font "Fira Code-13")
+            (set-face-font 'fixed-pitch "Fira Code-13")
+            (set-frame-font "Fira Code-13" nil t))))
 
 (require 'window-conf)
 (require 'sexp-conf)
@@ -516,6 +545,7 @@
 (require 'dotnet-conf)
 (require 'latex-conf)
 (require 'nim-conf)
+(require 'haskell-conf)
 (require 'utility-conf)
 
 (load custom-file)

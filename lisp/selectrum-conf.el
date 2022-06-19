@@ -79,7 +79,8 @@
     (setq read-file-name-completion-ignore-case t
           read-buffer-completion-ignore-case t
           completion-ignore-case t)
-    (setq completion-styles '(orderless)
+    (setq
+                                        ; completion-styles '(orderless)
           completion-category-defaults nil
           completion-category-overrides '((file (styles partial-completion))))
     ;; (defun just-one-face (fn &rest args)
@@ -212,5 +213,8 @@
   ;; switch between the annotators.
   (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil)))
 
+
+(use-package affe
+    :straight t)
 
 (provide 'selectrum-conf)
