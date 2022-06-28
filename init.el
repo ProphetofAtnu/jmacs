@@ -258,7 +258,7 @@
     (setq corfu-auto t
           corfu-auto-delay 0.1
           corfu-auto-prefix 2)
-    ;; (setq tab-always-indent 'complete)
+    (setq tab-always-indent 'complete)
     (defun corfu-enable-in-minibuffer ()
       "Enable Corfu in the minibuffer if `completion-at-point' is bound."
       (when (where-is-internal #'completion-at-point (list (current-local-map)))
@@ -269,7 +269,7 @@
               (lambda ()
                 (setq-local corfu-auto nil)
                 (corfu-mode)))
-    ;; (global-corfu-mode)
+    (global-corfu-mode)
     )
 
 (use-package cape
@@ -333,23 +333,26 @@
     (:keymaps 'company-active-map
               "TAB" 'company-complete-common-or-cycle
               "<tab>" 'company-complete-common-or-cycle)
-    (:states '(insert)
-             "TAB" 'company-indent-or-complete-common
-             "<tab>" 'company-indent-or-complete-common
-             )
+    ;; (:states '(insert)
+    ;;          "TAB" 'company-indent-or-complete-common
+    ;;          "<tab>" 'company-indent-or-complete-common
+    ;;          )
     :init
-    (add-hook 'emacs-startup-hook
-              'global-company-mode)
+    ;; (add-hook 'emacs-startup-hook
+    ;;           'global-company-mode)
     :config
     (defun company-enable-in-minibuffer ()
       "Enable Corfu in the minibuffer if `completion-at-point' is bound."
       (when (where-is-internal #'completion-at-point (list (current-local-map)))
         ;; (setq-local corfu-auto nil) Enable/disable auto completion
         (company-mode 1)))
-    (add-hook 'minibuffer-setup-hook #'company-enable-in-minibuffer)
+    ;; (add-hook 'minibuffer-setup-hook #'company-enable-in-minibuffer)
+    ;; (setq company-frontends '(company-pseudo-tooltip-unless-just-one-frontend company-preview-if-just-one-frontend))
+
     (delq 'company-semantic company-backends)
-    (setq company-minimum-prefix-length 3
-          company-idle-delay .3))
+    (setq company-minimum-prefix-length 1
+          company-idle-delay 0.1))
+
 
 ;; (use-package company-statistics 
 ;;     :straight t
