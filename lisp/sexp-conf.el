@@ -39,7 +39,15 @@
     :straight t)
 
 (use-package evil-smartparens
-    :straight t)
+    :straight t
+    :hook ((emacs-lisp-mode
+            lisp-mode
+            lisp-interaction-mode
+            clojure-mode
+            common-lisp-mode
+            scheme-mode)
+           . evil-smartparens-mode)
+    )
 
 (use-package evil-cleverparens
     :straight t

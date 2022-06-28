@@ -27,7 +27,12 @@
     :hook (emacs-lisp-mode . lisp-extra-font-lock-mode))
 
 (use-package inspector
-    :straight t)
+    :straight t
+    :config
+    (define-prefix-map elisp-inspect
+        "e" 'inspect-expression
+        "s" 'inspect-last-sexp
+        "o" 'inspect-object))
 
 (use-package eros
     :straight t
@@ -64,6 +69,9 @@
   (setq-local lisp-indent-function #'common-lisp-indent-function)
   (setq-local format-action 'parinfer-indent-buffer)              
   (setq-local evil-lookup-func #'helpful-at-point)
+  ;; (setq-local completion-at-point-functions
+  ;;             '(cape-file cape-symbol cape-dabbrev t))
+
   ;; (when corfu-global-mode
   ;;   (setq-local completion-at-point-functions '(
   ;;               elisp-completion-at-point
@@ -75,12 +83,13 @@
   )
 
 (use-package elisp-mode
-  :commands (elisp-mode)
-  :config
-  (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-setup-hook))
+    :commands (elisp-mode)
+    :config
+    (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-setup-hook))
 
 (local-leader-def
     :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
+  "i" (mount-prefix-map elisp-inspect "Inspector")
   "l" 'elisp-auto-insert-lex
   "e" 'eval-last-sexp
   "d" 'eval-defun

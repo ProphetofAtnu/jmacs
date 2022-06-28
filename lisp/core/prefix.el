@@ -81,6 +81,7 @@
     "w" 'which-key-show-major-mode)
 
 (define-prefix-map jump
+    "i" 'ibuffer-jump
     "d" 'dired-jump
     "D" 'dired-jump-other-window)
 

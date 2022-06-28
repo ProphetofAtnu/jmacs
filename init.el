@@ -112,6 +112,7 @@
     :hook (emacs-startup . evil-mode)
     :init 
     (setq evil-want-C-u-scroll t
+          evil-cross-lines t
           evil-undo-system 'undo-redo
           evil-ex-search-vim-style-regexp t
           evil-search-module 'evil-search))
@@ -185,10 +186,27 @@
     :init
     (require 'core/bindings))
 
+(use-package undo-tree
+    :straight t
+    :hook (emacs-startup . global-undo-tree-mode)
+    :general
+    ('prefix-utility-map
+     "u" 'undo-tree-visualize)
+    :config
+    (setq evil-undo-system 'undo-tree))
+
+
+(use-package orderless
+    :straight t
+    :ensure t
+    :commands (orderless-filter))
+
 (use-package fussy
     :straight t
   :config
   (push 'fussy completion-styles)
+  (setq fussy-filter-fn 'fussy-filter-orderless)
+
   (setq
    ;; For example, project-find-file uses 'project-files which uses
    ;; substring completion by default. Set to nil to make sure it's using
@@ -196,14 +214,37 @@
    completion-category-defaults nil
    completion-category-overrides nil))
 
-(use-package fuz
-  :ensure nil
-  :straight (fuz :type git :host github :repo "rustify-emacs/fuz.el")
-  :config
-  (setq fussy-score-fn 'fussy-fuz-score)
-  (unless (require 'fuz-core nil t)
-    (fuz-build-and-load-dymod)))
+;; (use-package fuz
+;;   :ensure nil
+;;   :straight (fuz :type git :host github :repo "rustify-emacs/fuz.el")
+;;   :config
+;;   (setq fussy-score-fn 'fussy-fuz-score)
+;;   (unless (require 'fuz-core nil t)
+;;     (fuz-build-and-load-dymod)))
 
+
+;; (use-package flx-rs
+;;   :straight
+;;   (flx-rs
+;;    :repo "jcs-elpa/flx-rs"
+;;    :fetcher github)
+;;   :config
+;;   (setq fussy-score-fn 'flx-rs-score)
+;;   (setq flx-rs--bin-dir
+;;         (expand-file-name "straight/repos/flx-rs/core/target/release/" user-emacs-directory))
+;;   (flx-rs-load-dyn))
+
+; Configuration that builds dynamic module locally.
+(use-package fzf-native
+  :straight
+  (:repo "dangduc/fzf-native"
+   :host github
+   :files (:defaults "*.c" "*.h" "*.txt"))
+  :config
+  (if (eq system-type 'darwin)
+      (setq fzf-native-module-cmake-args "-DCMAKE_C_FLAGS='-O3'"))
+  (setq fussy-score-fn 'fussy-fzf-native-score)
+  (fzf-native-load-own-build-dyn))
 
 (use-package corfu
     :straight t
@@ -217,7 +258,7 @@
     (setq corfu-auto t
           corfu-auto-delay 0.1
           corfu-auto-prefix 2)
-    (setq tab-always-indent 'complete)
+    ;; (setq tab-always-indent 'complete)
     (defun corfu-enable-in-minibuffer ()
       "Enable Corfu in the minibuffer if `completion-at-point' is bound."
       (when (where-is-internal #'completion-at-point (list (current-local-map)))
@@ -228,7 +269,7 @@
               (lambda ()
                 (setq-local corfu-auto nil)
                 (corfu-mode)))
-    (global-corfu-mode)
+    ;; (global-corfu-mode)
     )
 
 (use-package cape
@@ -253,7 +294,6 @@
     (add-to-list 'completion-at-point-functions #'cape-dabbrev t)
     (add-to-list 'completion-at-point-functions #'cape-keyword))
 
-
 (use-package evil-mc
     :straight t
     :hook (evil-mode . global-evil-mc-mode)
@@ -268,10 +308,11 @@
               "z /" 'evil-mc-undo-all-cursors
               )
     :config
+    (require 'core/hydras)
     (general-def
         :keymaps '(evil-mc-key-map)
       :states '(normal)
-      "g . ." 'evil-mc-hydra/body)
+      "g.." 'evil-mc-hydra/body)
     (evil-mc-define-vars)
     (add-to-list 'evil-mc-incompatible-minor-modes 'lispy)
     ) 
@@ -280,11 +321,11 @@
 (use-package evil-avy
     :straight t
     :after (evil)
+    ;; :hook (evil-mode . evil-avy-mode)
     :general
     (:states '(normal)
              "s" 'evil-avy-goto-char-2
              "g l" 'evil-avy-goto-line))
-
 
 (use-package company
     :straight t
@@ -292,18 +333,23 @@
     (:keymaps 'company-active-map
               "TAB" 'company-complete-common-or-cycle
               "<tab>" 'company-complete-common-or-cycle)
-    ;; :init
-    ;; (add-hook 'emacs-startup-hook
-    ;;           'global-company-mode)
+    (:states '(insert)
+             "TAB" 'company-indent-or-complete-common
+             "<tab>" 'company-indent-or-complete-common
+             )
+    :init
+    (add-hook 'emacs-startup-hook
+              'global-company-mode)
     :config
     (defun company-enable-in-minibuffer ()
       "Enable Corfu in the minibuffer if `completion-at-point' is bound."
       (when (where-is-internal #'completion-at-point (list (current-local-map)))
         ;; (setq-local corfu-auto nil) Enable/disable auto completion
         (company-mode 1)))
-    ;; (add-hook 'minibuffer-setup-hook #'company-enable-in-minibuffer)
+    (add-hook 'minibuffer-setup-hook #'company-enable-in-minibuffer)
     (delq 'company-semantic company-backends)
-    (setq company-minimum-prefix-length 1))
+    (setq company-minimum-prefix-length 3
+          company-idle-delay .3))
 
 ;; (use-package company-statistics 
 ;;     :straight t
@@ -408,6 +454,7 @@
            ;; Alternative tempel-expand
            ("M-*" . tempel-insert)))
 
+
 (use-package yasnippet
     :straight t
     :hook (emacs-startup . yas-global-mode)
@@ -475,8 +522,12 @@
               "a" 'projectile-add-known-project
               "R" 'projectile-remove-current-project-from-known-projects
               "t" 'projectile-regenerate-tags
-              "g" 'projectile-ripgrep
+              "r" 'projectile-ripgrep
+              "b" 'consult-projectile-switch-to-buffer
               "!" 'projectile-cleanup-known-projects
+              "&" 'projectile-run-async-shell-command-in-root
+              "w" 'projectile-run-term
+              "o" 'projectile-find-other-file
               "x" 'projectile-run-project
               "X" 'projectile-compile-project
               "f" 'projectile-find-file-dwim
