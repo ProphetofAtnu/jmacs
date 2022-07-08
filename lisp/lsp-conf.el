@@ -19,6 +19,9 @@
       "s" 'lsp)
     ;; Uncomment following section if you would like to tune lsp-mode performance according to
     ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
+    (defun override-lsp-defaults ()
+      (setq-local completion-category-defaults nil))
+    (add-hook 'lsp-completion-mode-hook #'override-lsp-defaults)
     (setq lsp-idle-delay 0.500)
     (setq lsp-log-io nil)
     (setq lsp-completion-provider :none)
@@ -61,5 +64,22 @@
     :straight t
     :config
     (setq eglot-autoshutdown t))
+
+(straight-use-package
+ '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge" :files ("*")))
+
+(straight-use-package
+ '(acm :type git :host github :repo "manateelazycat/lsp-bridge" :files ("acm/*")))
+
+(use-package acm
+    :straight t)
+
+(use-package lsp-bridge
+    :straight t
+    :config
+    (defun corfu-disable-locally ()
+      (corfu-mode -1))
+    (add-hook 'lsp-bridge-mode-hook
+              #'corfu-disable-locally))
 
 (provide 'lsp-conf)

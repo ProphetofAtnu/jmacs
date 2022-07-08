@@ -42,6 +42,7 @@
 (straight-use-package 'evil)
 (straight-use-package 'switch-window)
 (straight-use-package 'emr)
+(straight-use-package 'evil-mc)
 
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
@@ -68,12 +69,13 @@
       read-process-output-max (* 1024 1024))
 
 (byte-recompile-directory (expand-file-name "util" user-emacs-directory) 0)
-(byte-recompile-directory (expand-file-name "lisp/core" user-emacs-directory) 0)
+;; (byte-recompile-directory (expand-file-name "lisp/core" user-emacs-directory) 0)
 
 (defvar js/should-load-and-compile-directories
   (list
    (expand-file-name "util" user-emacs-directory)
-   (expand-file-name "lisp/core" user-emacs-directory)))
+   ;; (expand-file-name "lisp/core" user-emacs-directory)
+   ))
 
 (use-package exec-path-from-shell
     :straight t
@@ -186,14 +188,14 @@
     :init
     (require 'core/bindings))
 
-(use-package undo-tree
-    :straight t
-    :hook (emacs-startup . global-undo-tree-mode)
-    :general
-    ('prefix-utility-map
-     "u" 'undo-tree-visualize)
-    :config
-    (setq evil-undo-system 'undo-tree))
+;; (use-package undo-tree
+;;     :straight t
+;;     :hook (emacs-startup . global-undo-tree-mode)
+;;     :general
+;;     ('prefix-utility-map
+;;      "u" 'undo-tree-visualize))
+;;     ;; :config
+;;     ;; (setq evil-undo-system 'undo-tree))
 
 
 (use-package orderless
@@ -214,27 +216,6 @@
    completion-category-defaults nil
    completion-category-overrides nil))
 
-;; (use-package fuz
-;;   :ensure nil
-;;   :straight (fuz :type git :host github :repo "rustify-emacs/fuz.el")
-;;   :config
-;;   (setq fussy-score-fn 'fussy-fuz-score)
-;;   (unless (require 'fuz-core nil t)
-;;     (fuz-build-and-load-dymod)))
-
-
-;; (use-package flx-rs
-;;   :straight
-;;   (flx-rs
-;;    :repo "jcs-elpa/flx-rs"
-;;    :fetcher github)
-;;   :config
-;;   (setq fussy-score-fn 'flx-rs-score)
-;;   (setq flx-rs--bin-dir
-;;         (expand-file-name "straight/repos/flx-rs/core/target/release/" user-emacs-directory))
-;;   (flx-rs-load-dyn))
-
-; Configuration that builds dynamic module locally.
 (use-package fzf-native
   :straight
   (:repo "dangduc/fzf-native"
@@ -256,7 +237,7 @@
           ([backtab] . corfu-previous))
     :init
     (setq corfu-auto t
-          corfu-auto-delay 0.1
+          corfu-auto-delay 0.2
           corfu-auto-prefix 2)
     (setq tab-always-indent 'complete)
     (defun corfu-enable-in-minibuffer ()
@@ -337,7 +318,7 @@
     ;;          "TAB" 'company-indent-or-complete-common
     ;;          "<tab>" 'company-indent-or-complete-common
     ;;          )
-    :init
+    ;; :init
     ;; (add-hook 'emacs-startup-hook
     ;;           'global-company-mode)
     :config
@@ -575,6 +556,7 @@
 (require 'sexp-conf)
 (require 'emacs-lisp-conf)
 (require 'selectrum-conf)
+(require 'lsp-conf)
 (require 'java-conf)
 (require 'clojure-conf)
 (require 'clisp-conf)
@@ -584,7 +566,6 @@
 (require 'python-conf)
 (require 'docker-conf)
 (require 'erlang-conf)
-(require 'lsp-conf)
 (require 'elixir-conf)
 (require 'racket-conf)
 (require 'rust-conf)

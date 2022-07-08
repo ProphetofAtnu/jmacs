@@ -35,8 +35,13 @@
 
 (use-package lsp-mode
     :straight t
-    :hook (python-mode . lsp-deferred))
+    ;; :hook (python-mode . lsp-deferred)
+    )
 
+(use-package lsp-bridge
+    :straight t
+    :hook (python-mode . lsp-bridge-mode)
+    )
 ;; (use-package eglot
 ;;     :straight t
 ;;     :hook (python-mode . eglot-ensure)

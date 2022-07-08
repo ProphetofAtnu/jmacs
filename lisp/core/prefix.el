@@ -96,6 +96,7 @@
     "!" 'auto-insert)
 
 (define-prefix-map frame
+    "o" 'other-frame
     "n" 'make-frame
     "m" 'make-frame-on-monitor
     "f" 'toggle-frame-maximized)

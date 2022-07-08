@@ -1,0 +1,74 @@
+;; -*- lexical-binding: t; -*-
+
+(setq test-file "/home/scaggj/git/install/llvm-project/clang-tools-extra/clangd/quality/model/forest.json")
+
+(setq file-buffer (let ((buf (get-buffer-create "*test*")))
+                    (with-current-buffer  buf
+                        (insert-file-contents-literally test-file))))
+
+(setq tfile (get-buffer "*test*"))
+
+
+(with-current-buffer (get-buffer "*test*")
+  (goto-char (point-min))
+  (let ((quotes 0))
+    (condition-case nil 
+        (while t
+          (if (eq (char-after) ?\")
+              (cl-incf quotes))
+          (forward-char)
+          )
+      ('error nil))
+    quotes))
+
+
+(with-current-buffer (get-buffer "*test*")
+  (goto-char (point-min))
+  (let ((quotes 0)
+        (bstr (buffer-substring-no-properties (point-min) (point-max))))
+    (cl-loop for s across bstr
+          when (eq s ?\")
+          do (cl-incf quotes))
+    quotes))
+
+(benchmark 1 
+           '(with-current-buffer (get-buffer "*test*")
+             (goto-char (point-min))
+             (let ((quotes 0))
+               (condition-case nil 
+                   (while t
+                     (if (eq (char-after) ?\")
+                         (cl-incf quotes))
+                     (forward-char)
+                     )
+                 ('error nil))
+               quotes)))
+
+(benchmark 1 
+           '(with-current-buffer (get-buffer "*test*")
+             (goto-char (point-min))
+             (let ((quotes 0)
+                   (bstr (buffer-substring-no-properties (point-min) (point-max))))
+               (cl-loop for s across bstr
+                     when (eq s ?\")
+                     do (cl-incf quotes))
+               quotes)))
+
+
+(benchmark 1 
+           '(with-current-buffer (get-buffer "*test*")
+             (goto-char (point-min))
+             (let ((quotes 0)
+                   (pos -1)
+                   (bstr (buffer-substring-no-properties (point-min) (point-max))))
+               (while  (setf pos (string-search "\"" bstr (1+ pos)))
+                 (cl-incf quotes))
+               quotes)))
+
+(benchmark 1 
+           '(with-current-buffer (get-buffer "*test*")
+             (goto-char (point-min))
+             (let ((quotes 0))
+               (while  (search-forward "\"" nil t)
+                 (cl-incf quotes))
+               quotes)))

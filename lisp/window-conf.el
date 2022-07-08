@@ -24,6 +24,7 @@
 (defvar popup-buffer-identifiers 
   '("\\*lsp-help\\*"
     "\\*Help\\*"
+    "\\*Ibuffer\\*"
     "\\*Process List\\*"
     "\\*cider-doc\\*"
     "\\*helpful.*"))
@@ -33,6 +34,7 @@
     cider-docview-mode
     compilation-mode
     process-menu-mode
+    ibuffer-mode
     helpful-mode))
 
 (defun build-bottom-buffer-params ()
