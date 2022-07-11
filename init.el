@@ -443,10 +443,10 @@
     :straight t
     :hook (emacs-startup . yas-global-mode)
     :config
-    (general-def
-        'yas-minor-mode-map
-        "SPC"
-      yas-maybe-expand)
+    ;; (general-def
+    ;;     'yas-minor-mode-map
+    ;;     "SPC"
+    ;;   yas-maybe-expand)
     (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand))
 
 (use-package tab-bar

@@ -71,15 +71,41 @@
 (straight-use-package
  '(acm :type git :host github :repo "manateelazycat/lsp-bridge" :files ("acm/*")))
 
+
+(use-package epc
+    :straight t)
+
 (use-package acm
     :straight t)
 
 (use-package lsp-bridge
     :straight t
+    :general
+    (local-leader-def
+        :definer 'minor-mode
+      :keymaps '(lsp-bridge-mode)
+      "." 'lsp-bridge-code-action
+      "r" 'lsp-bridge-rename
+      "*" 'lsp-bridge-restart-process
+      "=" 'lsp-bridge-code-format)
     :config
-    (defun corfu-disable-locally ()
+    (defhydra lsp-bridge-diagnostics-hydra ()
+      ("[" lsp-bridge-jump-to-prev-diagnostic "next")
+      ("]" lsp-bridge-jump-to-next-diagnostic "prev")
+      )
+    
+    (local-leader-def
+        :definer 'minor-mode
+      :keymaps '(lsp-bridge-mode)
+      "[" 'lsp-bridge-diagnostics-hydra/lsp-bridge-jump-to-prev-diagnostic
+      "]" 'lsp-bridge-diagnostics-hydra/lsp-bridge-jump-to-next-diagnostic
+      )
+    (setq lsp-bridge-lookup-doc-tooltip-border-width 3
+          lsp-bridge-diagnostic-tooltip-border-width 3)
+    (defun bridge-user-hook ()
+      (setq-local evil-lookup-func 'lsp-bridge-lookup-documentation)
       (corfu-mode -1))
     (add-hook 'lsp-bridge-mode-hook
-              #'corfu-disable-locally))
+              #'bridge-user-hook))
 
 (provide 'lsp-conf)
