@@ -71,19 +71,14 @@
 (straight-use-package
  '(acm :type git :host github :repo "manateelazycat/lsp-bridge" :files ("acm/*")))
 
-<<<<<<< HEAD
-
 (use-package epc
     :straight t)
 
-=======
->>>>>>> 23aae35 (Minor changes, new lsp backend testing.)
 (use-package acm
     :straight t)
 
 (use-package lsp-bridge
     :straight t
-<<<<<<< HEAD
     :general
     (local-leader-def
         :definer 'minor-mode
@@ -111,12 +106,5 @@
       (corfu-mode -1))
     (add-hook 'lsp-bridge-mode-hook
               #'bridge-user-hook))
-=======
-    :config
-    (defun corfu-disable-locally ()
-      (corfu-mode -1))
-    (add-hook 'lsp-bridge-mode-hook
-              #'corfu-disable-locally))
->>>>>>> 23aae35 (Minor changes, new lsp backend testing.)
 
 (provide 'lsp-conf)
