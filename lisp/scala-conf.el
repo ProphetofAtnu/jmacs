@@ -13,10 +13,10 @@
     :config
     ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
     ;; allows using SPACE when in the minibuffer
-    (substitute-key-definition
-     'minibuffer-complete-word
-     'self-insert-command
-     minibuffer-local-completion-map)
+    ;; (substitute-key-definition
+    ;;  'minibuffer-complete-word
+    ;;  'self-insert-command
+    ;;  minibuffer-local-completion-map)
     ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
     (setq sbt:program-options '("-Dsbt.supershell=false"))
     )
@@ -26,15 +26,7 @@
     ;; Optional - enable lsp-mode automatically in scala files
     :hook  (scala-mode . lsp))
 
-;; Add metals backend for lsp-mode
 (use-package lsp-metals
     :straight t)
-
-;; Use company-capf as a completion provider.
-;;
-;; To Company-lsp users:
-;;   Company-lsp is no longer maintained and has been removed from MELPA.
-;;   Please migrate to company-capf.
-;; Use the Debug Adapter Protocol for running tests and debugging
 
 (provide 'scala-conf)

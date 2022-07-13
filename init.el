@@ -428,9 +428,9 @@
   (setq switch-window-shortcut-style 'qwerty
         switch-window-multiple-frames t))
 
-(use-package dired-filter)
-(use-package dired-narrow)
-(use-package dired-subtree)
+;; (use-package dired-filter)
+;; (use-package dired-narrow)
+;; (use-package dired-subtree)
 
 (use-package tempel
     :straight t
@@ -462,7 +462,9 @@
 
 (use-package tree-sitter
     :straight t
-    :hook (emacs-startup . global-tree-sitter-mode))
+    :hook (emacs-startup . global-tree-sitter-mode)
+    :config
+    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
 (use-package tree-sitter-indent
     :straight t)
@@ -477,12 +479,12 @@
     :straight t
     :commands (treemacs))
 
-(use-package dired-sidebar
-    :straight t
-    :general 
-    (global-leader-def
-        :keymaps 'override
-      "t" 'dired-sidebar-toggle-sidebar))
+;; (use-package dired-sidebar
+;;     :straight t
+;;     :general 
+;;     (global-leader-def
+;;         :keymaps 'override
+;;       "t" 'dired-sidebar-toggle-sidebar))
 
 (use-package winner
     :general

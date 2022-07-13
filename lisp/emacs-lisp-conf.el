@@ -69,8 +69,6 @@
   (setq-local lisp-indent-function #'common-lisp-indent-function)
   (setq-local format-action 'parinfer-indent-buffer)              
   (setq-local evil-lookup-func #'helpful-at-point)
-  (setq-local completion-at-point-functions
-              '(cape-file cape-symbol cape-dabbrev t))
 
   ;; (when corfu-global-mode
   ;;   (setq-local completion-at-point-functions '(

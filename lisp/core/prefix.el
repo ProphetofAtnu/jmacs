@@ -103,6 +103,11 @@
 
 (define-prefix-map project)
 
+(define-prefix-map modifier
+    "w" 'other-window-prefix
+    "f" 'other-frame-prefix
+    "t" 'other-tab-prefix)
+
 (define-prefix-map utility 
     "l" 'list-processes
     "v" 'vterm)

@@ -42,6 +42,7 @@
   "o" (mount-prefix-map frame "Frame")
   "s" (mount-prefix-map search "Search")
   "i" (mount-prefix-map insert "Insert")
+  "m" (mount-prefix-map modifier "Modifier")
   "v" (mount-prefix-map project "Project"))
 
 (general-create-definer local-leader-def

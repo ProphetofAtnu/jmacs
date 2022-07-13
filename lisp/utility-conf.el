@@ -17,13 +17,38 @@
     (require 'citre-config)
     (setq citre-enable-capf-integration nil))
 
-(use-package ranger
+
+(defun dired-down-dir ()
+  (interactive)
+  (when (directory-name-p
+         (dired-file-name-at-point))
+    (dired-open-file)))
+
+(use-package dirvish
     :straight t
-    :commands (ranger-override-dired-mode)
-    :general
-    (:keymaps '(ranger-mode-map)
-              "w x" 'dired-hexl-open-other-window
-              "w X" 'dired-hexl-open-other-window-noselect))
+    :defer nil
+    :config
+    (general-defs
+        :keymaps '(dirvish-mode-map)
+     :states '(normal motion)
+     "l" 'dired-down-dir
+     "h" 'dired-up-directory
+     "TAB" 'dirvish-subtree-toggle
+     "s" 'dirvish-narrow
+     "," 'dirvish-dispatch
+     )
+    (global-leader-def
+        :keymaps 'override
+      "t" 'dirvish-side)
+    (dirvish-override-dired-mode 1))
+
+;; (use-package ranger
+;;     :straight t
+;;     :commands (ranger-override-dired-mode)
+;;     :general
+;;     (:keymaps '(ranger-mode-map)
+;;               "w x" 'dired-hexl-open-other-window
+;;               "w X" 'dired-hexl-open-other-window-noselect))
 
 (evil-define-text-object evil-entire-buffer (count &optional beg end type)
   (flatten-list (bounds-of-thing-at-point 'buffer)))

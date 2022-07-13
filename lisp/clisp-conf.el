@@ -4,6 +4,8 @@
 
 (require 'general)
 
+(setq inferior-lisp-program "ros -Q run")
+
 (use-package sly-macrostep
     :straight t
     :after (sly))
@@ -40,7 +42,7 @@
       "b" 'sly-eval-buffer
       "d" 'sly-cd
       "D" 'sly-pwd)
-    :config 
+    :config)
     (setq sly-contribs '(sly-mrepl
                          sly-fancy
                          sly-tramp
@@ -52,7 +54,7 @@
                          sly-indentation
                          sly-trace-dialog
                          sly-fontifying-fu
-                         sly-fancy-inspector)))
+                         sly-fancy-inspector))
 
 ;; (use-package slime
 ;;              :straight t
