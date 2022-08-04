@@ -166,4 +166,17 @@
         (?b (* num (expt factor 2)))
         (?g (* num (expt factor 3)))))))
 
+
+(defmacro js/to-repeatable (fun &optional force)
+  (let ((fn-name (intern (format "$rep/%S" fun))))
+    (if (and (not force) (functionp fn-name))
+        `(function ,fn-name)
+      `(defun ,fn-name (&rest args)
+         (interactive)
+         (apply (function ,fun) args)
+         (set-transient-map
+          (let ((km (make-sparse-keymap)))
+            (keymap-set km (single-key-description last-input-event) (function ,fun))
+            (set-transient-map km t)))))))
+
 (provide 'core/utility)

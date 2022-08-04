@@ -38,6 +38,7 @@
   "t" 'dired-jump-in-side-window
   "u" (mount-prefix-map utility "Utility")
   "j" (mount-prefix-map jump "Jump")
+  "e" (mount-prefix-map edit "Edit")
   "h" (mount-prefix-map help "Help")
   "o" (mount-prefix-map frame "Frame")
   "s" (mount-prefix-map search "Search")

@@ -18,9 +18,14 @@
 ;;     :hook ((eshell-mode shell-mode) . 'company-mode)
 ;;     )
 
-;; (use-package eshell
-;;     :config
-;;   (add-hook 'eshell-mode-hook (l)))
+(use-package eshell
+    :config
+  (require 'em-term)
+  (dolist (cmd '("ipython" "sbt" "iex"))
+    (add-to-list 'eshell-visual-commands cmd)))
+
+(use-package pcomplete-extension
+    :straight t)
 
 (use-package bash-completion
     :straight t

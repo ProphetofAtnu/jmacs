@@ -17,7 +17,6 @@
     (require 'citre-config)
     (setq citre-enable-capf-integration nil))
 
-
 (defun dired-down-dir ()
   (interactive)
   (when (directory-name-p
@@ -68,5 +67,10 @@
  :keymaps 'Info-mode-map
  "o" 'ace-link
  )
+
+(use-package pdf-tools
+    :straight t
+    :init
+    (pdf-tools-install))
 
 (provide 'utility-conf)

@@ -38,11 +38,15 @@
       "a" 'sly-apropos-all
       "x" 'sly-scratch
       "r" 'sly-pprint-eval-region
-      "e" 'sly-pprint-eval-last-expression
+      "e" 'sly-eval-defun
+      "E" 'sly-pprint-eval-last-expression
       "b" 'sly-eval-buffer
       "d" 'sly-cd
+      "m" 'macrostep-mode
       "D" 'sly-pwd)
-    :config)
+    :init
+    (add-to-list 'popup-buffer-identifiers "\\*sly-description\\*")
+    :config
     (setq sly-contribs '(sly-mrepl
                          sly-fancy
                          sly-tramp
@@ -54,7 +58,7 @@
                          sly-indentation
                          sly-trace-dialog
                          sly-fontifying-fu
-                         sly-fancy-inspector))
+                         sly-fancy-inspector)))
 
 ;; (use-package slime
 ;;              :straight t

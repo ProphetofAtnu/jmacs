@@ -4,14 +4,17 @@
     :straight t
     :general
     (local-leader-def
-        :keymaps '(geiser-mode-map)
+        :keymaps '(scheme-mode-map)
       "e" 'geiser-eval-definition
       "E" 'geiser-eval-definition-and-go
       "b" 'geiser-eval-buffer
-      "b" 'geiser-eval-buffer-and-go
+      "B" 'geiser-eval-buffer-and-go
       "r" 'geiser-eval-region
       "s" 'geiser-set-scheme
-      "," 'geiser-mode-switch-to-repl))
+      "d" 'geiser-doc-module
+      "," 'geiser-mode-switch-to-repl)
+    :config
+    (setq geiser-default-implementation 'guile))
 
 (defconst geiser-gambit-minimum-version "4.9.3")
 

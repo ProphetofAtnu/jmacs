@@ -8,7 +8,7 @@
 
 (use-package lsp-mode
     :straight t
-    :hook ((objc-mode c-mode c++-mode) . lsp-deferred))
+    :hook ((cmake-mode objc-mode c-mode c++-mode) . lsp-deferred))
 
 (use-package acm
     :straight t)

@@ -26,6 +26,7 @@
     "\\*Help\\*"
     "\\*Ibuffer\\*"
     "\\*Process List\\*"
+    "\\*sly-description\\*"
     "\\*cider-doc\\*"
     "\\*helpful.*"))
 

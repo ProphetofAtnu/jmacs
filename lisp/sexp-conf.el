@@ -36,7 +36,14 @@
            . rainbow-delimiters-mode))
 
 (use-package smartparens
-    :straight t)
+    :straight t
+    :hook ((emacs-lisp-mode
+            lisp-mode
+            lisp-interaction-mode
+            clojure-mode
+            common-lisp-mode
+            scheme-mode)
+           . smartparens-mode))
 
 (use-package evil-smartparens
     :straight t

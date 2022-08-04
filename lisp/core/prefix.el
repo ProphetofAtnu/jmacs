@@ -99,6 +99,7 @@
     "o" 'other-frame
     "n" 'make-frame
     "m" 'make-frame-on-monitor
+    "d" 'delete-frame
     "f" 'toggle-frame-maximized)
 
 (define-prefix-map project)
@@ -111,5 +112,7 @@
 (define-prefix-map utility 
     "l" 'list-processes
     "v" 'vterm)
+
+(define-prefix-map edit)
 
 (provide 'core/prefix)

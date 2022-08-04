@@ -121,7 +121,9 @@
 
 (use-package evil-collection
     :straight t
-    :hook (evil-mode . evil-collection-init)
+    :init
+    (evil-collection-init)
+    (global-evil-collection-unimpaired-mode +1)
     :config
     (delq 'lispy evil-collection-mode-list))
 
@@ -172,7 +174,10 @@
 (use-package which-key
     :straight t
     :delight
-    :hook (emacs-startup . which-key-mode))
+    :hook (emacs-startup . which-key-mode)
+    :config
+    (add-to-list 'which-key-replacement-alist
+                 '((nil . "evil-collection-\\(.*\\)") . (nil . "ec-\\1"))))
 
 (use-package which-key-posframe
     :straight t
@@ -277,9 +282,8 @@
 
 (use-package evil-mc
     :straight t
+    :defer nil
     :hook (evil-mode . global-evil-mc-mode)
-    :init
-    (require 'core/hydras)
     :general
     (:keymaps '(evil-mc-key-map)
               :states '(normal)
@@ -288,11 +292,10 @@
               "z >" 'evil-mc-resume-cursors
               "z /" 'evil-mc-undo-all-cursors
               )
-    :config
+    :init
     (require 'core/hydras)
     (general-def
-        :keymaps '(evil-mc-key-map)
-      :states '(normal)
+        :states '(normal)
       "g.." 'evil-mc-hydra/body)
     (evil-mc-define-vars)
     (add-to-list 'evil-mc-incompatible-minor-modes 'lispy)
@@ -460,6 +463,13 @@
               "t" 'insert-date-time
               "T" 'insert-time))
 
+(use-package string-inflection
+    :straight t
+    :config
+    (general-defs
+        :keymaps 'prefix-edit-map
+        "i" (js/to-repeatable string-inflection-all-cycle)))
+
 (use-package tree-sitter
     :straight t
     :hook (emacs-startup . global-tree-sitter-mode)
@@ -580,6 +590,7 @@
 (require 'ruby-conf)
 (require 'sql-conf)
 (require 'dotnet-conf)
+(require 'zig-conf)
 (require 'latex-conf)
 (require 'nim-conf)
 (require 'haskell-conf)

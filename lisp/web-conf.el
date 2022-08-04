@@ -29,6 +29,7 @@
 (use-package lsp-mode
     :straight t
     :hook ((json-mode
+            svelte-mode
             js2-jsx-mode)
            . lsp-deferred)
     :init
@@ -36,6 +37,9 @@
     (add-hook 'typescript-mode-hook 'detect-js-workspace-type))
 
 (use-package web-mode
+    :straight t)
+
+(use-package svelte-mode
     :straight t)
 
 (use-package json-mode
