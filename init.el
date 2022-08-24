@@ -379,16 +379,56 @@
  ;; '(mode-line-inactive
  ;;   ((((class color) (min-colors 88)) (:background "#111111" :foreground "#000000"))
  ;;    (t (:weight light :box nil :background "#202339" :foreground "#000000" :inherit (mode-line)))))
+
+(use-package telephone-line
+    :straight t
+    :config
+    (delight 'emacs-lisp-mode "Elisp")
+    (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
+          telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
+          telephone-line-primary-right-separator 'telephone-line-cubed-right
+          telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
+    (setq telephone-line-height 24
+          telephone-line-evil-use-short-tag t)
+    (telephone-line-mode +1))
+
+(use-package kaolin-themes
+    :straight t)
  
 (use-package cherry-blossom-theme
     :straight t)
-    ;; (load-theme 'cherry-blossom t)
-    ;; (set-face-foreground 'mode-line-inactive "#5F5A60"))
 
 (use-package modus-themes
     :straight t
-    :config 
+    :config
     (load-theme 'modus-vivendi t))
+
+;; (use-package ample-theme
+;;     :straight t)
+
+;; (use-package moe-theme
+;;     :straight t)
+
+;; (use-package molokai-theme
+;;     :straight t)
+
+;; (use-package monokai-theme
+;;     :straight t)
+
+;; (use-package soothe-theme
+;;     :straight t)
+
+;; (use-package exotica-theme
+;;     :straight t)
+
+;; (use-package uwu-theme
+;;     :straight t)
+
+;; (use-package lush-theme
+;;     :straight t)
+
+;; (use-package doom-themes
+;;     :straight t)
 
 (use-package zoxide
     :straight t
@@ -398,14 +438,13 @@
      "r" 'zoxide-travel
      "c" 'zoxide-cd))
 
-(use-package doom-modeline
-    :straight t
-    :init
-    (doom-modeline-mode)
-    :config
-    (setq doom-modeline-height 0)
-    (setq inhibit-compacting-font-caches t))
-
+;; (use-package doom-modeline
+;;     :straight t
+;;     :init
+;;     (doom-modeline-mode)
+;;     :config
+;;     (setq doom-modeline-height 0)
+;;     (setq inhibit-compacting-font-caches t))
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
@@ -504,8 +543,19 @@
    )
   :hook (emacs-startup . winner-mode))
 
-(use-package elec-pair
-    :init (electric-pair-mode))
+;; (use-package elec-pair
+;;     :init (electric-pair-mode))
+
+(use-package smartparens
+    :straight t
+    :hook (emacs-startup
+           . smartparens-global-mode)
+    :config 
+    (require 'smartparens-config)
+    (setq sp-highlight-wrap-overlay t
+          sp-highlight-pair-overlay nil
+          sp-highlight-wrap-tag-overlay t)
+    )
 
 (use-package projectile
     :straight t
@@ -594,6 +644,7 @@
 (require 'latex-conf)
 (require 'nim-conf)
 (require 'haskell-conf)
+(require 'flutter-conf)
 (require 'utility-conf)
 
 (load custom-file)

@@ -6,6 +6,9 @@
 (use-package flutter
     :straight t)
 
+(use-package lsp-dart
+    :straight t)
+
 (use-package lsp-mode
     :hook (dart-mode . lsp-deferred))
 

@@ -21,6 +21,13 @@
     ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
     (defun override-lsp-defaults ()
       (setq-local completion-category-defaults nil))
+
+    (with-eval-after-load 'lsp-mode
+      (eval '(setf (lsp-session-folders
+                    (lsp-session))
+              (cl-remove-if-not #'file-exists-p
+               (lsp-session-folders (lsp-session))))))
+
     (add-hook 'lsp-completion-mode-hook #'override-lsp-defaults)
     (setq lsp-idle-delay 0.500)
     (setq lsp-log-io nil)
@@ -63,7 +70,15 @@
 (use-package eglot
     :straight t
     :config
-    (setq eglot-autoshutdown t))
+    (setq eglot-autoshutdown t)
+    (defun eglot-setup () 
+      (local-leader-def
+        :keymaps 'local
+        "." 'eglot-code-actions
+        "*" 'eglot-reconnect
+        "=" 'eglot-format-buffer))
+    (add-hook 'eglot-managed-mode-hook #'eglot-setup)
+    )
 
 (straight-use-package
  '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge" :files ("*")))

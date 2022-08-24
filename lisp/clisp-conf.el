@@ -58,7 +58,9 @@
                          sly-indentation
                          sly-trace-dialog
                          sly-fontifying-fu
-                         sly-fancy-inspector)))
+                         sly-fancy-inspector))
+    (sly-symbol-completion-mode +1)
+    )
 
 ;; (use-package slime
 ;;              :straight t

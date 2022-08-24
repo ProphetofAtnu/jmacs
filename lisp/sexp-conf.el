@@ -35,15 +35,21 @@
             scheme-mode)
            . rainbow-delimiters-mode))
 
-(use-package smartparens
-    :straight t
-    :hook ((emacs-lisp-mode
-            lisp-mode
-            lisp-interaction-mode
-            clojure-mode
-            common-lisp-mode
-            scheme-mode)
-           . smartparens-mode))
+;; (use-package smartparens
+;;     :straight t
+;;     :hook ((emacs-lisp-mode
+;;             lisp-mode
+;;             lisp-interaction-mode
+;;             clojure-mode
+;;             common-lisp-mode
+;;             scheme-mode)
+;;            . smartparens-mode)
+;;     :config 
+;;     (require 'smartparens-config)
+;;     (setq sp-highlight-wrap-overlay t
+;;           sp-highlight-pair-overlay nil
+;;           sp-highlight-wrap-tag-overlay t)
+;;     )
 
 (use-package evil-smartparens
     :straight t
@@ -53,8 +59,8 @@
             clojure-mode
             common-lisp-mode
             scheme-mode)
-           . evil-smartparens-mode)
-    )
+           . evil-smartparens-mode))
+
 
 (use-package evil-cleverparens
     :straight t

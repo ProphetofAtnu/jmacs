@@ -10,8 +10,16 @@
     :straight t
     :hook ((cmake-mode objc-mode c-mode c++-mode) . lsp-deferred))
 
-(use-package acm
-    :straight t)
+;; (use-package lsp-mode
+;;     :straight t
+;;     :hook (cmake-mode . lsp-deferred))
+
+;; (use-package irony
+;;     :straight t
+;;     :hook ((cmake-mode objc-mode c-mode c++-mode) . irony-mode))
+
+;; (use-package acm
+;;     :straight t)
 
 ;; (use-package lsp-bridge
 ;;     :straight t
