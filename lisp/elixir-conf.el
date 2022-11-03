@@ -3,11 +3,11 @@
 (require 'mode-local)
 
 (use-package elixir-mode
-    :straight t
-    :defer t
-    :config
-    (setq lsp-elixir-suggest-specs nil)
-    (add-to-list 'exec-path (expand-file-name "~/.install/elixir-ls/release")))
+ :straight t
+ :defer t
+ :config
+ (setq lsp-elixir-suggest-specs nil)
+ (setq lsp-elixir-ls-server-dir (expand-file-name "~/.install/elixir-ls/release")))
 
 (use-package lsp-mode
     :straight t

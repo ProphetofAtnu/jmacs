@@ -30,38 +30,42 @@
 ;;     :straight t
 ;;     :hook (python-mode . anaconda-mode))
 
-(use-package lsp-pyright
-  :straight t)
+;; (use-package lsp-pyright
+;;   :straight t)
 
 (use-package lsp-mode
-    :straight t
-    ;; :hook (python-mode . lsp-deferred)
-    )
+  :straight t
+  :hook (python-mode . lsp-deferred)
+  :config
+  (setq
+   lsp-pylsp-plugins-jedi-completion-fuzzy t
+   lsp-pylsp-plugins-pydocstyle-enabled nil
+   lsp-pylsp-plugins-flake8-enabled nil)
+  )
 
-(use-package lsp-bridge
-    :straight t
-    :hook (python-mode . lsp-bridge-mode)
-    )
+;; (use-package lsp-bridge
+;;   :straight t
+;;   :hook (python-mode . (lambda ()
+;;                          (if buffer-file-name 
+;;                              (lsp-bridge-mode))))
+;;   )
 ;; (use-package eglot
-;;     :straight t
-;;     :hook (python-mode . eglot-ensure)
-;;     :config
-;;     (push '(python-mode . ("pyright-langserver" "--stdio"))
-;;           eglot-server-programs))
+;;   :straight t
+;;   :hook (python-mode . eglot-ensure))
 
 (use-package python-black
-    :straight t
-    :general
-    (local-leader-def
-        :keymaps '(python-mode-map)
-      "=" 'python-black-buffer))          
+  :straight t
+  :general
+  (local-leader-def
+    :keymaps '(python-mode-map)
+    "=" 'python-black-buffer))          
 
 (use-package python-x
   :straight t
   :after (python)
   :general
   (local-leader-def
-      :keymaps '(python-mode-map)
+    :keymaps '(python-mode-map)
     "e" 'python-shell-send-dwim)
   :config
   (python-x-setup))
@@ -91,8 +95,8 @@
 ;;     (jupyter-org-define-key (kbd "C-M-<return>") 'jupyter-eval-defun))
 
 (use-package org
-    :defer t
-    :config)
+  :defer t
+  :config)
 
 
 (provide 'python-conf)

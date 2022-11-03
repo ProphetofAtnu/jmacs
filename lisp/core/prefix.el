@@ -41,6 +41,7 @@
  "s" 'save-buffer
  "S" 'evil-write-all
  "j" 'dired-jump-other-window
+ "C-r" 'read-only-mode
  )
  
 
@@ -110,8 +111,7 @@
     "t" 'other-tab-prefix)
 
 (define-prefix-map utility 
-    "l" 'list-processes
-    "v" 'vterm)
+    "l" 'list-processes)
 
 (define-prefix-map edit)
 

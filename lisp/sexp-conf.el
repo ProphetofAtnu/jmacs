@@ -25,15 +25,19 @@
 ;;     :straight t
 ;;     :hook (lispy-mode . lispyville-mode))
 
+(use-package parinfer
+  :straight t
+  :commands (parinfer-auto-fix))
+
 (use-package rainbow-delimiters
-    :straight t
-    :hook ((emacs-lisp-mode
-            lisp-mode
-            clojure-mode
-            lisp-interaction-mode
-            common-lisp-mode
-            scheme-mode)
-           . rainbow-delimiters-mode))
+  :straight t
+  :hook ((emacs-lisp-mode
+          lisp-mode
+          clojure-mode
+          lisp-interaction-mode
+          common-lisp-mode
+          scheme-mode)
+         . rainbow-delimiters-mode))
 
 ;; (use-package smartparens
 ;;     :straight t
@@ -52,35 +56,35 @@
 ;;     )
 
 (use-package evil-smartparens
-    :straight t
-    :hook ((emacs-lisp-mode
-            lisp-mode
-            lisp-interaction-mode
-            clojure-mode
-            common-lisp-mode
-            scheme-mode)
-           . evil-smartparens-mode))
+  :straight t
+  :hook ((emacs-lisp-mode
+          lisp-mode
+          lisp-interaction-mode
+          clojure-mode
+          common-lisp-mode
+          scheme-mode)
+         . evil-smartparens-mode))
 
 
 (use-package evil-cleverparens
-    :straight t
-    :hook ((emacs-lisp-mode
-            lisp-mode
-            lisp-interaction-mode
-            clojure-mode
-            common-lisp-mode
-            scheme-mode)
-           . evil-cleverparens-mode)
-    :general
-    (:keymaps '(evil-cleverparens-mode-map)
-              :states '(normal visual motion)
-              "(" 'evil-cp-backward-sexp
-              ")" 'evil-cp-forward-sexp)
-    :init
-    (setq evil-cleverparens-use-additional-movement-keys nil
-          ;; evil-cleverparens-swap-move-by-word-and-symbol t
-          evil-cleverparens-use-s-and-S nil
-          evil-move-beyond-eol t))
+  :straight t
+  :hook ((emacs-lisp-mode
+          lisp-mode
+          lisp-interaction-mode
+          clojure-mode
+          common-lisp-mode
+          scheme-mode)
+         . evil-cleverparens-mode)
+  :general
+  (:keymaps '(evil-cleverparens-mode-map)
+            :states '(normal visual motion)
+            "(" 'evil-cp-backward-sexp
+            ")" 'evil-cp-forward-sexp)
+  :init
+  (setq evil-cleverparens-use-additional-movement-keys nil
+        ;; evil-cleverparens-swap-move-by-word-and-symbol t
+        evil-cleverparens-use-s-and-S nil
+        evil-move-beyond-eol t))
 
 (require 'evil-cleverparens-text-objects)
 

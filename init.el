@@ -43,6 +43,7 @@
 (straight-use-package 'switch-window)
 (straight-use-package 'emr)
 (straight-use-package 'evil-mc)
+(straight-use-package 'elixir-mode)
 
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
@@ -66,7 +67,11 @@
       comint-prompt-read-only t
       sentence-end-double-space nil
       gc-cons-threshold 100000000
-      read-process-output-max (* 1024 1024))
+      minibuffer-follows-selected-frame nil
+      tab-width 4
+      read-process-output-max (* 1024 1024)
+      byte-compile-warnings nil
+      custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 (byte-recompile-directory (expand-file-name "util" user-emacs-directory) 0)
 ;; (byte-recompile-directory (expand-file-name "lisp/core" user-emacs-directory) 0)
@@ -77,121 +82,122 @@
    ;; (expand-file-name "lisp/core" user-emacs-directory)
    ))
 
+
 (use-package exec-path-from-shell
-    :straight t
-    :hook (emacs-startup . exec-path-from-shell-initialize)
-    :init
-    (setq exec-path-from-shell-variables
-          '("LDFLAGS" "CPPFLAGS" "PATH" "MANPATH")))
+  :straight t
+  :hook (emacs-startup . exec-path-from-shell-initialize)
+  :init
+  (setq exec-path-from-shell-variables
+        '("LDFLAGS" "CPPFLAGS" "PATH" "MANPATH")))
 
 
 ;; (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.5.1/emacs")
 
-(use-package better-defaults
-    :straight t)
+                                        ; (use-package better-defaults
+                                        ;     :straight t)
 
 (use-package no-littering
-    :straight t)
+  :straight t)
 
 (use-package dash
-    :straight t)
+  :straight t)
 
 (use-package delight
-    :straight t)
+  :straight t)
 
 (use-package fn
-    :straight t)
+  :straight t)
 
 (use-package popup
-    :straight t)
+  :straight t)
 
 (require 'core/utility)
 ;; Evil
 
 (use-package evil 
-    :straight t
-    :delight
-    :hook (emacs-startup . evil-mode)
-    :init 
-    (setq evil-want-C-u-scroll t
-          evil-cross-lines t
-          evil-undo-system 'undo-redo
-          evil-ex-search-vim-style-regexp t
-          evil-search-module 'evil-search))
+  :straight t
+  :delight
+  :hook (emacs-startup . evil-mode)
+  :init 
+  (setq evil-want-C-u-scroll t
+        evil-cross-lines t
+        evil-undo-system 'undo-redo
+        evil-ex-search-vim-style-regexp t
+        evil-search-module 'evil-search))
 
 (use-package evil-collection
-    :straight t
-    :init
-    (evil-collection-init)
-    (global-evil-collection-unimpaired-mode +1)
-    :config
-    (delq 'lispy evil-collection-mode-list))
+  :straight t
+  :init
+  (evil-collection-init)
+  (global-evil-collection-unimpaired-mode +1)
+  :config
+  (delq 'lispy evil-collection-mode-list))
 
 (use-package evil-goggles
-    :straight t
-    :delight
-    :hook (evil-mode . evil-goggles-mode)
-    :config
-    (evil-goggles-use-diff-faces))
+  :straight t
+  :delight
+  :hook (evil-mode . evil-goggles-mode)
+  :config
+  (evil-goggles-use-diff-faces))
 
 (use-package evil-surround
-    :straight t
-    :after (evil)
-    :commands
-    (evil-surround-edit
-     evil-Surround-edit
-     evil-surround-region
-     evil-Surround-region)
-    :init
-    (evil-define-key 'operator global-map "s" 'evil-surround-edit)
-    (evil-define-key 'operator global-map "S" 'evil-surround-edit)
-    (evil-define-key 'visual global-map "s" 'evil-surround-region)
-    (evil-define-key 'visual global-map "S" 'evil-Surround-region))
+  :straight t
+  :after (evil)
+  :commands
+  (evil-surround-edit
+   evil-Surround-edit
+   evil-surround-region
+   evil-Surround-region)
+  :init
+  (evil-define-key 'operator global-map "s" 'evil-surround-edit)
+  (evil-define-key 'operator global-map "S" 'evil-surround-edit)
+  (evil-define-key 'visual global-map "s" 'evil-surround-region)
+  (evil-define-key 'visual global-map "S" 'evil-Surround-region))
 
 (use-package evil-matchit
-    :straight t
-    :hook (evil-mode . global-evil-matchit-mode))
+  :straight t
+  :hook (evil-mode . global-evil-matchit-mode))
 
 (use-package hydra
-    :straight t)
+  :straight t)
 
 (use-package evil-commentary
-    :straight t
-    :after (evil)
-    :bind
-    (:map evil-normal-state-map)
-    ("gc" . evil-commentary))
+  :straight t
+  :after (evil)
+  :bind
+  (:map evil-normal-state-map)
+  ("gc" . evil-commentary))
 
 (use-package evil-better-visual-line
-    :straight t
-    :defer 5
-    :config
-    (add-hook 'visual-line-mode-hook #'evil-better-visual-line-on))
+  :straight t
+  :defer 5
+  :config
+  (add-hook 'visual-line-mode-hook #'evil-better-visual-line-on))
 
 (use-package avy
-    :straight t)
+  :straight t)
 
 (use-package which-key
-    :straight t
-    :delight
-    :hook (emacs-startup . which-key-mode)
-    :config
-    (add-to-list 'which-key-replacement-alist
-                 '((nil . "evil-collection-\\(.*\\)") . (nil . "ec-\\1"))))
+  :straight t
+  :delight
+  :hook (emacs-startup . which-key-mode)
+  :config
+  (add-to-list 'which-key-replacement-alist
+               '((nil . "evil-collection-\\(.*\\)") . (nil . "ec-\\1"))))
 
 (use-package which-key-posframe
-    :straight t
-    :delight
-    :hook (which-key-mode . which-key-posframe-mode)
-    :config
-    (setq which-key-posframe-poshandler 'posframe-poshandler-frame-bottom-center))
+  :straight t
+  :delight
+  :hook (which-key-mode . which-key-posframe-mode)
+  :config
+  (setq which-key-posframe-poshandler 'posframe-poshandler-frame-bottom-center))
 
 
 (use-package general
-    :straight t
-    :hook (emacs-startup . general-override-mode)
-    :init
-    (require 'core/bindings))
+  :straight t
+  :hook (emacs-startup . general-override-mode)
+  :init
+  (require 'core/bindings))
 
 ;; (use-package undo-tree
 ;;     :straight t
@@ -204,12 +210,12 @@
 
 
 (use-package orderless
-    :straight t
-    :ensure t
-    :commands (orderless-filter))
+  :straight t
+  :ensure t
+  :commands (orderless-filter))
 
 (use-package fussy
-    :straight t
+  :straight t
   :config
   (push 'fussy completion-styles)
   (setq fussy-filter-fn 'fussy-filter-orderless)
@@ -221,121 +227,118 @@
    completion-category-defaults nil
    completion-category-overrides nil))
 
-(use-package fzf-native
-  :straight
-  (:repo "dangduc/fzf-native"
-   :host github
-   :files (:defaults "*.c" "*.h" "*.txt"))
-  :config
-  (if (eq system-type 'darwin)
-      (setq fzf-native-module-cmake-args "-DCMAKE_C_FLAGS='-O3'"))
-  (setq fussy-score-fn 'fussy-fzf-native-score)
-  (fzf-native-load-own-build-dyn))
+                                        ; (use-package fzf-native
+                                        ;   :straight
+                                        ;   (:repo "dangduc/fzf-native"
+                                        ;    :host github
+                                        ;    :files (:defaults "*.c" "*.h" "*.txt"))
+                                        ;   :config
+                                        ;   (if (eq system-type 'darwin)
+                                        ;       (setq fzf-native-module-cmake-args "-DCMAKE_C_FLAGS='-O3'"))
+                                        ;   (setq fussy-score-fn 'fussy-fzf-native-score)
+                                        ;   (fzf-native-load-own-build-dyn))
 
 (use-package corfu
-    :straight t
-    :bind
-    (:map corfu-map
-          ("TAB" . corfu-next)
-          ([tab] . corfu-next)
-          ("S-TAB" . corfu-previous)
-          ([backtab] . corfu-previous))
-    :init
-    (setq corfu-auto t
-          corfu-auto-delay 0.2
-          corfu-auto-prefix 2)
-    (setq tab-always-indent 'complete)
-    (defun corfu-enable-in-minibuffer ()
-      "Enable Corfu in the minibuffer if `completion-at-point' is bound."
-      (when (where-is-internal #'completion-at-point (list (current-local-map)))
-        ;; (setq-local corfu-auto nil) Enable/disable auto completion
-        (corfu-mode 1)))
-    (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
-    (add-hook 'eshell-mode-hook
-              (lambda ()
-                (setq-local corfu-auto nil)
-                (corfu-mode)))
-    (global-corfu-mode)
-    )
+  :straight t
+  :bind
+  (:map corfu-map
+        ("TAB" . corfu-next)
+        ([tab] . corfu-next)
+        ("S-TAB" . corfu-previous)
+        ([backtab] . corfu-previous))
+  :init
+  (setq corfu-auto t
+        corfu-auto-delay 0.2
+        corfu-auto-prefix 2)
+  (setq tab-always-indent 'complete)
+  (defun corfu-enable-in-minibuffer ()
+    "Enable Corfu in the minibuffer if `completion-at-point' is bound."
+    (when (where-is-internal #'completion-at-point (list (current-local-map)))
+      ;; (setq-local corfu-auto nil) Enable/disable auto completion
+      (corfu-mode 1)))
+  (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+              (setq-local corfu-auto nil)
+              (corfu-mode)))
+  (global-corfu-mode)
+  )
 
 (use-package cape
-    :straight t
-    :config ;; Silence the pcomplete capf, no errors or messages!
+  :straight t
+  :config ;; Silence the pcomplete capf, no errors or messages!
+  (advice-add
+   'pcomplete-completions-at-point
+   :around #'cape-wrap-silent)
+  (dolist (i 
+           '(evil-ex-elisp-completion-at-point
+             evil-ex-command-completion-at-point
+             evil-ex-argument-completion-at-point))
     (advice-add
-     'pcomplete-completions-at-point
-     :around #'cape-wrap-silent)
-    (dolist (i 
-              '(evil-ex-elisp-completion-at-point
-                evil-ex-command-completion-at-point
-                evil-ex-argument-completion-at-point))
-      (advice-add
-       i
-       :around #'cape-wrap-silent))
-    ;; Ensure that pcomplete does not write to the buffer
-    ;; and behaves as a pure `completion-at-point-function'.
-    (advice-add
-     'pcomplete-completions-at-point
-     :around #'cape-wrap-purify)
-    :init
-    (add-to-list 'completion-at-point-functions #'cape-dabbrev t)
-    (add-to-list 'completion-at-point-functions #'cape-keyword))
+     i
+     :around #'cape-wrap-silent))
+  ;; Ensure that pcomplete does not write to the buffer
+  ;; and behaves as a pure `completion-at-point-function'.
+  (advice-add
+   'pcomplete-completions-at-point
+   :around #'cape-wrap-purify)
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev t)
+  (add-to-list 'completion-at-point-functions #'cape-keyword))
 
 (use-package evil-mc
-    :straight t
-    :defer nil
-    :hook (evil-mode . global-evil-mc-mode)
-    :general
-    (:keymaps '(evil-mc-key-map)
-              :states '(normal)
-              "z ." 'evil-mc-make-cursor-here 
-              "z <" 'evil-mc-pause-cursors
-              "z >" 'evil-mc-resume-cursors
-              "z /" 'evil-mc-undo-all-cursors
-              )
-    :init
-    (require 'core/hydras)
-    (general-def
-        :states '(normal)
-      "g.." 'evil-mc-hydra/body)
-    (evil-mc-define-vars)
-    (add-to-list 'evil-mc-incompatible-minor-modes 'lispy)
-    ) 
+  :straight t
+  :defer nil
+  :hook (evil-mode . global-evil-mc-mode)
+  :general
+  (:keymaps '(evil-mc-key-map)
+            :states '(normal)
+            "z ." 'evil-mc-make-cursor-here 
+            "z <" 'evil-mc-pause-cursors
+            "z >" 'evil-mc-resume-cursors
+            "z /" 'evil-mc-undo-all-cursors
+            )
+  :init
+  (require 'core/hydras)
+  (general-def
+    :states '(normal)
+    "g.." 'evil-mc-hydra/body)
+  (evil-mc-define-vars)
+  (add-to-list 'evil-mc-incompatible-minor-modes 'lispy)
+  ) 
 
 
 (use-package evil-avy
-    :straight t
-    :after (evil)
-    ;; :hook (evil-mode . evil-avy-mode)
-    :general
-    (:states '(normal)
-             "s" 'evil-avy-goto-char-2
-             "g l" 'evil-avy-goto-line))
+  :straight t
+  :after (evil)
+  ;; :hook (evil-mode . evil-avy-mode)
+  :general
+  (:states '(normal)
+           "s" 'evil-avy-goto-char-2
+           "g l" 'evil-avy-goto-line))
 
 (use-package company
-    :straight t
-    :general
-    (:keymaps 'company-active-map
-              "TAB" 'company-complete-common-or-cycle
-              "<tab>" 'company-complete-common-or-cycle)
-    ;; (:states '(insert)
-    ;;          "TAB" 'company-indent-or-complete-common
-    ;;          "<tab>" 'company-indent-or-complete-common
-    ;;          )
-    ;; :init
-    ;; (add-hook 'emacs-startup-hook
-    ;;           'global-company-mode)
-    :config
-    (defun company-enable-in-minibuffer ()
-      "Enable Corfu in the minibuffer if `completion-at-point' is bound."
-      (when (where-is-internal #'completion-at-point (list (current-local-map)))
-        ;; (setq-local corfu-auto nil) Enable/disable auto completion
-        (company-mode 1)))
-    ;; (add-hook 'minibuffer-setup-hook #'company-enable-in-minibuffer)
-    ;; (setq company-frontends '(company-pseudo-tooltip-unless-just-one-frontend company-preview-if-just-one-frontend))
-
-    (delq 'company-semantic company-backends)
-    (setq company-minimum-prefix-length 1
-          company-idle-delay 0.1))
+  :straight t
+  :general
+  (:keymaps 'company-active-map
+            "TAB" 'company-complete-common-or-cycle
+            "<tab>" 'company-complete-common-or-cycle)
+  ;; (:states '(insert)
+  ;;          "TAB" 'company-indent-or-complete-common
+  ;;          "<tab>" 'company-indent-or-complete-common
+  ;;          )
+  ;; :init
+  ;; (add-hook 'emacs-startup-hook
+  ;;           'global-company-mode)
+  :config
+  (add-hook 'company-mode-hook (lambda () (corfu-mode -1)))
+  (defun company-enable-in-minibuffer ()
+    "Enable Corfu in the minibuffer if `completion-at-point' is bound."
+    (when (where-is-internal #'completion-at-point (list (current-local-map)))
+      (company-mode 1)))
+  (delq 'company-semantic company-backends)
+  (setq company-minimum-prefix-length 1
+        company-idle-delay 0.1))
 
 
 ;; (use-package company-statistics 
@@ -343,18 +346,18 @@
 ;;     :hook (company-mode . company-statistics-mode))
 
 (use-package restart-emacs
-    :straight t
-    :commands (restart-emacs))
+  :straight t
+  :commands (restart-emacs))
 
 (use-package recentf
-    :hook (emacs-startup . recentf-mode))
+  :hook (emacs-startup . recentf-mode))
 
 (use-package magit
-    :straight t
-    :commands (magit)
-    :general
-    (:keymaps 'prefix-project-map
-              "m" 'magit))
+  :straight t
+  :commands (magit)
+  :general
+  (:keymaps 'prefix-project-map
+            "m" 'magit))
 
 ;; straight-use-package
 ;; (use-package parrot
@@ -363,8 +366,8 @@
 ;;   )
 
 (use-package markdown-mode
-    :straight t
-    :mode "\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'")
+  :straight t
+  :mode "\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'")
 
 ;; Themeing
 ;; (use-package bliss-theme
@@ -376,32 +379,32 @@
 ;;     (set-face-background 'lazy-highlight "#333333"))
 
 
- ;; '(mode-line-inactive
- ;;   ((((class color) (min-colors 88)) (:background "#111111" :foreground "#000000"))
- ;;    (t (:weight light :box nil :background "#202339" :foreground "#000000" :inherit (mode-line)))))
+;; '(mode-line-inactive
+;;   ((((class color) (min-colors 88)) (:background "#111111" :foreground "#000000"))
+;;    (t (:weight light :box nil :background "#202339" :foreground "#000000" :inherit (mode-line)))))
 
 (use-package telephone-line
-    :straight t
-    :config
-    (delight 'emacs-lisp-mode "Elisp")
-    (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
-          telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
-          telephone-line-primary-right-separator 'telephone-line-cubed-right
-          telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
-    (setq telephone-line-height 24
-          telephone-line-evil-use-short-tag t)
-    (telephone-line-mode +1))
+  :straight t
+  :config
+  (delight 'emacs-lisp-mode "Elisp")
+  (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
+        telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
+        telephone-line-primary-right-separator 'telephone-line-cubed-right
+        telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
+  (setq telephone-line-height 24
+        telephone-line-evil-use-short-tag t)
+  (telephone-line-mode +1))
 
 (use-package kaolin-themes
-    :straight t)
- 
+  :straight t)
+
 (use-package cherry-blossom-theme
-    :straight t)
+  :straight t)
 
 (use-package modus-themes
-    :straight t
-    :config
-    (load-theme 'modus-vivendi t))
+  :straight t
+  :config
+  (load-theme 'modus-vivendi t))
 
 ;; (use-package ample-theme
 ;;     :straight t)
@@ -431,12 +434,12 @@
 ;;     :straight t)
 
 (use-package zoxide
-    :straight t
-    :general
-    (prefix-file-map
-     "z" 'zoxide-find-file
-     "r" 'zoxide-travel
-     "c" 'zoxide-cd))
+  :straight t
+  :general
+  (prefix-file-map
+   "z" 'zoxide-find-file
+   "r" 'zoxide-travel
+   "c" 'zoxide-cd))
 
 ;; (use-package doom-modeline
 ;;     :straight t
@@ -449,24 +452,24 @@
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
 (use-package helpful
-    :straight t
-    :init
-    (defvar read-symbol-positions-list nil)
-    :commands (helpful-symbol
-               helpful-key))
+  :straight t
+  :init
+  (defvar read-symbol-positions-list nil)
+  :commands (helpful-symbol
+             helpful-key))
 
 (use-package ace-window
-    :straight t
-    :commands (ace-window
-               ace-swap-window)
-    :config
-    (setq aw-keys
-          (cl-loop for k across "asdfjkl;"
-                collect k)))
+  :straight t
+  :commands (ace-window
+             ace-swap-window)
+  :config
+  (setq aw-keys
+        (cl-loop for k across "asdfjkl;"
+                 collect k)))
 
 (use-package switch-window
-    :straight t
-    :config
+  :straight t
+  :config
   (setq switch-window-shortcut-style 'qwerty
         switch-window-multiple-frames t))
 
@@ -475,58 +478,58 @@
 ;; (use-package dired-subtree)
 
 (use-package tempel
-    :straight t
-    :bind (("M-+" . tempel-complete)
-           ;; Alternative tempel-expand
-           ("M-*" . tempel-insert)))
+  :straight t
+  :bind (("M-+" . tempel-complete)
+         ;; Alternative tempel-expand
+         ("M-*" . tempel-insert)))
 
 
 (use-package yasnippet
-    :straight t
-    :hook (emacs-startup . yas-global-mode)
-    :config
-    ;; (general-def
-    ;;     'yas-minor-mode-map
-    ;;     "SPC"
-    ;;   yas-maybe-expand)
-    (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand))
+  :straight t
+  :hook (emacs-startup . yas-global-mode)
+  :config
+  ;; (general-def
+  ;;     'yas-minor-mode-map
+  ;;     "SPC"
+  ;;   yas-maybe-expand)
+  (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand))
 
 (use-package tab-bar
-    :init
+  :init
   (setq tab-bar-show nil))
 
 (use-package insert-time
-    :straight t
-    :general
-    (:keymaps 'prefix-insert-map
-              "t" 'insert-date-time
-              "T" 'insert-time))
+  :straight t
+  :general
+  (:keymaps 'prefix-insert-map
+            "t" 'insert-date-time
+            "T" 'insert-time))
 
 (use-package string-inflection
-    :straight t
-    :config
-    (general-defs
-        :keymaps 'prefix-edit-map
-        "i" (js/to-repeatable string-inflection-all-cycle)))
+  :straight t
+  :config
+  (general-defs
+    :keymaps 'prefix-edit-map
+    "i" (js/to-repeatable string-inflection-all-cycle)))
 
 (use-package tree-sitter
-    :straight t
-    :hook (emacs-startup . global-tree-sitter-mode)
-    :config
-    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+  :straight t
+  :hook (emacs-startup . global-tree-sitter-mode)
+  :config
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
 (use-package tree-sitter-indent
-    :straight t)
+  :straight t)
 
 (use-package tree-sitter-langs
-    :straight t)
- 
+  :straight t)
+
 (use-package all-the-icons
-    :straight t)
+  :straight t)
 
 (use-package treemacs
-    :straight t
-    :commands (treemacs))
+  :straight t
+  :commands (treemacs))
 
 ;; (use-package dired-sidebar
 ;;     :straight t
@@ -536,7 +539,7 @@
 ;;       "t" 'dired-sidebar-toggle-sidebar))
 
 (use-package winner
-    :general
+  :general
   ('winner-mode-map
    "C-M-<" 'winner-undo
    "C-M->" 'winner-redo
@@ -547,59 +550,59 @@
 ;;     :init (electric-pair-mode))
 
 (use-package smartparens
-    :straight t
-    :hook (emacs-startup
-           . smartparens-global-mode)
-    :config 
-    (require 'smartparens-config)
-    (setq sp-highlight-wrap-overlay t
-          sp-highlight-pair-overlay nil
-          sp-highlight-wrap-tag-overlay t)
-    )
+  :straight t
+  :hook (emacs-startup
+         . smartparens-global-mode)
+  :config 
+  (require 'smartparens-config)
+  (setq sp-highlight-wrap-overlay t
+        sp-highlight-pair-overlay nil
+        sp-highlight-wrap-tag-overlay t)
+  )
 
 (use-package projectile
-    :straight t
-    :hook (emacs-startup . projectile-mode)
-    :general
-    (:keymaps 'prefix-file-map
-              "p" 'projectile-find-file)
-    (:keymaps 'prefix-project-map
-              "s" 'projectile-switch-project
-              "a" 'projectile-add-known-project
-              "R" 'projectile-remove-current-project-from-known-projects
-              "t" 'projectile-regenerate-tags
-              "r" 'projectile-ripgrep
-              "b" 'consult-projectile-switch-to-buffer
-              "!" 'projectile-cleanup-known-projects
-              "&" 'projectile-run-async-shell-command-in-root
-              "w" 'projectile-run-term
-              "o" 'projectile-find-other-file
-              "x" 'projectile-run-project
-              "X" 'projectile-compile-project
-              "f" 'projectile-find-file-dwim
-              "c" 'projectile-commander
-              "C" 'projectile-kill-buffers))
+  :straight t
+  :hook (emacs-startup . projectile-mode)
+  :general
+  (:keymaps 'prefix-file-map
+            "p" 'projectile-find-file)
+  (:keymaps 'prefix-project-map
+            "s" 'projectile-switch-project
+            "a" 'projectile-add-known-project
+            "R" 'projectile-remove-current-project-from-known-projects
+            "t" 'projectile-regenerate-tags
+            "r" 'projectile-ripgrep
+            "b" 'consult-projectile-switch-to-buffer
+            "!" 'projectile-cleanup-known-projects
+            "&" 'projectile-run-async-shell-command-in-root
+            "w" 'projectile-run-term
+            "o" 'projectile-find-other-file
+            "x" 'projectile-run-project
+            "X" 'projectile-compile-project
+            "f" 'projectile-find-file-dwim
+            "c" 'projectile-commander
+            "C" 'projectile-kill-buffers))
 
 (use-package origami
-    :straight t
-    :hook (emacs-startup . global-origami-mode))
+  :straight t
+  :hook (emacs-startup . global-origami-mode))
 
 (use-package zmq
-    :straight t
-    :defer t)
+  :straight t
+  :defer t)
 
 (setq frame-resize-pixelwise t
       window-resize-pixelwise t)
 
 (use-package markdown-mode
-    :straight t)
+  :straight t)
 
 (use-package iedit
-    :straight t
-    :general
-    (:keymaps 'isearch-mode-map
-              "C-;" 'iedit-mode-from-isearch
-              ))
+  :straight t
+  :general
+  (:keymaps 'isearch-mode-map
+            "C-;" 'iedit-mode-from-isearch
+            ))
 
 (add-hook 'emacs-startup-hook
           'global-auto-revert-mode)
@@ -609,10 +612,10 @@
 ;;           'elisp-sql-capf-mode)
 
 (cond
-  ((eq system-type 'darwin) (require 'macos))
-  (t (progn (set-face-attribute 'default t :font "Fira Code-13")
-            (set-face-font 'fixed-pitch "Fira Code-13")
-            (set-frame-font "Fira Code-13" nil t))))
+ ((eq system-type 'darwin) (require 'macos))
+ (t (progn (set-face-attribute 'default t :font "Fira Code-13")
+           (set-face-font 'fixed-pitch "Fira Code-13")
+           (set-frame-font "Fira Code-13" nil t))))
 
 (require 'window-conf)
 (require 'sexp-conf)
@@ -640,11 +643,13 @@
 (require 'ruby-conf)
 (require 'sql-conf)
 (require 'dotnet-conf)
+(require 'ocaml-conf)
 (require 'zig-conf)
 (require 'latex-conf)
 (require 'nim-conf)
 (require 'haskell-conf)
 (require 'flutter-conf)
+(require 'julia-conf)
 (require 'utility-conf)
 
 (load custom-file)
@@ -655,3 +660,7 @@
 (put 'list-threads 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
+(put 'set-goal-column 'disabled nil)
+;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
+(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+;; ## end of OPAM user-setup addition for emacs / base ## keep this line

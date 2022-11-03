@@ -1,14 +1,33 @@
 ;;; -*- lexical-binding: t; -*-
 
 (use-package glsl-mode
-    :straight t)
+  :straight t)
 
 (use-package cmake-mode
-    :straight t)
+  :straight t
+  :init
+  (setenv "CDMAKE_EXPORT_COMPILE_COMMANDS" "1"))
 
 (use-package lsp-mode
-    :straight t
-    :hook ((cmake-mode objc-mode c-mode c++-mode) . lsp-deferred))
+  :straight t
+  :hook ((cmake-mode objc-mode c-mode c++-mode) . lsp-deferred)
+  :general
+  (local-leader-def
+    :keymaps '(c++-mode-map c-mode-map objc-mode-map)
+    "o" 'lsp-clangd-find-other-file)
+  :config
+  (require 'lsp-clangd)
+  (setq lsp-clients-clangd-args
+        (append lsp-clients-clangd-args
+                '("--all-scopes-completion"
+                  "--completion-style=detailed"
+                  "--background-index"
+                  "-j=8"
+                  "--pch-storage=memory")))
+  )
+
+(use-package qml-mode
+  :straight t)
 
 ;; (use-package lsp-mode
 ;;     :straight t

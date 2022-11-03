@@ -7,12 +7,12 @@
 ;; (setq explicit-shell-file-name "/usr/local/bin/bash")
 
 (use-package shell-pop
-  :straight t
-  :general
-  (override
-   "C-'" 'shell-pop)
-  :config
-  (setq shell-pop-full-span t))
+    :straight t
+    :general
+    (override
+     "C-'" 'shell-pop)
+    :config
+    (setq shell-pop-full-span t))
   
 (use-package eshell
     :config
@@ -31,7 +31,13 @@
 
 (use-package vterm
     :straight t
-    :commands (vterm vterm-other-window))
+    :commands (vterm vterm-other-window)
+    :general
+    ('prefix-utility-map
+     "v" 'vterm
+     "V" 'vterm-other-window)
+    :config
+    (setq vterm-timer-delay 0))
 
 (defun shell-scratch-create ()
   (interactive)
@@ -80,7 +86,11 @@
 
 (use-package vterm-toggle
     :straight t
-    :commands (vterm-toggle))
+    :commands (vterm-toggle)
+    :general
+    ('prefix-utility-map
+     "d" 'vterm-toggle-insert-cd
+     "t" 'vterm-toggle))
 
 (provide 'shell-conf)
 
