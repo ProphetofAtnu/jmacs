@@ -17,8 +17,7 @@
 (use-package utop
   :straight t
   :config
-  (add-hook 'utop-mode-hook 'company-mode)
-  )
+  (add-hook 'utop-mode-hook 'company-mode))
 
 
 (provide 'ocaml-conf)

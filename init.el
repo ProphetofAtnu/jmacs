@@ -23,9 +23,6 @@
 (require 'use-package)
 
 (setq use-package-compute-statistics t)
-(defvar evil-want-integration t)
-(defvar evil-disable-insert-state-bindings t)
-(defvar evil-want-keybinding nil)
 
 (straight-use-package 'dired-hacks)
 (straight-use-package 'general)
@@ -91,11 +88,6 @@
         '("LDFLAGS" "CPPFLAGS" "PATH" "MANPATH")))
 
 
-;; (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.5.1/emacs")
-
-                                        ; (use-package better-defaults
-                                        ;     :straight t)
-
 (use-package no-littering
   :straight t)
 
@@ -112,7 +104,12 @@
   :straight t)
 
 (require 'core/utility)
+
 ;; Evil
+
+(defvar evil-want-integration t)
+(defvar evil-disable-insert-state-bindings t)
+(defvar evil-want-keybinding nil)
 
 (use-package evil 
   :straight t
@@ -157,6 +154,10 @@
 (use-package evil-matchit
   :straight t
   :hook (evil-mode . global-evil-matchit-mode))
+
+(use-package evil-lion
+  :straight t
+  :hook (evil-mode . evil-lion-mode))
 
 (use-package hydra
   :straight t)
@@ -314,8 +315,17 @@
   ;; :hook (evil-mode . evil-avy-mode)
   :general
   (:states '(normal)
-           "s" 'evil-avy-goto-char-2
-           "g l" 'evil-avy-goto-line))
+           "s" 'evil-avy-goto-char-2))
+
+(use-package evil-snipe
+  :straight t
+  :config
+  (setq evil-snipe-scope 'whole-buffer
+        evil-snipe-enable-highlight t
+        evil-snipe-enable-incremental-highlight t
+        evil-snipe-show-prompt nil
+        evil-snipe-smart-case t)
+  (evil-snipe-mode 1))
 
 (use-package company
   :straight t
