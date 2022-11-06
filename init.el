@@ -407,7 +407,7 @@
   :general
   (prefix-file-map
    "z" 'zoxide-find-file
-   "r" 'zoxide-travel
+   "t" 'zoxide-travel
    "c" 'zoxide-cd))
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)

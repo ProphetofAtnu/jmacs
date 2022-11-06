@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
-(use-package lsp-mssql
-    :straight t)
+;; (use-package lsp-mssql
+;;     :straight t)
 
 ;; (use-package sqlite3
 ;;     :straight t
@@ -22,4 +22,5 @@
              (expand-file-name
               "lisp/packages/eodbc"
               user-emacs-directory))
+
 (provide 'sql-conf)
