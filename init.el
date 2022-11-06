@@ -58,7 +58,10 @@
 (add-to-list 'load-path (expand-file-name "platform" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lisp/packages/epy" user-emacs-directory))
 
+
 (setq visible-bell nil
+      frame-resize-pixelwise t
+      window-resize-pixelwise t
       ring-bell-function #'ignore
       inhibit-startup-screen t
       comint-prompt-read-only t
@@ -71,6 +74,8 @@
       custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 (byte-recompile-directory (expand-file-name "util" user-emacs-directory) 0)
+(byte-recompile-directory (expand-file-name "lisp" user-emacs-directory) 0)
+;; (byte-recompile-directory user-emacs-directory)
 ;; (byte-recompile-directory (expand-file-name "lisp/core" user-emacs-directory) 0)
 
 (defvar js/should-load-and-compile-directories
@@ -200,15 +205,6 @@
   :init
   (require 'core/bindings))
 
-;; (use-package undo-tree
-;;     :straight t
-;;     :hook (emacs-startup . global-undo-tree-mode)
-;;     :general
-;;     ('prefix-utility-map
-;;      "u" 'undo-tree-visualize))
-;;     ;; :config
-;;     ;; (setq evil-undo-system 'undo-tree))
-
 
 (use-package orderless
   :straight t
@@ -220,24 +216,12 @@
   :config
   (push 'fussy completion-styles)
   (setq fussy-filter-fn 'fussy-filter-orderless)
-
   (setq
    ;; For example, project-find-file uses 'project-files which uses
    ;; substring completion by default. Set to nil to make sure it's using
    ;; flx.
    completion-category-defaults nil
    completion-category-overrides nil))
-
-                                        ; (use-package fzf-native
-                                        ;   :straight
-                                        ;   (:repo "dangduc/fzf-native"
-                                        ;    :host github
-                                        ;    :files (:defaults "*.c" "*.h" "*.txt"))
-                                        ;   :config
-                                        ;   (if (eq system-type 'darwin)
-                                        ;       (setq fzf-native-module-cmake-args "-DCMAKE_C_FLAGS='-O3'"))
-                                        ;   (setq fussy-score-fn 'fussy-fzf-native-score)
-                                        ;   (fzf-native-load-own-build-dyn))
 
 (use-package corfu
   :straight t
@@ -406,42 +390,17 @@
   (telephone-line-mode +1))
 
 (use-package kaolin-themes
-  :straight t)
+  :straight t
+  :defer t)
 
 (use-package cherry-blossom-theme
-  :straight t)
+  :straight t
+  :defer t)
 
 (use-package modus-themes
   :straight t
   :config
   (load-theme 'modus-vivendi t))
-
-;; (use-package ample-theme
-;;     :straight t)
-
-;; (use-package moe-theme
-;;     :straight t)
-
-;; (use-package molokai-theme
-;;     :straight t)
-
-;; (use-package monokai-theme
-;;     :straight t)
-
-;; (use-package soothe-theme
-;;     :straight t)
-
-;; (use-package exotica-theme
-;;     :straight t)
-
-;; (use-package uwu-theme
-;;     :straight t)
-
-;; (use-package lush-theme
-;;     :straight t)
-
-;; (use-package doom-themes
-;;     :straight t)
 
 (use-package zoxide
   :straight t
@@ -450,14 +409,6 @@
    "z" 'zoxide-find-file
    "r" 'zoxide-travel
    "c" 'zoxide-cd))
-
-;; (use-package doom-modeline
-;;     :straight t
-;;     :init
-;;     (doom-modeline-mode)
-;;     :config
-;;     (setq doom-modeline-height 0)
-;;     (setq inhibit-compacting-font-caches t))
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 
@@ -541,13 +492,6 @@
   :straight t
   :commands (treemacs))
 
-;; (use-package dired-sidebar
-;;     :straight t
-;;     :general 
-;;     (global-leader-def
-;;         :keymaps 'override
-;;       "t" 'dired-sidebar-toggle-sidebar))
-
 (use-package winner
   :general
   ('winner-mode-map
@@ -555,9 +499,6 @@
    "C-M->" 'winner-redo
    )
   :hook (emacs-startup . winner-mode))
-
-;; (use-package elec-pair
-;;     :init (electric-pair-mode))
 
 (use-package smartparens
   :straight t
@@ -567,8 +508,7 @@
   (require 'smartparens-config)
   (setq sp-highlight-wrap-overlay t
         sp-highlight-pair-overlay nil
-        sp-highlight-wrap-tag-overlay t)
-  )
+        sp-highlight-wrap-tag-overlay t))
 
 (use-package projectile
   :straight t
@@ -601,9 +541,6 @@
   :straight t
   :defer t)
 
-(setq frame-resize-pixelwise t
-      window-resize-pixelwise t)
-
 (use-package markdown-mode
   :straight t)
 
@@ -617,50 +554,47 @@
 (add-hook 'emacs-startup-hook
           'global-auto-revert-mode)
 
-;; (require 'elisp-sql-capf)
-;; (add-hook 'emacs-startup-hook
-;;           'elisp-sql-capf-mode)
-
 (cond
  ((eq system-type 'darwin) (require 'macos))
  (t (progn (set-face-attribute 'default t :font "Fira Code-13")
            (set-face-font 'fixed-pitch "Fira Code-13")
            (set-frame-font "Fira Code-13" nil t))))
 
-(require 'window-conf)
-(require 'sexp-conf)
-(require 'emacs-lisp-conf)
-(require 'selectrum-conf)
-(require 'lsp-conf)
-(require 'java-conf)
-(require 'clojure-conf)
-(require 'clisp-conf)
-(require 'scheme-conf)
-(require 'shell-conf)
-(require 'org-conf)
-(require 'python-conf)
-(require 'docker-conf)
-(require 'erlang-conf)
-(require 'elixir-conf)
-(require 'racket-conf)
-(require 'rust-conf)
-(require 'c-conf)
-(require 'web-conf)
-(require 'scala-conf)
-(require 'eww-conf)
-(require 'swift-conf)
-(require 'go-conf)
-(require 'ruby-conf)
-(require 'sql-conf)
-(require 'dotnet-conf)
-(require 'ocaml-conf)
-(require 'zig-conf)
-(require 'latex-conf)
-(require 'nim-conf)
-(require 'haskell-conf)
-(require 'flutter-conf)
-(require 'julia-conf)
-(require 'utility-conf)
+(let ((use-package-always-defer t))
+  (require 'window-conf)
+  (require 'sexp-conf)
+  (require 'emacs-lisp-conf)
+  (require 'selectrum-conf)
+  (require 'lsp-conf)
+  (require 'java-conf)
+  (require 'clojure-conf)
+  (require 'clisp-conf)
+  (require 'scheme-conf)
+  (require 'shell-conf)
+  (require 'org-conf)
+  (require 'python-conf)
+  (require 'docker-conf)
+  (require 'erlang-conf)
+  (require 'elixir-conf)
+  (require 'racket-conf)
+  (require 'rust-conf)
+  (require 'c-conf)
+  (require 'web-conf)
+  (require 'scala-conf)
+  (require 'eww-conf)
+  (require 'swift-conf)
+  (require 'go-conf)
+  (require 'ruby-conf)
+  (require 'sql-conf)
+  (require 'dotnet-conf)
+  (require 'ocaml-conf)
+  (require 'zig-conf)
+  (require 'latex-conf)
+  (require 'nim-conf)
+  (require 'haskell-conf)
+  (require 'flutter-conf)
+  (require 'julia-conf)
+  (require 'utility-conf))
 
 (load custom-file)
 (load (expand-file-name "local.el" user-emacs-directory) nil)

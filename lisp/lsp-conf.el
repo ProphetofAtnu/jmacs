@@ -2,6 +2,7 @@
 
 (use-package treemacs
   :straight t
+  :defer t
   :general
   (local-leader-def
     :definer 'minor-mode
@@ -96,10 +97,12 @@
   (corfu-mode -1))
 
 (use-package acm
-  :straight t)
+  :straight t
+  :defer t)
 
 (use-package lsp-bridge
   :straight t
+  :defer t
   :general
   (local-leader-def
     :definer 'minor-mode

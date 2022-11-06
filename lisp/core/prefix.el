@@ -15,8 +15,8 @@
   (let ((prefix-cmd (intern (format "prefix-%s-command" name)))
         (prefix-map (intern (format "prefix-%s-map" name))))
     `'(:prefix-command ,prefix-cmd
-       :prefix-map ,prefix-map
-       :wk ,ident)))
+		       :prefix-map ,prefix-map
+		       :wk ,ident)))
 
 
 (general-define-key
@@ -30,7 +30,7 @@
  "v" 'view-buffer
  "V" 'view-buffer-other-window
  "k" 'kill-extra-buffers)
- 
+
 
 (general-define-key
  :prefix-command 'prefix-file-command
@@ -43,7 +43,7 @@
  "j" 'dired-jump-other-window
  "C-r" 'read-only-mode
  )
- 
+
 
 (general-define-key
  :prefix-command 'prefix-emacs-command
@@ -73,45 +73,45 @@
  "J" 'evil-window-move-very-bottom
  "K" 'evil-window-move-very-top
  "L" 'evil-window-move-far-right)
- 
+
 
 (define-prefix-map help 
-    "v" 'helpful-variable
-    "f" 'helpful-callable
-    "i" 'info
-    "w" 'which-key-show-major-mode)
+		   "v" 'helpful-variable
+		   "f" 'helpful-callable
+		   "i" 'info
+		   "w" 'which-key-show-major-mode)
 
 (define-prefix-map jump
-    "i" 'ibuffer-jump
-    "d" 'dired-jump
-    "D" 'dired-jump-other-window)
+		   "i" 'ibuffer-jump
+		   "d" 'dired-jump
+		   "D" 'dired-jump-other-window)
 
 (define-prefix-map search
-    "o" 'occur)
+		   "o" 'occur)
 
 (define-prefix-map insert
-    "y" 'yas-insert-snippet
-    "a" 'yas-new-snippet
-    "r" 'insert-register
-    "b" 'insert-buffer
-    "!" 'auto-insert)
+		   "y" 'yas-insert-snippet
+		   "a" 'yas-new-snippet
+		   "r" 'insert-register
+		   "b" 'insert-buffer
+		   "!" 'auto-insert)
 
 (define-prefix-map frame
-    "o" 'other-frame
-    "n" 'make-frame
-    "m" 'make-frame-on-monitor
-    "d" 'delete-frame
-    "f" 'toggle-frame-maximized)
+		   "o" 'other-frame
+		   "n" 'make-frame
+		   "m" 'make-frame-on-monitor
+		   "d" 'delete-frame
+		   "f" 'toggle-frame-maximized)
 
 (define-prefix-map project)
 
 (define-prefix-map modifier
-    "w" 'other-window-prefix
-    "f" 'other-frame-prefix
-    "t" 'other-tab-prefix)
+		   "w" 'other-window-prefix
+		   "f" 'other-frame-prefix
+		   "t" 'other-tab-prefix)
 
 (define-prefix-map utility 
-    "l" 'list-processes)
+		   "l" 'list-processes)
 
 (define-prefix-map edit)
 

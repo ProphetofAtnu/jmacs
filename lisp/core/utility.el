@@ -140,15 +140,15 @@
                     1000.0
                   1024.0)))
     (cl-case format
-      ('KiB (/ bytes-count factor))
-      ('KB (/ bytes-count factor))
-      ('kb (/ bytes-count factor))
-      ('MiB (/ bytes-count (expt factor 2)))
-      ('MB (/ bytes-count (expt factor 2)))
-      ('mb (/ bytes-count (expt factor 2)))
-      ('GiB (/ bytes-count (expt factor 3)))
-      ('GB (/ bytes-count (expt factor 3)))
-      ('gb (/ bytes-count (expt factor 3))))))
+      (KiB (/ bytes-count factor))
+      (KB (/ bytes-count factor))
+      (kb (/ bytes-count factor))
+      (MiB (/ bytes-count (expt factor 2)))
+      (MB (/ bytes-count (expt factor 2)))
+      (mb (/ bytes-count (expt factor 2)))
+      (GiB (/ bytes-count (expt factor 3)))
+      (GB (/ bytes-count (expt factor 3)))
+      (gb (/ bytes-count (expt factor 3))))))
 
 (defun bytes-parse-string (fmt &optional metric?)
   (save-match-data

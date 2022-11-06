@@ -61,9 +61,7 @@
  )
 
 (use-package pdf-tools
-    :straight t
-    :init
-    (pdf-tools-install))
+  :straight t)
 
 (use-package elfeed
     :straight t)
