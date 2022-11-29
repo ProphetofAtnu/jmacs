@@ -4,16 +4,17 @@
 
 (use-package elixir-mode
  :straight t
- :defer t
- :config
- (setq lsp-elixir-suggest-specs nil)
- (setq lsp-elixir-ls-server-dir (expand-file-name "~/.install/elixir-ls/release")))
+ :defer t)
+
 
 (use-package lsp-mode
     :straight t
     :defer t
     :hook
-    (elixir-mode . lsp-deferred))
+    (elixir-mode . lsp-deferred)
+    :config
+    (setq lsp-elixir-ls-server-dir (expand-file-name "~/.install/elixir-ls/release/"))
+    (setq lsp-elixir-suggest-specs nil))
 
 (use-package mix
     :straight t

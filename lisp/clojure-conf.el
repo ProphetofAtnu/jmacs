@@ -5,12 +5,7 @@
 
 (use-package clojure-mode
   :straight t
-  :defer t
-  :config
-  (progn 
-    (require 'core/utility)
-    (use-local-pairs 'clojure-mode-hook
-                     '((?{ . ?})))))
+  :defer t)
 
 (use-package a
     :straight t)

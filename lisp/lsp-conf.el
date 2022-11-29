@@ -89,7 +89,8 @@
  '(acm :type git :host github :repo "manateelazycat/lsp-bridge" :files ("acm/*")))
 
 (use-package epc
-  :straight t)
+  :straight t
+  :defer t)
 
 
 (defun js/disable-company-and-corfu-locally ()

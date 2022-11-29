@@ -5,7 +5,7 @@
 
 (use-package org-ext
     :general
-  (:keymaps 'org-mode-map
+  (:keymaps '(org-mode-map)
             :states '(normal)
             "RET" 'org-ext-dynamic-ret))
 
@@ -18,7 +18,7 @@
     (define-prefix-map org-table)
     :general
     (local-leader-def
-        :keymaps 'org-mode-map
+        :keymaps '(org-mode-map)
       "," 'consult-org-heading
       "|" 'org-table-create-or-convert-from-region
       "y" 'org-store-link
@@ -60,7 +60,7 @@
     :hook (org-mode . org-download-enable)
     :general
     (local-leader-def
-        :keymaps 'org-mode-map
+        :keymaps '(org-mode-map)
       "d" '(:ignore t :wk "Download")
       "d c" 'org-download-clipboard
       "d s" 'org-download-screenshot)

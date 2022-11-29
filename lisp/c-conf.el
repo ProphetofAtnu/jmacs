@@ -20,11 +20,18 @@
   (setq lsp-clients-clangd-args
         (append lsp-clients-clangd-args
                 '("--all-scopes-completion"
-                  "--completion-style=detailed"
+                                        ; "--completion-style=detailed"
                   "--background-index"
                   "-j=8"
+                  "--compile-commands-dir=build"
                   "--pch-storage=memory")))
   )
+
+(use-package cc-mode
+  :config
+  (let ((cur (alist-get "java" c-style-alist
+                        nil nil #'string=)))
+    (setf (alist-get 'c-basic-offset cur) 8)))
 
 (use-package qml-mode
   :straight t)

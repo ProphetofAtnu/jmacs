@@ -69,4 +69,15 @@
 (use-package plz
     :straight t)
 
+(use-package hyperbole
+  :straight t
+  :commands (hyperbole)
+  :general
+  (global-leader-def
+    :keymaps '(override)
+    "x" 'hyperbole))
+
+;; <(hibtypes)>
+;; "(hyperbole)Creating Types."
+
 (provide 'utility-conf)

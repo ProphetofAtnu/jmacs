@@ -17,3 +17,5 @@ __pycache__
 *.elc
 /auto-save-list/
 /recentf
+.hypb
+/tree-sitter/

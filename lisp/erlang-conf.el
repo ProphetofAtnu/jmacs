@@ -3,6 +3,7 @@
 (use-package erlang
     :straight t)
 
-(require 'erlang)
+(use-package 'lfe-mode
+  :straight t)
 
 (provide 'erlang-conf)

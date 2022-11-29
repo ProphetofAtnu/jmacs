@@ -29,6 +29,7 @@
  "i" 'ibuffer-other-window
  "v" 'view-buffer
  "V" 'view-buffer-other-window
+ "r" 'revert-buffer-quick
  "k" 'kill-extra-buffers)
 
 
