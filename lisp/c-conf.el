@@ -8,14 +8,20 @@
   :init
   (setenv "CDMAKE_EXPORT_COMPILE_COMMANDS" "1"))
 
+(use-package ccls
+  :straight t
+  )
+
 (use-package lsp-mode
   :straight t
-  :hook ((cmake-mode objc-mode c-mode c++-mode) . lsp-deferred)
+  :hook ((cmake-mode objc-mode c-mode c++-mode) . lsp)
   :general
   (local-leader-def
     :keymaps '(c++-mode-map c-mode-map objc-mode-map)
     "o" 'lsp-clangd-find-other-file)
   :config
+  (setq lsp-lens-enable nil)
+  (remove-hook 'lsp-mode-hook #'lsp-lens-mode)
   (require 'lsp-clangd)
   (setq lsp-clients-clangd-args
         (append lsp-clients-clangd-args
@@ -24,8 +30,7 @@
                   "--background-index"
                   "-j=8"
                   "--compile-commands-dir=build"
-                  "--pch-storage=memory")))
-  )
+                  "--pch-storage=memory"))))
 
 (use-package cc-mode
   :config

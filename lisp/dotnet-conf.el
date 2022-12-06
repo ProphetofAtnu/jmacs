@@ -1,16 +1,18 @@
 ;; -*- lexical-binding: t; -*-
 
 (use-package fsharp-mode
-    :straight t
-    :config
-    (add-to-list 'eglot-server-programs '(fsharp-mode . ("fsautocomplete"))))
+    :straight t)
 
 (use-package csharp-mode
     :straight t)
 
-(use-package lsp-mode
-    :straight t
-    :hook (csharp-mode . lsp-deferred))
+(use-package lsp-csharp
+    :hook (csharp-mode . lsp-deferred)
+    :config
+    (setq lsp-csharp-server-path
+	  (expand-file-name
+	   "OmniSharp"
+	   lsp-csharp-omnisharp-roslyn-server-dir)))
 
 (use-package powershell
     :straight t)

@@ -1,6 +1,8 @@
 ;; -*- lexical-binding: t; -*-
-;; Builtin Emacs Tree Sitter
+;; Builtin Emacs Tree Sitter (BETS) extensions
 ;; (Not the dynamic module)
+
+(defvar-local bets-buffer-parser nil)
 
 (defun bets--shell-mode-syntax (&optional buffer)
   (buffer-local-value 'sh-shell (or buffer (current-buffer))))
@@ -35,7 +37,11 @@
   "Get a parser for the current buffer or 'nil' if there is no valid
 parser."
   (when-let ((lang (bets-can-enable buffer)))
-    (treesit-parser-create
-     lang buffer)))
+    (with-current-buffer buffer
+      (setq-local bets-buffer-parser (treesit-parser-create
+				      lang buffer)))))
+
+(defun bets-simple-parser-at-point (&optional pnt)
+  (bets-can-enable))
 
 (provide 'bets)

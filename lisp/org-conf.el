@@ -92,5 +92,4 @@
   (setq deft-directory
         (expand-file-name "deft" org-directory)))
   
-
 (provide 'org-conf)
