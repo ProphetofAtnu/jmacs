@@ -1,124 +1,132 @@
-;; -*- lexical-binding: t; -*-
+;; -*- lexical-binding: t; eieio-backward-compatibility: nil  -*-
 
+(setq-local eieio-backward-compatibility nil)
 
-(defvar emacs-dotnet-kernel-command-types '(Cancel
-                                            ChangeWorkingDirectory
-                                            CompileProject
-                                            DisplayError
-                                            DisplayValue
-                                            OpenDocument
-                                            OpenProject
-                                            Quit
-                                            RequestCompletions
-                                            RequestDiagnostics
-                                            RequestHoverText
-                                            RequestInput
-                                            RequestKernelInfo
-                                            RequestSignatureHelp
-                                            RequestValue
-                                            RequestValueInfos
-                                            SendEditableCode
-                                            SendValue
-                                            SubmitCode
-                                            UpdateDisplayedValue))
+(defvar emacs-dotnet-dt-kernel-command-types '(Cancel
+					       ChangeWorkingDirectory
+					       CompileProject
+					       DisplayError
+					       DisplayValue
+					       OpenDocument
+					       OpenProject
+					       Quit
+					       RequestCompletions
+					       RequestDiagnostics
+					       RequestHoverText
+					       RequestInput
+					       RequestKernelInfo
+					       RequestSignatureHelp
+					       RequestValue
+					       RequestValueInfos
+					       SendEditableCode
+					       SendValue
+					       SubmitCode
+					       UpdateDisplayedValue))
 
-(defvar emacs-dotnet-kernel-event-types '(AssemblyProduced
-                                          CodeSubmissionReceived
-                                          CommandCancelled
-                                          CommandFailed
-                                          CommandSucceeded
-                                          CompleteCodeSubmissionReceived
-                                          CompletionsProduced
-                                          DiagnosticLogEntryProduced
-                                          DiagnosticsProduced
-                                          DisplayedValueProduced
-                                          DisplayedValueUpdated
-                                          DocumentOpened
-                                          ErrorProduced
-                                          HoverTextProduced
-                                          IncompleteCodeSubmissionReceived
-                                          InputProduced
-                                          KernelExtensionLoaded
-                                          KernelInfoProduced
-                                          KernelReady
-                                          PackageAdded
-                                          ProjectOpened
-                                          ReturnValueProduced
-                                          SignatureHelpProduced
-                                          StandardErrorValueProduced
-                                          StandardOutputValueProduced
-                                          ValueInfosProduced
-                                          ValueProduced
-                                          WorkingDirectoryChanged))
+(defvar emacs-dotnet-dt-kernel-event-types '(AssemblyProduced
+					     CodeSubmissionReceived
+					     CommandCancelled
+					     CommandFailed
+					     CommandSucceeded
+					     CompleteCodeSubmissionReceived
+					     CompletionsProduced
+					     DiagnosticLogEntryProduced
+					     DiagnosticsProduced
+					     DisplayedValueProduced
+					     DisplayedValueUpdated
+					     DocumentOpened
+					     ErrorProduced
+					     HoverTextProduced
+					     IncompleteCodeSubmissionReceived
+					     InputProduced
+					     KernelExtensionLoaded
+					     KernelInfoProduced
+					     KernelReady
+					     PackageAdded
+					     ProjectOpened
+					     ReturnValueProduced
+					     SignatureHelpProduced
+					     StandardErrorValueProduced
+					     StandardOutputValueProduced
+					     ValueInfosProduced
+					     ValueProduced
+					     WorkingDirectoryChanged))
+
+(defvar emacs-dotnet-dt-classes nil)
 
 (defconst
-  emacs-dotnet-submission-types
+  emacs-dotnet-dt-submission-types
   '(:run :diagnose))
 (cl-deftype
-    emacs-dotnet-submission-type
+    emacs-dotnet-dt-submission-type
     ()
   '(or :run :diagnose))
 (defconst
-  emacs-dotnet-request-types
+  emacs-dotnet-dt-request-types
   '(:parse :serialize))
 (cl-deftype
-    emacs-dotnet-request-type
+    emacs-dotnet-dt-request-type
     ()
   '(or :parse :serialize))
 (defconst
-  emacs-dotnet-document-serialization-types
+  emacs-dotnet-dt-document-serialization-types
   '(:dib :ipynb))
 (cl-deftype
-    emacs-dotnet-document-serialization-type
+    emacs-dotnet-dt-document-serialization-type
     ()
   '(or :dib :ipynb))
 (defconst
-  emacs-dotnet-diagnostic-severities
+  emacs-dotnet-dt-diagnostic-severities
   '(:hidden :info :warning :error))
 (cl-deftype
-    emacs-dotnet-diagnostic-severity
+    emacs-dotnet-dt-diagnostic-severity
     ()
   '(or
     :hidden :info :warning :error))
 (defconst
-  emacs-dotnet-insert-text-formats
+  emacs-dotnet-dt-insert-text-formats
   '(:plaintext :snippet))
 (cl-deftype
-    emacs-dotnet-insert-text-format
+    emacs-dotnet-dt-insert-text-format
     ()
   '(or :plaintext :snippet))
 
-(defmacro emacs-dotnet-defclass (symbol &rest args)
-  `(defclass
-     ,symbol
-     ,@args
-     :allow-nil-initform t))
+(cl-deftype emacs-dotnet-dt-listof (_) '(satisfies listp))
+
+(defmacro emacs-dotnet-dt-defclass (symbol parent slots &rest args)
+  `(progn
+    (cl-pushnew ',symbol emacs-dotnet-dt-classes)
+    (defclass
+      ,symbol
+      (,@parent)
+      ,slots
+      :allow-nil-initform t)))
 
 ;;;; Data types
-(emacs-dotnet-defclass
- emacs-dotnet-line-position
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-line-position
  ()
  ((line
    :initarg :line :type integer)
   (character
    :initarg :character :type integer)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-line-position-span
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-line-position-span
  ()
  ((start
-   :initarg :start :type emacs-dotnet-line-position)
+   :initarg :start :type emacs-dotnet-dt-line-position)
   (end
-   :initarg :end :type emacs-dotnet-line-position)))
+   :initarg :end :type emacs-dotnet-dt-line-position)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-base64-encoded-assembly
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-base64-encoded-assembly
  ()
  ((value
    :initarg :value :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-completion-item
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-completion-item
  ()
  ((displayText
    :initarg :displayText :type string)
@@ -132,15 +140,15 @@
    :initarg :insertText :type string)
   (insertTextFormat
    :initarg :insertTextFormat :initform nil
-   :type (or null emacs-dotnet-insert-text-format))
+   :type (or null emacs-dotnet-dt-insert-text-format))
   (documentation
    :initarg :documentation :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-diagnostic
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-diagnostic
  ()
  ((linePositionSpan
-   :initarg :linePositionSpan :type emacs-dotnet-line-position-span)
+   :initarg :linePositionSpan :type emacs-dotnet-dt-line-position-span)
   (severity
    :initarg :severity :type symbol)
   (code
@@ -148,25 +156,26 @@
   (message
    :initarg :message :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-formatted-value
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-formatted-value
  ()
  ((mimeType
    :initarg :mimeType :type string)
   (value
    :initarg :value :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-interactive-document
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-interactive-document
  ()
  ((elements
-   :initarg :elements :type (list
-			     emacs-dotnet-interactive-document-element))
+   :initarg :elements :type (emacs-dotnet-dt-listof
+			     emacs-dotnet-dt-interactive-document-element
+			     ))
   (metadata
    :initarg :metadata :type hash-table)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-interactive-document-element
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-interactive-document-element
  ()
  ((id
    :initarg :id :initform nil
@@ -184,11 +193,11 @@
    :initarg :metadata :initform nil
    :type hash-table)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-kernel-info
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-kernel-info
  ()
  ((aliases
-   :initarg :aliases :type (array string))
+   :initarg :aliases :type (emacs-dotnet-dt-listof string))
   (languageName
    :initarg :languageName :initform nil
    :type (or null string))
@@ -205,69 +214,69 @@
    :initarg :remoteUri :initform nil
    :type string)
   (supportedKernelCommands
-   :initarg :supportedKernelCommands :type (array
-					    emacs-dotnet-kernel-command-info))
+   :initarg :supportedKernelCommands :type (emacs-dotnet-dt-listof
+					    emacs-dotnet-dt-kernel-command-info))
   (supportedDirectives
-   :initarg :supportedDirectives :type (array
-					emacs-dotnet-kernel-directive-info))))
+   :initarg :supportedDirectives :type (emacs-dotnet-dt-listof
+					emacs-dotnet-dt-kernel-directive-info))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-kernel-command-info
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-kernel-command-info
  ()
  ((name
    :initarg :name :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-kernel-directive-info
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-kernel-directive-info
  ()
  ((name
    :initarg :name :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-kernel-value-info
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-kernel-value-info
  ()
  ((name
    :initarg :name :type string)
   (preferredMimeTypes
-   :initarg :preferredMimeTypes :type (array string))))
+   :initarg :preferredMimeTypes :type (emacs-dotnet-dt-listof string))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-project-file
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-project-file
  ()
  ((relativeFilePath
    :initarg :relativeFilePath :type string)
   (content
    :initarg :content :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-project
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-project
  ()
  ((files
-   :initarg :files :type (array
-			  emacs-dotnet-project-file))))
+   :initarg :files :type (emacs-dotnet-dt-listof
+			  emacs-dotnet-dt-project-file))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-project-item
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-project-item
  ()
  ((relativeFilePath
    :initarg :relativeFilePath :type string)
   (regionNames
-   :initarg :regionNames :type (array string))
+   :initarg :regionNames :type (emacs-dotnet-dt-listof string))
   (regionsContent
    :initarg :regionsContent :type list)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-resolved-package-reference
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-resolved-package-reference
  ()
  ((assemblyPaths
-   :initarg :assemblyPaths :type (array string))
+   :initarg :assemblyPaths :type (emacs-dotnet-dt-listof string))
   (probingPaths
-   :initarg :probingPaths :type (array string))
+   :initarg :probingPaths :type (emacs-dotnet-dt-listof string))
   (packageRoot
    :initarg :packageRoot :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-package-reference
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-package-reference
  ()
  ((packageName
    :initarg :packageName :type string)
@@ -276,27 +285,27 @@
   (isPackageVersionSpecified
    :initarg :isPackageVersionSpecified :type boolean)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-signature-information
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-signature-information
  ()
  ((label
    :initarg :label :type string)
   (documentation
    :initarg :documentation :type FormattedValue)
   (parameters
-   :initarg :parameters :type (array
-			       emacs-dotnet-parameter-information))))
+   :initarg :parameters :type (emacs-dotnet-dt-listof
+			       emacs-dotnet-dt-parameter-information))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-parameter-information
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-parameter-information
  ()
  ((label
    :initarg :label :type string)
   (documentation
    :initarg :documentation :type FormattedValue)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-document-kernel-info-collection
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-document-kernel-info-collection
  ()
  ((defaultKernelName
    :initarg :defaultKernelName :type string)
@@ -304,8 +313,8 @@
    :initarg :items :type ()
    document-kernel-info)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-kernel-command-envelope
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-kernel-command-envelope
  ()
  ((token
    :initarg :token :initform nil
@@ -318,23 +327,23 @@
   (command :initarg :command)
   (routingSlip
    :initarg :routingSlip :initform nil
-   :type (array string))))
+   :type (emacs-dotnet-dt-listof string))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-kernel-event-envelope
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-kernel-event-envelope
  ()
  ((eventType
    :initarg :eventType :type string)
   (event :initarg :event)
   (command
    :initarg :command :initform nil
-   :type (or null emacs-dotnet-kernel-command-envelope))
+   :type (or null emacs-dotnet-dt-kernel-command-envelope))
   (routingSlip
    :initarg :routingSlip :initform nil)))
 
 ;;;; Kernel commands 
-(emacs-dotnet-defclass
- emacs-dotnet-kernel-command
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-kernel-command
  ()
  ((targetKernelName
    :initarg :targetKernelName :initform nil
@@ -346,84 +355,84 @@
    :initarg :destinationUri :initform nil
    :type (or null string))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-language-service-command
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-language-service-command
+ (emacs-dotnet-dt-kernel-command)
  ((code
    :initarg :code :type string)
   (linePosition
-   :initarg :linePosition :type emacs-dotnet-line-position)))
+   :initarg :linePosition :type emacs-dotnet-dt-line-position)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-cancel
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-cancel
+ (emacs-dotnet-dt-kernel-command)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-change-working-directory
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-change-working-directory
+ (emacs-dotnet-dt-kernel-command)
  ((workingDirectory
    :initarg :workingDirectory :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-compile-project
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-compile-project
+ (emacs-dotnet-dt-kernel-command)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-display-error
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-display-error
+ (emacs-dotnet-dt-kernel-command)
  ((message
    :initarg :message :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-display-value
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-display-value
+ (emacs-dotnet-dt-kernel-command)
  ((formattedValue
-   :initarg :formattedValue :type emacs-dotnet-formatted-value)
+   :initarg :formattedValue :type emacs-dotnet-dt-formatted-value)
   (valueId
    :initarg :valueId :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-open-document
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-open-document
+ (emacs-dotnet-dt-kernel-command)
  ((relativeFilePath
    :initarg :relativeFilePath :type string)
   (regionName
    :initarg :regionName :initform nil
    :type (or null string))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-open-project
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-open-project
+ (emacs-dotnet-dt-kernel-command)
  ((project
-   :initarg :project :type emacs-dotnet-project)))
+   :initarg :project :type emacs-dotnet-dt-project)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-quit
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-quit
+ (emacs-dotnet-dt-kernel-command)
  ())
 
 
-(emacs-dotnet-defclass
- emacs-dotnet-request-completions
- (emacs-dotnet-language-service-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-request-completions
+ (emacs-dotnet-dt-language-service-command)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-request-diagnostics
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-request-diagnostics
+ (emacs-dotnet-dt-kernel-command)
  ((code
    :initarg :code :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-request-hover-text
- (emacs-dotnet-language-service-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-request-hover-text
+ (emacs-dotnet-dt-language-service-command)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-request-input
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-request-input
+ (emacs-dotnet-dt-kernel-command)
  ((prompt
    :initarg :prompt :type string)
   (isPassword
@@ -433,89 +442,89 @@
   (valueName
    :initarg :valueName :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-request-kernel-info
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-request-kernel-info
+ (emacs-dotnet-dt-kernel-command)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-request-signature-help
- (emacs-dotnet-language-service-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-request-signature-help
+ (emacs-dotnet-dt-language-service-command)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-request-value
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-request-value
+ (emacs-dotnet-dt-kernel-command)
  ((name
    :initarg :name :type string)
   (mimeType
    :initarg :mimeType :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-request-value-infos
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-request-value-infos
+ (emacs-dotnet-dt-kernel-command)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-send-editable-code
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-send-editable-code
+ (emacs-dotnet-dt-kernel-command)
  ((kernelName
    :initarg :kernelName :type string)
   (code
    :initarg :code :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-send-value
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-send-value
+ (emacs-dotnet-dt-kernel-command)
  ((formattedValue
-   :initarg :formattedValue :type emacs-dotnet-formatted-value)
+   :initarg :formattedValue :type emacs-dotnet-dt-formatted-value)
   (name
    :initarg :name :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-submit-code
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-submit-code
+ (emacs-dotnet-dt-kernel-command)
  ((code
    :initarg :code :type string)
   (submissionType
    :initarg :submissionType :initform nil
-   :type (or null emacs-dotnet-submission-type))))
+   :type (or null emacs-dotnet-dt-submission-type))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-update-displayed-value
- (emacs-dotnet-kernel-command)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-update-displayed-value
+ (emacs-dotnet-dt-kernel-command)
  ((formattedValue
-   :initarg :formattedValue :type emacs-dotnet-formatted-value)
+   :initarg :formattedValue :type emacs-dotnet-dt-formatted-value)
   (valueId
    :initarg :valueId :type string)))
 
 ;;;; Kernel Events
-(emacs-dotnet-defclass
- emacs-dotnet-kernel-event
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-kernel-event
  ()
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-interactive-document-output-element
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-interactive-document-output-element
  ()
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-notebook-parser-server-response
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-notebook-parser-server-response
  ()
  ((id :initarg :id :type string)))
 
 
-(emacs-dotnet-defclass
- emacs-dotnet-display-element
- (emacs-dotnet-interactive-document-output-element)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-display-element
+ (emacs-dotnet-dt-interactive-document-output-element)
  ((data
    :initarg :data :type 'hash-table)
   (metadata
    :initarg :metadata :type 'hash-table)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-return-value-element
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-return-value-element
  ()
  ((data
    :initarg :data :type 'hash-table)
@@ -524,26 +533,26 @@
   (metadata
    :initarg :metadata :type 'hash-table)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-text-element
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-text-element
  ()
  ((name
    :initarg :name :type string)
   (text
    :initarg :text :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-error-element
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-error-element
  ()
  ((errorName
    :initarg :errorName :type string)
   (errorValue
    :initarg :errorValue :type string)
   (stackTrace
-   :initarg :stackTrace :type (array string))))
+   :initarg :stackTrace :type (emacs-dotnet-dt-listof string))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-document-kernel-info
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-document-kernel-info
  ()
  ((name
    :initarg :name :type string)
@@ -551,150 +560,150 @@
    :initarg :languageName :initform nil
    :type (or null string))
   (aliases
-   :initarg :aliases :type (array string))))
+   :initarg :aliases :type (emacs-dotnet-dt-listof string))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-notebook-parse-or-serialize-request
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-notebook-parse-or-serialize-request
  ()
  ((type
-   :initarg :type :type emacs-dotnet-request-type)
+   :initarg :type :type emacs-dotnet-dt-request-type)
   (id :initarg :id :type string)
   (serializationType
-   :initarg :serializationType :type emacs-dotnet-document-serialization-type)
+   :initarg :serializationType :type emacs-dotnet-dt-document-serialization-type)
   (defaultLanguage
    :initarg :defaultLanguage :type string)))
 
 
-(emacs-dotnet-defclass
- emacs-dotnet-notebook-parse-request
- (emacs-dotnet-notebook-parse-or-serialize-request)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-notebook-parse-request
+ (emacs-dotnet-dt-notebook-parse-or-serialize-request)
  ((type
-   :initarg :type :type emacs-dotnet-request-type)
+   :initarg :type :type emacs-dotnet-dt-request-type)
   (rawData
    :initarg :rawData :type array)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-notebook-serialize-request
- (emacs-dotnet-notebook-parse-or-serialize-request)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-notebook-serialize-request
+ (emacs-dotnet-dt-notebook-parse-or-serialize-request)
  ((type
-   :initarg :type :type emacs-dotnet-request-type)
+   :initarg :type :type emacs-dotnet-dt-request-type)
   (newLine
    :initarg :newLine :type string)
   (document
-   :initarg :document :type emacs-dotnet-interactive-document)))
+   :initarg :document :type emacs-dotnet-dt-interactive-document)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-notebook-parse-response
- (emacs-dotnet-notebook-parser-server-response)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-notebook-parse-response
+ (emacs-dotnet-dt-notebook-parser-server-response)
  ((document
-   :initarg :document :type emacs-dotnet-interactive-document)))
+   :initarg :document :type emacs-dotnet-dt-interactive-document)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-notebook-serialize-response
- (emacs-dotnet-notebook-parser-server-response)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-notebook-serialize-response
+ (emacs-dotnet-dt-notebook-parser-server-response)
  ((rawData
    :initarg :rawData :type array)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-notebook-error-response
- (emacs-dotnet-notebook-parser-server-response)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-notebook-error-response
+ (emacs-dotnet-dt-notebook-parser-server-response)
  ((errorMessage
    :initarg :errorMessage :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-assembly-produced
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-assembly-produced
+ (emacs-dotnet-dt-kernel-event)
  ((assembly
    :initarg :assembly :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-code-submission-received
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-code-submission-received
+ (emacs-dotnet-dt-kernel-event)
  ((code
    :initarg :code :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-command-cancelled
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-command-cancelled
+ (emacs-dotnet-dt-kernel-event)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-kernel-command-completion-event
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-kernel-command-completion-event
+ (emacs-dotnet-dt-kernel-event)
  ((executionOrder
    :initarg :executionOrder :initform nil
    :type (or null integer))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-command-failed
- (emacs-dotnet-kernel-command-completion-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-command-failed
+ (emacs-dotnet-dt-kernel-command-completion-event)
  ((message
    :initarg :message :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-command-succeeded
- (emacs-dotnet-kernel-command-completion-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-command-succeeded
+ (emacs-dotnet-dt-kernel-command-completion-event)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-complete-code-submission-received
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-complete-code-submission-received
+ (emacs-dotnet-dt-kernel-event)
  ((code
    :initarg :code :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-completions-produced
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-completions-produced
+ (emacs-dotnet-dt-kernel-event)
  ((linePositionSpan
    :initarg :linePositionSpan :initform nil
-   :type (or null emacs-dotnet-line-position-span))
+   :type (or null emacs-dotnet-dt-line-position-span))
   (completions
-   :initarg :completions :type (array
-				emacs-dotnet-completion-item))))
+   :initarg :completions :type (emacs-dotnet-dt-listof
+				emacs-dotnet-dt-completion-item))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-diagnostic-event
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-diagnostic-event
+ (emacs-dotnet-dt-kernel-event)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-diagnostic-log-entry-produced
- (emacs-dotnet-diagnostic-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-diagnostic-log-entry-produced
+ (emacs-dotnet-dt-diagnostic-event)
  ((message
    :initarg :message :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-diagnostics-produced
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-diagnostics-produced
+ (emacs-dotnet-dt-kernel-event)
  ((diagnostics
-   :initarg :diagnostics :type (array Diagnostic))
+   :initarg :diagnostics :type (emacs-dotnet-dt-listof Diagnostic))
   (formattedDiagnostics
-   :initarg :formattedDiagnostics :type (array
-					 emacs-dotnet-formatted-value))))
+   :initarg :formattedDiagnostics :type (emacs-dotnet-dt-listof
+					 emacs-dotnet-dt-formatted-value))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-display-event
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-display-event
+ (emacs-dotnet-dt-kernel-event)
  ((formattedValues
-   :initarg :formattedValues :type (array
-				    emacs-dotnet-formatted-value))
+   :initarg :formattedValues :type (emacs-dotnet-dt-listof
+				    emacs-dotnet-dt-formatted-value))
   (valueId
    :initarg :valueId :initform nil
    :type (or null string))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-displayed-value-produced
- (emacs-dotnet-display-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-displayed-value-produced
+ (emacs-dotnet-dt-display-event)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-displayed-value-updated
- (emacs-dotnet-display-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-displayed-value-updated
+ (emacs-dotnet-dt-display-event)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-document-opened
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-document-opened
+ (emacs-dotnet-dt-kernel-event)
  ((relativeFilePath
    :initarg :relativeFilePath :type string)
   (regionName
@@ -703,111 +712,111 @@
   (content
    :initarg :content :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-error-produced
- (emacs-dotnet-display-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-error-produced
+ (emacs-dotnet-dt-display-event)
  ((message
    :initarg :message :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-hover-text-produced
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-hover-text-produced
+ (emacs-dotnet-dt-kernel-event)
  ((content
-   :initarg :content :type (array
-			    emacs-dotnet-formatted-value))
+   :initarg :content :type (emacs-dotnet-dt-listof
+			    emacs-dotnet-dt-formatted-value))
   (linePositionSpan
    :initarg :linePositionSpan :initform nil
-   :type (or null emacs-dotnet-line-position-span))))
+   :type (or null emacs-dotnet-dt-line-position-span))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-incomplete-code-submission-received
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-incomplete-code-submission-received
+ (emacs-dotnet-dt-kernel-event)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-input-produced
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-input-produced
+ (emacs-dotnet-dt-kernel-event)
  ((value
    :initarg :value :type string)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-kernel-extension-loaded
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-kernel-extension-loaded
+ (emacs-dotnet-dt-kernel-event)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-kernel-info-produced
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-kernel-info-produced
+ (emacs-dotnet-dt-kernel-event)
  ((kernelInfo
-   :initarg :kernelInfo :type emacs-dotnet-kernel-info)))
+   :initarg :kernelInfo :type emacs-dotnet-dt-kernel-info)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-kernel-ready
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-kernel-ready
+ (emacs-dotnet-dt-kernel-event)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-package-added
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-package-added
+ (emacs-dotnet-dt-kernel-event)
  ((packageReference
-   :initarg :packageReference :type emacs-dotnet-resolved-package-reference)))
+   :initarg :packageReference :type emacs-dotnet-dt-resolved-package-reference)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-project-opened
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-project-opened
+ (emacs-dotnet-dt-kernel-event)
  ((projectItems
-   :initarg :projectItems :type (array
-				 emacs-dotnet-project-item))))
+   :initarg :projectItems :type (emacs-dotnet-dt-listof
+				 emacs-dotnet-dt-project-item))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-return-value-produced
- (emacs-dotnet-display-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-return-value-produced
+ (emacs-dotnet-dt-display-event)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-signature-help-produced
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-signature-help-produced
+ (emacs-dotnet-dt-kernel-event)
  ((signatures
-   :initarg :signatures :type (array
-			       emacs-dotnet-signature-information))
+   :initarg :signatures :type (emacs-dotnet-dt-listof
+			       emacs-dotnet-dt-signature-information))
   (activeSignatureIndex
    :initarg :activeSignatureIndex :type integer)
   (activeParameterIndex
    :initarg :activeParameterIndex :type integer)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-standard-error-value-produced
- (emacs-dotnet-display-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-standard-error-value-produced
+ (emacs-dotnet-dt-display-event)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-standard-output-value-produced
- (emacs-dotnet-display-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-standard-output-value-produced
+ (emacs-dotnet-dt-display-event)
  ())
 
-(emacs-dotnet-defclass
- emacs-dotnet-value-infos-produced
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-value-infos-produced
+ (emacs-dotnet-dt-kernel-event)
  ((valueInfos
-   :initarg :valueInfos :type (array
-			       emacs-dotnet-kernel-value-info))))
+   :initarg :valueInfos :type (emacs-dotnet-dt-listof
+			       emacs-dotnet-dt-kernel-value-info))))
 
-(emacs-dotnet-defclass
- emacs-dotnet-value-produced
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-value-produced
+ (emacs-dotnet-dt-kernel-event)
  ((name
    :initarg :name :type string)
   (formattedValue
-   :initarg :formattedValue :type emacs-dotnet-formatted-value)))
+   :initarg :formattedValue :type emacs-dotnet-dt-formatted-value)))
 
-(emacs-dotnet-defclass
- emacs-dotnet-working-directory-changed
- (emacs-dotnet-kernel-event)
+(emacs-dotnet-dt-defclass
+ emacs-dotnet-dt-working-directory-changed
+ (emacs-dotnet-dt-kernel-event)
  ((workingDirectory
    :initarg :workingDirectory :type string)))
 
 (provide 'emacs-dotnet-contracts)
 
 ;; Local Variables:
-;; read-symbol-shorthands: (("edn-" . "emacs-dotnet-"))
+;; read-symbol-shorthands: (("edn-" . "emacs-dotnet-dt-"))
 ;; End:
