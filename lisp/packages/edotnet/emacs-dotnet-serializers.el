@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
-(require 'cl)
+(require 'cl-lib)
 (require 'emacs-dotnet-contracts)
 
 (cl-defgeneric edn-serialize (target)
@@ -11,6 +11,10 @@
   (declare (speed 3) (pure t))
   (cl-loop for tgt in target
            collect (edn-serialize tgt)))
+
+(defsubst emacs-dotnet--json-serialize-wrapper (obj)
+  (let ((json-object-type 'plist))
+    (json-serialize obj)))
 
 (eval-when-compile
  (defmacro edn--agen-serializer (clz)

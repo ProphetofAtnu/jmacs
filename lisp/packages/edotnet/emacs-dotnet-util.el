@@ -53,5 +53,4 @@
   (with-slots (eventType) this
     (format "#<emacs-dotnet-dt-kernel-event-envelope :eventType %s>" eventType)))
 
-
 (provide 'emacs-dotnet-util)

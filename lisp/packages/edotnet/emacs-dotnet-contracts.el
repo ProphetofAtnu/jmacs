@@ -1,5 +1,8 @@
 ;; -*- lexical-binding: t; eieio-backward-compatibility: nil  -*-
 
+(require 'eieio)
+(require 'cl-lib)
+
 (setq-local eieio-backward-compatibility nil)
 
 (defvar emacs-dotnet-dt-kernel-command-types '(Cancel
