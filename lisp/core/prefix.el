@@ -112,6 +112,7 @@
 		   "t" 'other-tab-prefix)
 
 (define-prefix-map utility 
+		   "a" 'auto-insert
 		   "l" 'list-processes)
 
 (define-prefix-map edit)

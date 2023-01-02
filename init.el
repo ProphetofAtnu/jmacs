@@ -50,7 +50,8 @@
 
 
 (setq warning-minimum-level :error
-      warning-minimum-log-level :error)
+      warning-minimum-log-level :error
+      native-comp-async-query-on-exit t)
 
 (setq create-lockfiles nil)
 
@@ -205,7 +206,13 @@
   :straight t
   :hook (emacs-startup . general-override-mode)
   :init
-  (require 'core/bindings))
+  (require 'core/bindings)
+  :config
+  (with-eval-after-load 'evil
+    (general-defs
+      :states '(normal motion)
+      "M-u" 'universal-argument)
+    ))
 
 
 (use-package orderless

@@ -6,6 +6,7 @@
 
 (setq default-frame-alist
       '((ns-transparent-titlebar t)))
+
 (set-frame-parameter (selected-frame) 'ns-transparent-titlebar t)
 
 

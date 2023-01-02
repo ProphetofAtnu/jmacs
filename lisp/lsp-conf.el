@@ -8,9 +8,13 @@
     :definer 'minor-mode
     :keymaps '(lsp-mode)
     "TAB" 'treemacs
-    "C-<tab>" 'treemacs-display-current-project-exclusively)
+    "C-<tab>" 'treemacs-add-and-display-current-project-exclusively)
+  :config
+  (setq treemacs-width 35)
   )
 
+(use-package treemacs-evil
+  :straight t)
 
 (use-package lsp-mode
   :straight t
@@ -43,6 +47,7 @@
   (add-hook 'lsp-completion-mode-hook #'override-lsp-defaults)
   (setq lsp-idle-delay 0.500)
   (setq lsp-log-io nil)
+  (setq lsp-file-watch-threshold 5000)
   ;; (setq lsp-completion-provider :none)
   (setq lsp-prefer-flymake nil))
 

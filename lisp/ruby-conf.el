@@ -4,11 +4,12 @@
 ;; (add-to-list 'company-backends
 ;;              (cape-company-to-capf 'company-robe))
 
-(use-package lsp-mode
-    :straight t
-    :hook (ruby-mode . lsp-deferred))
+;; (use-package lsp-mode
+;;     :straight t
+;;     :hook (ruby-mode . lsp-deferred))
 
-;; (use-package robe
-;;     :straight t)
+(use-package robe
+  :straight t
+  )
 
 (provide 'ruby-conf)

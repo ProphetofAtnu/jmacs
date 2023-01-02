@@ -6,11 +6,11 @@
 (use-package cmake-mode
   :straight t
   :init
-  (setenv "CDMAKE_EXPORT_COMPILE_COMMANDS" "1"))
+  (setenv "CMAKE_EXPORT_COMPILE_COMMANDS" "1"))
 
-(use-package ccls
-  :straight t
-  )
+;; (use-package ccls
+;;   :straight t
+;;   )
 
 (use-package lsp-mode
   :straight t
@@ -41,22 +41,10 @@
 (use-package qml-mode
   :straight t)
 
-;; (use-package lsp-mode
-;;     :straight t
-;;     :hook (cmake-mode . lsp-deferred))
-
-;; (use-package irony
-;;     :straight t
-;;     :hook ((cmake-mode objc-mode c-mode c++-mode) . irony-mode))
-
-;; (use-package acm
-;;     :straight t)
-
-;; (use-package lsp-bridge
-;;     :straight t
-;;     :hook ((objc-mode c-mode c++-mode) . lsp-bridge-mode))
-
 (defconst cmake-export-compile-commands-flag
   "-DCMAKE_EXPORT_COMPILE_COMMANDS=1")
+
+(add-to-list 'auto-mode-alist
+	     '("\\.mm\\'" . objc-mode))
 
 (provide 'c-conf)
