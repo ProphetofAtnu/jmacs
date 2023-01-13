@@ -3,8 +3,21 @@
 (require 'general)
 (require 'use-package)
 
-;; (setq system-uses-terminfo nil)
-;; (setq explicit-shell-file-name "/usr/local/bin/bash")
+(straight-use-package
+ '(eat :type git
+       :host codeberg
+       :repo "akib/emacs-eat"
+       :files ("*.el" ("term" "term/*.el") "*.texi"
+               "*.ti" ("terminfo/e" "terminfo/e/*")
+               ("terminfo/65" "terminfo/65/*")
+               ("integration" "integration/*")
+               (:exclude ".dir-locals.el" "*-tests.el"))))
+
+(use-package eat
+  :commands (eat-eshell-mode eat)
+  :general
+  (:keymaps '(eat-mode-map)
+	    "M-DEL" 'eat-self-input))
 
 (use-package shell-pop
     :straight t
@@ -15,13 +28,11 @@
     (setq shell-pop-full-span t))
   
 (use-package eshell
-    :config
-  (require 'em-term)
-  (dolist (cmd '("ipython" "sbt" "iex"))
-    (add-to-list 'eshell-visual-commands cmd)))
+    :init
+    (add-hook 'eshell-load-hook #'eat-eshell-mode))
 
 (use-package pcomplete-extension
-    :straight t)
+  :straight t)
 
 (use-package bash-completion
     :straight t
