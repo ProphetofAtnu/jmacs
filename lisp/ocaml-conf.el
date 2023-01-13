@@ -3,12 +3,6 @@
 (straight-use-package 'tuareg-mode)
 (straight-use-package 'caml-mode)
 
-(use-package tuareg-mode
-  :straight t)
-
-(use-package caml-mode
-  :straight t)
-
 (use-package dune
   :straight t)
 

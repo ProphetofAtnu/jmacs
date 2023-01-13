@@ -8,6 +8,8 @@
 ;;     (add-to-list 'eglot-server-programs
 ;;                  '(swift-mode "sourcekit-lsp")))
 
+(straight-use-package 'lsp-sourcekit)
+
 (use-package swift-mode
     :straight t
     :config
@@ -19,8 +21,8 @@
     (add-to-list 'lsp-file-watch-ignored-directories
 		 "[/\\\\]\\.build\\'"))
 
-(use-package lsp-sourcekit
-    :straight t)
+;; (use-package lsp-sourcekit
+;;     :straight t)
 
 (use-package lsp-mode
   :straight t
