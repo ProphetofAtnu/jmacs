@@ -1,18 +1,15 @@
 ;; -*- lexical-binding: t; -*-
 
-(defvar evil-want-integration t)
-(defvar evil-disable-insert-state-bindings t)
-(defvar evil-want-keybinding nil)
-
 (use-package evil 
   :delight
   :hook (emacs-startup . evil-mode)
   :init 
-  (setq evil-want-C-u-scroll t
-        evil-cross-lines t
-        evil-undo-system 'undo-redo
-        evil-ex-search-vim-style-regexp t
-        evil-search-module 'evil-search))
+  ;; (setq evil-want-C-u-scroll t
+  ;;       evil-cross-lines t
+  ;;       evil-undo-system 'undo-redo
+  ;;       evil-ex-search-vim-style-regexp t
+  ;;       evil-search-module 'evil-search)
+  )
 
 (use-package evil-collection
   :straight t

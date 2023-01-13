@@ -16,9 +16,9 @@
            (set-face-font 'fixed-pitch "FiraCode Nerd Font-12")
            (set-frame-font "FiraCode Nerd Font-12" nil t))))
 
-
 ;; Global Configurations
 (require 'global/global-tools)
+(require 'global/global-edit-tools)
 (require 'global/global-evil)
 (require 'global/global-completion-styles)
 (require 'global/global-which-key)
@@ -59,6 +59,7 @@
 (require 'julia-conf)
 (require 'utility-conf)
 
+;; Load the global themes
 (require 'global/global-theme)
 
 (load custom-file)

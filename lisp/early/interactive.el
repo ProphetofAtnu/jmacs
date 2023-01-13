@@ -5,8 +5,8 @@
 ;; Only things that are depended on by INTERACTIVE code should end up
 ;; in this file. 
 
+
 ;; UI packages that should be globally available
-(straight-use-package 'general)
 (straight-use-package 'hydra)
 (straight-use-package 'svg-lib)
 (straight-use-package 'avy)
@@ -18,8 +18,7 @@
 (straight-use-package 'markdown-mode)
 
 ;; For general
-(straight-use-package 'evil)
-(straight-use-package 'evil-mc)
+;; (straight-use-package 'evil-mc)
 
 ;; Configuration
 (menu-bar-mode -1)
@@ -57,12 +56,8 @@
       byte-compile-warnings nil
       custom-file (expand-file-name "custom.el" user-emacs-directory))
 
-(require 'autorevert)
-(add-hook 'emacs-startup-hook
-          'global-auto-revert-mode)
-
-(with-eval-after-load 'prog-mode
-  (add-hook 'prog-mode-hook 'prettify-symbols-mode))
+;; Setup keybindings
+(require 'setup/keybinding-setup)
 
 (use-package exec-path-from-shell
   :straight t
@@ -71,17 +66,14 @@
   (setq exec-path-from-shell-variables
         '("LDFLAGS" "CPPFLAGS" "PATH" "MANPATH")))
 
-(use-package general
-  :straight t
-  :hook (emacs-startup . general-override-mode)
-  :init
-  (require 'core/bindings)
-  :config
-  (with-eval-after-load 'evil
-    (general-defs
-      :states '(normal motion)
-      "M-u" 'universal-argument)
-    ))
+(require 'autorevert)
+(add-hook 'emacs-startup-hook
+          'global-auto-revert-mode)
+
+
+(with-eval-after-load 'prog-mode
+  (add-hook 'prog-mode-hook 'prettify-symbols-mode))
+
 
 (use-package tab-bar
   :config
