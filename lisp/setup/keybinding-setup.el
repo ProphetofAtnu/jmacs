@@ -1,17 +1,8 @@
 ;; -*- lexical-binding: t; -*-
 
-(straight-use-package 'evil)
-(straight-use-package 'general)
+(require 'prefix-binding-utils)
 
 ;; I'm setting these before evil can even be declared.
-(defvar evil-want-integration t)
-(defvar evil-disable-insert-state-bindings t)
-(defvar evil-want-keybinding nil)
-(defvar evil-want-C-u-scroll t)
-(defvar evil-cross-lines t)
-(defvar evil-undo-system 'undo-redo)
-(defvar evil-ex-search-vim-style-regexp t)
-(defvar evil-search-module 'evil-search)
 
 (use-package general
   :hook (emacs-startup . general-override-mode)
@@ -26,21 +17,6 @@
     ))
 
 (defvar keyboard-quit-hook nil)
-
-(defmacro define-prefix-map (name &rest defs)
-  (let ((prefix-cmd (intern (format "prefix-%s-command" name)))
-        (prefix-map (intern (format "prefix-%s-map" name))))
-    `(general-define-key
-      :prefix-command ',prefix-cmd
-      :prefix-map ',prefix-map
-      ,@defs)))
-
-(defmacro mount-prefix-map (name ident)
-  (let ((prefix-cmd (intern (format "prefix-%s-command" name)))
-        (prefix-map (intern (format "prefix-%s-map" name))))
-    `'(:prefix-command ,prefix-cmd
-		       :prefix-map ,prefix-map
-		       :wk ,ident)))
 
 (defun js/keyboard-quit-advice (&rest x)
   "Advice to add a hook function to 'keyboard-quit'"

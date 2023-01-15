@@ -14,7 +14,7 @@
   (load bootstrap-file nil 'nomessage))
 
 ;; Included for convenience
-(straight-use-package 'use-package)
-(require 'use-package)
+;; (straight-use-package 'use-package)
+;; (require 'use-package)
 
 (provide 'early/bootstrap-straight)

@@ -37,7 +37,6 @@
   ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
   (defun override-lsp-defaults ()
     (setq-local completion-category-defaults nil))
-
   (with-eval-after-load 'lsp-mode
     (eval '(setf (lsp-session-folders
                   (lsp-session))

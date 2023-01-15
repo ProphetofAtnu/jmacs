@@ -3,7 +3,13 @@
 (defvar use-package-compute-statistics t)
 
 (require 'early/bootstrap-straight)
+;; Set up use-package
+(straight-use-package 'use-package)
+(require 'use-package)
 
+(require 'early/vars)
+(require 'early/packages)
+(require 'early/load-paths)
 (require 'early/core)
 (require 'early/interactive)
 

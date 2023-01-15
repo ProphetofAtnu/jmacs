@@ -4,7 +4,8 @@
 ;;;; Note!
 ;; Only things that are depended on by INTERACTIVE code should end up
 ;; in this file. 
-
+(straight-use-package 'evil)
+(straight-use-package 'general)
 
 ;; UI packages that should be globally available
 (straight-use-package 'hydra)
@@ -27,9 +28,9 @@
 
 (setq warning-minimum-level :error
       warning-minimum-log-level :error
-      native-comp-async-query-on-exit t)
-
-(setq create-lockfiles nil)
+      native-comp-async-query-on-exit t
+      ;; setq create-lockfiles nil
+      )
 
 (setq backup-directory-alist `((".*" . ,temporary-file-directory))
       auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))

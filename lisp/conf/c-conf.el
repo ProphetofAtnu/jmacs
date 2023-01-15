@@ -14,7 +14,7 @@
 
 (use-package lsp-mode
   :straight t
-  :hook ((cmake-mode objc-mode c-mode c++-mode) . lsp)
+  :hook ((cmake-mode objc-mode c-mode c++-mode) . lsp-deferred)
   :general
   (local-leader-def
     :keymaps '(c++-mode-map c-mode-map objc-mode-map)
