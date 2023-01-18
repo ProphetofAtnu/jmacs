@@ -12,6 +12,12 @@
           common-lisp-mode
           scheme-mode)
          . lispy-mode)
+  :general
+  ('normal 'lispy-mode-map
+		   "[" nil
+		   "]" nil
+		   "M-[" 'lispy-backward
+		   "M-]" 'lispy-backward)
   :init
   :config
   (keymap-set lispy-mode-map-lispy "DEL" 'lispy-delete-backward-or-splice-or-slurp)
@@ -38,22 +44,6 @@
           common-lisp-mode
           scheme-mode)
          . rainbow-delimiters-mode))
-
-;; (use-package smartparens
-;;     :straight t
-;;     :hook ((emacs-lisp-mode
-;;             lisp-mode
-;;             lisp-interaction-mode
-;;             clojure-mode
-;;             common-lisp-mode
-;;             scheme-mode)
-;;            . smartparens-mode)
-;;     :config 
-;;     (require 'smartparens-config)
-;;     (setq sp-highlight-wrap-overlay t
-;;           sp-highlight-pair-overlay nil
-;;           sp-highlight-wrap-tag-overlay t)
-;;     )
 
 (use-package evil-smartparens
   :straight t

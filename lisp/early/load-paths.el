@@ -1,6 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "lisp/ext" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lisp/lib" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lisp/conf" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "util" user-emacs-directory))

@@ -28,4 +28,4 @@
   :config
   (load-theme 'modus-vivendi t))
 
-(provide 'global-theme)
+(provide 'global/global-theme)

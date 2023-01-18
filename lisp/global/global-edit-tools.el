@@ -53,5 +53,21 @@
             "C-;" 'iedit-mode-from-isearch
             ))
 
+(use-package treemacs
+  :straight t
+  :defer t
+  :general
+  (local-leader-def
+    :definer 'minor-mode
+    :keymaps '(lsp-mode)
+    "TAB" 'treemacs
+    "C-<tab>" 'treemacs-add-and-display-current-project-exclusively)
+  :config
+  (setq treemacs-width 35)
+  )
+
+(use-package treemacs-evil
+  :straight t)
+
 
 (provide 'global/global-edit-tools)

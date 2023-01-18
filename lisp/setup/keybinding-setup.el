@@ -117,6 +117,7 @@
 
 (define-prefix-map utility 
 		   "a" 'auto-insert
+		   "s" 'scratch-buffer
 		   "l" 'list-processes)
 
 (define-prefix-map edit)

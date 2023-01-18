@@ -68,7 +68,7 @@
 ;; Load the global themes
 (require 'global/global-theme)
 
-(load custom-file)
+(load (custom-file))
 (load (expand-file-name "local.el" user-emacs-directory) nil)
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'erase-buffer 'disabled nil)

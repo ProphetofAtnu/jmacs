@@ -3,6 +3,8 @@
 (require 'use-package)
 (require 'general)
 
+(autoload 'ext/treesit-python-setup "treesit-extensions")
+
 ;; (use-package elpy
 ;;     :straight t
 ;;     :general
@@ -33,15 +35,15 @@
 ;; (use-package lsp-pyright
 ;;   :straight t)
 
-(use-package lsp-mode
-  :straight t
-  :hook (python-mode . lsp-deferred)
-  :config
-  (setq
-   lsp-pylsp-plugins-jedi-completion-fuzzy t
-   lsp-pylsp-plugins-pydocstyle-enabled nil
-   lsp-pylsp-plugins-flake8-enabled nil)
-  )
+;; (use-package lsp-mode
+;;   :straight t
+;;   :hook (python-mode . lsp-deferred)
+;;   :config
+;;   (setq
+;;    lsp-pylsp-plugins-jedi-completion-fuzzy t
+;;    lsp-pylsp-plugins-pydocstyle-enabled nil
+;;    lsp-pylsp-plugins-flake8-enabled nil)
+;;   )
 
 ;; (use-package lsp-bridge
 ;;   :straight t
@@ -49,9 +51,14 @@
 ;;                          (if buffer-file-name 
 ;;                              (lsp-bridge-mode))))
 ;;   )
-;; (use-package eglot
-;;   :straight t
-;;   :hook (python-mode . eglot-ensure))
+
+(with-eval-after-load "python"
+  (add-hook 'python-mode-hook
+	    #'ext/treesit-python-setup))
+
+(use-package eglot
+  :straight t
+  :hook (python-mode . eglot-ensure))
 
 (use-package python-black
   :straight t
@@ -69,34 +76,5 @@
     "e" 'python-shell-send-dwim)
   :config
   (python-x-setup))
-
-;; (use-package jupyter
-;;     :straight t
-;;     :config
-;;     (require 'ob-jupyter)
-;;     (setq org-babel-default-header-args:jupyter-python
-;;           '((:async . "yes")
-;;             (:session . "py")
-;;             (:kernel . "python3")))
-;;     (setq jupyter-org-adjust-image-size nil)
-;;     (org-babel-do-load-languages
-;;      'org-babel-load-languages
-;;      '((emacs-lisp . t)
-;;        (julia . t)
-;;        (python . t)
-;;        (jupyter . t)))
-;;     ;; (add-hook
-;;     ;;  'jupyter-repl-mode-hook 'company-mode)
-;;     (local-leader-def
-;;         :definer 'minor-mode
-;;       :keymaps '(jupyter-org-interaction-mode)
-;;       "b" 'jupyter-org-insert-src-block)
-;;     (jupyter-org-define-key (kbd "C-M-RET") 'jupyter-eval-defun)
-;;     (jupyter-org-define-key (kbd "C-M-<return>") 'jupyter-eval-defun))
-
-(use-package org
-  :defer t
-  :config)
-
 
 (provide 'python-conf)

@@ -33,15 +33,30 @@
          lang)
         lang nil)))
 
-(defun bets-get-buffer-parser (&optional buffer)
+(defun bets-setup-buffer-parser (&optional buffer)
   "Get a parser for the current buffer or 'nil' if there is no valid
 parser."
-  (when-let ((lang (bets-can-enable buffer)))
-    (with-current-buffer buffer
-      (setq-local bets-buffer-parser (treesit-parser-create
-				      lang buffer)))))
+  (or (buffer-local-value
+       'bets-buffer-parser
+       (or buffer (current-buffer)))
+      (when-let ((lang (bets-can-enable buffer)))
+	(with-current-buffer (or buffer (current-buffer))
+	  (setq-local bets-buffer-parser (treesit-parser-create
+					  lang buffer))))))
 
 (defun bets-simple-parser-at-point (&optional pnt)
   (bets-can-enable))
+
+
+;;;###autoload
+(define-minor-mode bets-autostart-mode
+  "Automatically load tree sitter for languages that support it"
+  :group 'bets
+  :global t
+  (if bets-autostart-mode
+      (add-hook #'prog-mode-hook
+		#'bets-setup-buffer-parser)
+    (remove-hook #'prog-mode-hook
+		 #'bets-setup-buffer-parser)))
 
 (provide 'bets)

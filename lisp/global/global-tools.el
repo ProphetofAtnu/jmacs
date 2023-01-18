@@ -4,8 +4,12 @@
   :general
   ('winner-mode-map
    "C-M-<" 'winner-undo
-   "C-M->" 'winner-redo
-   )
+   "C-M->" 'winner-redo)
+  ('normal
+   "[" nil
+   "]" nil
+   "[w" 'winner-undo
+   "]w" 'winner-redo)
   :hook (emacs-startup . winner-mode))
 
 (use-package markdown-mode
@@ -23,7 +27,10 @@
   :init
   (defvar read-symbol-positions-list nil)
   :commands (helpful-symbol
-             helpful-key))
+             helpful-key)
+  :general
+  ('prefix-help-map
+   "k" 'helpful-key))
 
 (use-package projectile
   :straight t
@@ -66,10 +73,9 @@
 (use-package zoxide
   :straight t
   :general
-  (prefix-file-map
+  ('prefix-file-map
    "z" 'zoxide-find-file
    "t" 'zoxide-travel
    "c" 'zoxide-cd))
-
 
 (provide 'global/global-tools)
