@@ -2,6 +2,8 @@
 
 (require 'core/utility)
 
+;; Per-buffer saved scratch values
+
 (create-open-functions dired-hexl-open (file)
                        (interactive
                         (list (dired-file-name-at-point)))
@@ -9,6 +11,9 @@
                            (find-file-noselect file)
                          (hexl-mode 1)
                          (current-buffer)))
+
+(use-package csv-mode
+  :straight t)
 
 (use-package citre
     :straight t

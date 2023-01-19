@@ -32,7 +32,7 @@
     "=" 'lsp-format-buffer)
   (general-defs
     :keymaps 'prefix-utility-map
-    "s" 'lsp)
+    "z" 'lsp)
   ;; Uncomment following section if you would like to tune lsp-mode performance according to
   ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
   (defun override-lsp-defaults ()

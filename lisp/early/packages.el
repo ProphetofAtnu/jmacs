@@ -11,5 +11,6 @@
 (straight-use-package 'emacsql)
 (straight-use-package 'emacsql-sqlite-builtin)
 (straight-use-package 'zmq)
+(straight-use-package 'esup)
 
 (provide 'early/packages)

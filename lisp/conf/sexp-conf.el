@@ -12,12 +12,6 @@
           common-lisp-mode
           scheme-mode)
          . lispy-mode)
-  :general
-  ('normal 'lispy-mode-map
-		   "[" nil
-		   "]" nil
-		   "M-[" 'lispy-backward
-		   "M-]" 'lispy-backward)
   :init
   :config
   (keymap-set lispy-mode-map-lispy "DEL" 'lispy-delete-backward-or-splice-or-slurp)
@@ -26,6 +20,7 @@
         lispy-colon-p nil)
   (add-to-list 'lispy-compat 'cider)
   (add-to-list 'lispy-compat 'macrostep))
+
 
 (use-package lispyville
   :straight t

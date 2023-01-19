@@ -41,7 +41,8 @@
               (setq-local corfu-auto nil)
               (corfu-mode)))
   (global-corfu-mode)
-  )
+  (add-hook 'evil-insert-state-exit-hook
+	    #'corfu-quit))
 
 (use-package cape
   :straight t

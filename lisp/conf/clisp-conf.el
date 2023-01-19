@@ -7,46 +7,6 @@
 
 (defvar js/lisprc-path (expand-file-name "tools/cl-init.lisp" user-emacs-directory))
 
-;; (use-package slime-company
-;;   :straight t
-;;   :defer t
-;;   :commands (company-slime))
-
-;; (defun js/slime-user-init ()
-;;   (if (file-exists-p js/lisprc-path)
-;;       (slime-load-file js/lisprc-path)))
-
-;; (use-package slime
-;;   :straight t
-;;   ;; :hook (common-lisp-mode . slime)
-;;   ;; :general
-;;   ;; (local-leader-def
-;;   ;;   :keymaps '(lisp-mode-map)
-;;   ;;   "e" 'slime-eval-defun
-;;   ;;   "E" 'slime-eval-print-last-expression
-;;   ;;   "c" 'slime-cd
-;;   ;;   "," 'slime-repl)
-;;   :config
-;;   (defun js/slime-company-hook ()
-;;     (add-hook 'company-backends #'company-slime nil t)
-;;     (company-mode +1))
-;;   (add-hook 'slime-mode-hook #'js/slime-company-hook)
-;;   (add-hook 'slime-repl-mode-hook #'js/slime-company-hook)
-;;   (setq inferior-lisp-program "ros -Q run")
-;;   (add-hook 'slime-connected-hook #'js/slime-user-init)
-;;   (slime-setup '(slime-fancy
-;;                  slime-company
-;;                  slime-scratch
-;;                  slime-repl
-;;                  slime-asdf
-;;                  slime-macrostep
-;;                  slime-quicklisp
-;;                  slime-sbcl-exts))
-;;   ;; (add-hook 'slime-completion-at-point-functions
-;;   ;;                (cape-company-to-capf #'company-slime))
-;;   ;; (remove-hook 'slime-completion-at-point-functions #'slime-c-p-c-completion-at-point)
-;;   )
-
 (use-package sly
   :straight t
   :general
@@ -86,15 +46,16 @@
   :config
   (sly-setup
    '(sly-fancy sly-mrepl sly-scratch))
-  (defun js/sly-company-hook ()
-    (sly-symbol-completion-mode -1)
-    (setq-local
-     company-frontends
-     '(company-pseudo-tooltip-unless-just-one-frontend
-       company-preview-if-just-one-frontend))
-    (company-mode 1))
-  (add-hook 'sly-mode-hook #'js/sly-company-hook)
-  (add-hook 'sly-mrepl-mode-hook #'js/sly-company-hook))
+  ;; (defun js/sly-company-hook ()
+  ;;   (sly-symbol-completion-mode -1)
+  ;;   (setq-local
+  ;;    company-frontends
+  ;;    '(company-pseudo-tooltip-unless-just-one-frontend
+  ;;      company-preview-if-just-one-frontend))
+  ;;   (company-mode 1))
+  ;; (add-hook 'sly-mode-hook #'js/sly-company-hook)
+  ;; (add-hook 'sly-mrepl-mode-hook #'js/sly-company-hook)
+  )
 
 ;; (use-package macrostep
 ;;   :straight t
