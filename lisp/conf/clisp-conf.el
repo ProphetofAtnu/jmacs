@@ -46,15 +46,15 @@
   :config
   (sly-setup
    '(sly-fancy sly-mrepl sly-scratch))
-  ;; (defun js/sly-company-hook ()
-  ;;   (sly-symbol-completion-mode -1)
-  ;;   (setq-local
-  ;;    company-frontends
-  ;;    '(company-pseudo-tooltip-unless-just-one-frontend
-  ;;      company-preview-if-just-one-frontend))
-  ;;   (company-mode 1))
-  ;; (add-hook 'sly-mode-hook #'js/sly-company-hook)
-  ;; (add-hook 'sly-mrepl-mode-hook #'js/sly-company-hook)
+  (defun js/sly-company-hook ()
+    (sly-symbol-completion-mode -1)
+    (setq-local
+     company-frontends
+     '(company-pseudo-tooltip-unless-just-one-frontend
+       company-preview-if-just-one-frontend))
+    (company-mode 1))
+  (add-hook 'sly-mode-hook #'js/sly-company-hook)
+  (add-hook 'sly-mrepl-mode-hook #'js/sly-company-hook)
   )
 
 ;; (use-package macrostep

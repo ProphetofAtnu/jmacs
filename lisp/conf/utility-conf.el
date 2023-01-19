@@ -66,10 +66,12 @@
  )
 
 (use-package pdf-tools
-  :straight t)
+  :straight t
+  :defer t)
 
 (use-package elfeed
-    :straight t)
+  :straight t
+  :defer t)
 
 (use-package plz
     :straight t)
