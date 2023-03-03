@@ -2,6 +2,9 @@
 
 (defvar use-package-compute-statistics t)
 
+(defvar native-comp-deferred-compilation-deny-list nil)
+
+
 (require 'early/bootstrap-straight)
 ;; Set up use-package
 (straight-use-package 'use-package)
@@ -70,6 +73,7 @@
 
 (load (custom-file))
 (load (expand-file-name "local.el" user-emacs-directory) nil)
+
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'erase-buffer 'disabled nil)
 (put 'list-timers 'disabled nil)

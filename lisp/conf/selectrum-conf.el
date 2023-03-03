@@ -155,7 +155,7 @@
     (setq
      consult-fontify-preserve nil
      xref-show-xrefs-function 'consult-xref
-     consult-preview-key (kbd "M-.")))
+     consult-preview-key "M-."))
 
 (use-package consult-projectile
     :straight t 

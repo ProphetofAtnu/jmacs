@@ -1,21 +1,5 @@
 ;;; -*- lexical-binding: t; -*-
 
-;; (use-package treemacs
-;;   :straight t
-;;   :defer t
-;;   :general
-;;   (local-leader-def
-;;     :definer 'minor-mode
-;;     :keymaps '(lsp-mode)
-;;     "TAB" 'treemacs
-;;     "C-<tab>" 'treemacs-add-and-display-current-project-exclusively)
-;;   :config
-;;   (setq treemacs-width 35)
-;;   )
-
-;; (use-package treemacs-evil
-;;   :straight t)
-
 (use-package lsp-mode
   :straight t
   :defer t
@@ -47,7 +31,7 @@
   (setq lsp-idle-delay 0.500)
   (setq lsp-log-io nil)
   (setq lsp-file-watch-threshold 5000)
-  ;; (setq lsp-completion-provider :none)
+  (setq lsp-completion-provider :none)
   (setq lsp-prefer-flymake nil))
 
 (use-package lsp-ui
@@ -86,11 +70,11 @@
   (add-hook 'eglot-managed-mode-hook #'eglot-setup)
   )
 
-(straight-use-package
- '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge" :files ("*")))
+;; (straight-use-package
+;;  '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge" :files ("*")))
 
-(straight-use-package
- '(acm :type git :host github :repo "manateelazycat/lsp-bridge" :files ("acm/*")))
+;; (straight-use-package
+;;  '(acm :type git :host github :repo "manateelazycat/lsp-bridge" :files ("acm/*")))
 
 (use-package epc
   :straight t
@@ -101,40 +85,40 @@
   (company-mode -1)
   (corfu-mode -1))
 
-(use-package acm
-  :straight t
-  :defer t)
+;; (use-package acm
+;;   :straight t
+;;   :defer t)
 
-(use-package lsp-bridge
-  :straight t
-  :defer t
-  :general
-  (local-leader-def
-    :definer 'minor-mode
-    :keymaps '(lsp-bridge-mode)
-    "." 'lsp-bridge-code-action
-    "r" 'lsp-bridge-rename
-    "*" 'lsp-bridge-restart-process
-    "=" 'lsp-bridge-code-format)
-  :config
-  (defhydra lsp-bridge-diagnostics-hydra ()
-    ("[" lsp-bridge-jump-to-prev-diagnostic "next")
-    ("]" lsp-bridge-jump-to-next-diagnostic "prev")
-    )
+;; (use-package lsp-bridge
+;;   :straight t
+;;   :defer t
+;;   :general
+;;   (local-leader-def
+;;     :definer 'minor-mode
+;;     :keymaps '(lsp-bridge-mode)
+;;     "." 'lsp-bridge-code-action
+;;     "r" 'lsp-bridge-rename
+;;     "*" 'lsp-bridge-restart-process
+;;     "=" 'lsp-bridge-code-format)
+;;   :config
+;;   (defhydra lsp-bridge-diagnostics-hydra ()
+;;     ("[" lsp-bridge-jump-to-prev-diagnostic "next")
+;;     ("]" lsp-bridge-jump-to-next-diagnostic "prev")
+;;     )
   
-  (local-leader-def
-    :definer 'minor-mode
-    :keymaps '(lsp-bridge-mode)
-    "[" 'lsp-bridge-diagnostics-hydra/lsp-bridge-jump-to-prev-diagnostic
-    "]" 'lsp-bridge-diagnostics-hydra/lsp-bridge-jump-to-next-diagnostic
-    )
-  (setq lsp-bridge-lookup-doc-tooltip-border-width 3
-        lsp-bridge-diagnostic-tooltip-border-width 3)
-  (defun bridge-user-hook ()
-    (setq-local evil-lookup-func 'lsp-bridge-lookup-documentation)
-    (corfu-mode -1)
-    (company-mode -1))
-  (add-hook 'lsp-bridge-mode-hook
-            #'bridge-user-hook))
+;;   (local-leader-def
+;;     :definer 'minor-mode
+;;     :keymaps '(lsp-bridge-mode)
+;;     "[" 'lsp-bridge-diagnostics-hydra/lsp-bridge-jump-to-prev-diagnostic
+;;     "]" 'lsp-bridge-diagnostics-hydra/lsp-bridge-jump-to-next-diagnostic
+;;     )
+;;   (setq lsp-bridge-lookup-doc-tooltip-border-width 3
+;;         lsp-bridge-diagnostic-tooltip-border-width 3)
+;;   (defun bridge-user-hook ()
+;;     (setq-local evil-lookup-func 'lsp-bridge-lookup-documentation)
+;;     (corfu-mode -1)
+;;     (company-mode -1))
+;;   (add-hook 'lsp-bridge-mode-hook
+;;             #'bridge-user-hook))
 
 (provide 'lsp-conf)

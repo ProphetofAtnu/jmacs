@@ -3,19 +3,22 @@
 (use-package orderless
   :straight t
   :ensure t
-  :commands (orderless-filter))
+  :init
+  (setq completion-styles '(orderless partial-completion basic)
+        completion-category-defaults nil
+        completion-category-overrides nil))
 
-(use-package fussy
-  :straight t
-  :config
-  (push 'fussy completion-styles)
-  (setq fussy-filter-fn 'fussy-filter-orderless)
-  (setq
-   ;; For example, project-find-file uses 'project-files which uses
-   ;; substring completion by default. Set to nil to make sure it's using
-   ;; flx.
-   completion-category-defaults nil
-   completion-category-overrides nil))
+;; (use-package fussy
+;;   :straight t
+;;   :config
+;;   (push 'fussy completion-styles)
+;;   (setq fussy-filter-fn 'fussy-filter-orderless)
+;;   (setq
+;;    ;; For example, project-find-file uses 'project-files which uses
+;;    ;; substring completion by default. Set to nil to make sure it's using
+;;    ;; flx.
+;;    completion-category-defaults nil
+;;    completion-category-overrides nil))
 
 (use-package corfu
   :straight t
@@ -40,16 +43,20 @@
             (lambda ()
               (setq-local corfu-auto nil)
               (corfu-mode)))
+  (defun js/lsp-completion-setup ()
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless)))
+  (add-hook 'lsp-mode-hook #'js/lsp-completion-setup)
   (global-corfu-mode)
   (add-hook 'evil-insert-state-exit-hook
-	    #'corfu-quit))
+            #'corfu-quit))
 
 (use-package cape
   :straight t
   :config ;; Silence the pcomplete capf, no errors or messages!
-  (advice-add
-   'pcomplete-completions-at-point
-   :around #'cape-wrap-silent)
+  ;; (advice-add
+  ;;  'pcomplete-completions-at-point
+  ;;  :around #'cape-wrap-silent)
   (dolist (i 
            '(evil-ex-elisp-completion-at-point
              evil-ex-command-completion-at-point
@@ -59,9 +66,9 @@
      :around #'cape-wrap-silent))
   ;; Ensure that pcomplete does not write to the buffer
   ;; and behaves as a pure `completion-at-point-function'.
-  (advice-add
-   'pcomplete-completions-at-point
-   :around #'cape-wrap-purify)
+  ;; (advice-add
+  ;;  'pcomplete-completions-at-point
+  ;;  :around #'cape-wrap-purify)
   :init
   (add-to-list 'completion-at-point-functions #'cape-dabbrev t)
   (add-to-list 'completion-at-point-functions #'cape-keyword))

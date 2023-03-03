@@ -46,16 +46,29 @@
   :config
   (sly-setup
    '(sly-fancy sly-mrepl sly-scratch))
-  (defun js/sly-company-hook ()
-    (sly-symbol-completion-mode -1)
-    (setq-local
-     company-frontends
-     '(company-pseudo-tooltip-unless-just-one-frontend
-       company-preview-if-just-one-frontend))
-    (company-mode 1))
-  (add-hook 'sly-mode-hook #'js/sly-company-hook)
-  (add-hook 'sly-mrepl-mode-hook #'js/sly-company-hook)
-  )
+  ;; (defun js/sly-company-hook ()
+  ;;   (sly-symbol-completion-mode -1)
+  ;;   (setq-local
+  ;;    company-frontends
+  ;;    '(company-pseudo-tooltip-unless-just-one-frontend
+  ;;      company-preview-if-just-one-frontend))
+  ;;   (company-mode 1))
+  ;; (add-hook 'sly-mode-hook #'js/sly-company-hook)
+  ;; (add-hook 'sly-mrepl-mode-hook #'js/sly-company-hook)
+  (setq sly-complete-symbol-function #'sly-simple-completions))
+
+;; (use-package slime
+;;   :straight t
+;;   :init
+;;   (setq slime-contribs '(slime-asdf
+;;                          slime-fancy
+;;                          slime-indentation
+;;                          slime-sbcl-exts
+;;                          slime-scratch))
+;;   ;; enable fuzzy matching in code buffer and SLIME REPL
+;;   (setq slime-complete-symbol*-fancy t)
+;;   :config
+;;   (slime-setup))
 
 ;; (use-package macrostep
 ;;   :straight t
