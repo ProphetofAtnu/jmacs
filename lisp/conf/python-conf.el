@@ -15,7 +15,7 @@
 
 (use-package lsp-mode
   :straight t
-  :hook (python-mode . lsp-deferred)
+  :hook ((python-ts-mode python-mode) . lsp-deferred)
   :config
   (setq
    lsp-pylsp-plugins-jedi-completion-fuzzy t
@@ -23,15 +23,15 @@
    lsp-pylsp-plugins-flake8-enabled nil)
   )
 
-(with-eval-after-load "python"
-  (add-hook 'python-mode-hook
-            #'ext/treesit-python-setup))
+;; (with-eval-after-load "python"
+;;   (add-hook 'python-mode-hook
+;;             #'ext/treesit-python-setup))
 
 (use-package python-black
   :straight t
   :general
   (local-leader-def
-    :keymaps '(python-mode-map)
+    :keymaps '(python-mode-map python-ts-mode-map)
     "=" 'python-black-buffer))          
 
 (use-package python-x
@@ -39,7 +39,7 @@
   :after (python)
   :general
   (local-leader-def
-    :keymaps '(python-mode-map)
+    :keymaps '(python-mode-map python-ts-mode-map)
     "e" 'python-shell-send-dwim)
   :config
   (python-x-setup))

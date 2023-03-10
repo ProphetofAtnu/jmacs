@@ -67,7 +67,11 @@
 
 (defun emacs-lisp-setup-hook ()
   ;; (setq-local lisp-indent-function #'common-lisp-indent-function)
-  (setq-local evil-lookup-func #'helpful-at-point))
+  (setq-local evil-lookup-func #'helpful-at-point)
+  (setq-local completion-at-point-functions
+	      '(tempel-expand
+		elisp-completion-at-point
+		cape-dabbrev t)))
 
 ;; (when corfu-global-mode
 ;;   (setq-local completion-at-point-functions '(

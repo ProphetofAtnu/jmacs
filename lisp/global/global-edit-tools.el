@@ -1,12 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
 
-(use-package tempel
-  :straight t
-  :bind (("M-+" . tempel-complete)
-         ;; Alternative tempel-expand
-         ("M-*" . tempel-insert)))
-
 
 (use-package yasnippet
   :straight t
@@ -16,7 +10,7 @@
   ;;     'yas-minor-mode-map
   ;;     "SPC"
   ;;   yas-maybe-expand)
-  (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand))
+  )
 
 (use-package insert-time
   :straight t
@@ -41,6 +35,10 @@
   (setq sp-highlight-wrap-overlay t
         sp-highlight-pair-overlay nil
         sp-highlight-wrap-tag-overlay t))
+
+(defun js/replace-smartparens-with-electric-insert ()
+  (smartparens-mode -1)
+  (electric-pair-mode +1))
 
 (use-package origami
   :straight t

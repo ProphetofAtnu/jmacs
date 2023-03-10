@@ -15,6 +15,8 @@
   :init
   :config
   (keymap-set lispy-mode-map-lispy "DEL" 'lispy-delete-backward-or-splice-or-slurp)
+  (keymap-set lispy-mode-map-lispy "TAB" nil)
+  (keymap-set lispy-mode-map "TAB" nil)
   (setq lispy-completion-method 'default
         lispy-close-quotes-at-end-p t
         lispy-colon-p nil)

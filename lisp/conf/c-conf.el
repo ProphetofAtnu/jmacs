@@ -12,6 +12,11 @@
 ;;   :straight t
 ;;   )
 
+(use-package python
+  :init
+  (add-to-list 'auto-mode-alist '("\\.py[iw]?\\'" . python-ts-mode))
+  (add-to-list 'interpreter-mode-alist '("python[0-9.]*" . python-ts-mode)))
+
 (use-package lsp-mode
   :straight t
   :hook ((cmake-mode objc-mode c-mode c++-mode) . lsp-deferred)

@@ -43,7 +43,7 @@
 (defun decoded-time-set (ts &rest timeargs)
   (let ((repl (apply #'make-decoded-time timeargs)))
     (mapcar #'(lambda (x) (or (car x) (cdr x)))
-            (-zip repl ts))))
+            (-zip-pair repl ts))))
 
 (defun revert-time-plist (plist)
  (mapcar #'cadr

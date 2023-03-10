@@ -8,17 +8,18 @@
         completion-category-defaults nil
         completion-category-overrides nil))
 
-;; (use-package fussy
-;;   :straight t
-;;   :config
-;;   (push 'fussy completion-styles)
-;;   (setq fussy-filter-fn 'fussy-filter-orderless)
-;;   (setq
-;;    ;; For example, project-find-file uses 'project-files which uses
-;;    ;; substring completion by default. Set to nil to make sure it's using
-;;    ;; flx.
-;;    completion-category-defaults nil
-;;    completion-category-overrides nil))
+
+(use-package tempel
+  :straight t
+  :bind (("M-+" . tempel-complete)
+         ;; Alternative tempel-expand
+         ("M-*" . tempel-insert))
+  :general
+  (tempel-map
+   "C-n" 'tempel-next
+   "C-p" 'tempel-previous)
+  :init
+  (setq tempel-trigger-prefix ","))
 
 (use-package corfu
   :straight t

@@ -1,0 +1,12 @@
+fundamental-mode
+
+(today (format-time-string "%Y-%m-%d"))
+
+emacs-lisp-mode
+
+(pt "(point)")
+(up "(use-package " q ")">)
+(ups "(use-package " q n>":straight t)">)
+
+
+
