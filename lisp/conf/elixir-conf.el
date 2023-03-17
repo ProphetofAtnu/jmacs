@@ -2,15 +2,13 @@
 
 (require 'mode-local)
 
-
-(defvar js/elixir-tempel-templates
-  '((if "if " p " do" n> q n "end" >)))
+;; For elixir-ts-mode
+(require 'treesit)
 
 (defun js/elixir-setup ()
   (require 'tempel)
-  (add-to-list 'tempel-template-sources 'js/elixir-tempel-templates)
   (setq-local completion-at-point-functions
-	      '(tempel-expand lsp-completion-at-point t))
+              '(tempel-expand lsp-completion-at-point t))
   (js/replace-smartparens-with-electric-insert))
 
 (use-package elixir-ts-mode

@@ -30,19 +30,3 @@
                    (string-replace "\x0D" "" string)))
           (set-marker (process-mark proc) (point)))
         (if moving (goto-char (process-mark proc)))))))
-
-(setq *iex*
-
-      (make-process :name "iex" :buffer (get-buffer-create "*runtime*")
-                    :command (list "/usr/local/bin/iex")
-                    ;; :filter #'ansi-insertion-filter
-                    ))
-
-(with-current-buffer (process-buffer *iex*)
-  (process-send-string *iex* "IO.pu")
-  (process-send-string *iex* "\t"))
-
-(with-current-buffer (process-buffer *iex*)
-  (process-send-eof *iex* ))
-
-(kill-process *iex*)

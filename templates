@@ -7,6 +7,21 @@ emacs-lisp-mode
 (pt "(point)")
 (up "(use-package " q ")">)
 (ups "(use-package " q n>":straight t)">)
+(let "(let ((" p "))" n> q")")
+(defun "(defun " p  " (" p ")" n> q ")")
 
+python-mode
+python-ts-mode
 
+(def "def " p "(" p "):" n> q)
 
+elixir-mode
+elixir-ts-mode
+
+(if "if " p " do" n> q n "end" >)
+(dm "defmodule " p " do" n> q n "end" >)
+(with "with " p " <- " p " do" n> q n> "end" >)
+(def "def " p " do" n> q n "end" >)
+(defp "defp " p " do" n> q n "end" >)
+(idef "def " p " do: " q)
+(idefp "defp " p " do: " q)

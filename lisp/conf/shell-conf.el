@@ -17,38 +17,41 @@
   :commands (eat-eshell-mode eat)
   :general
   (:keymaps '(eat-mode-map)
-	    "M-DEL" 'eat-self-input))
+            "M-DEL" 'eat-self-input)
+  :config
+  ;; (setq eat-default-cursor-type '(bar nil nil))
+  )
 
 (use-package shell-pop
-    :straight t
-    :general
-    (override
-     "C-'" 'shell-pop)
-    :config
-    (setq shell-pop-full-span t))
-  
+  :straight t
+  :general
+  (override
+   "C-'" 'shell-pop)
+  :config
+  (setq shell-pop-full-span t))
+
 (use-package eshell
-    :init
-    (add-hook 'eshell-load-hook #'eat-eshell-mode))
+  :init
+  (add-hook 'eshell-load-hook #'eat-eshell-mode))
 
 (use-package pcomplete-extension
   :straight t)
 
 (use-package bash-completion
-    :straight t
-    :commands (bash-completion-dynamic-complete-nocomint)
-    :init
-    (add-hook 'shell-dynamic-complete-functions #'bash-completion-dynamic-complete))
+  :straight t
+  :commands (bash-completion-dynamic-complete-nocomint)
+  :init
+  (add-hook 'shell-dynamic-complete-functions #'bash-completion-dynamic-complete))
 
 (use-package vterm
-    :straight t
-    :commands (vterm vterm-other-window)
-    :general
-    ('prefix-utility-map
-     "v" 'vterm
-     "V" 'vterm-other-window)
-    :config
-    (setq vterm-timer-delay 0))
+  :straight t
+  :commands (vterm vterm-other-window)
+  :general
+  ('prefix-utility-map
+   "v" 'vterm
+   "V" 'vterm-other-window)
+  :config
+  (setq vterm-timer-delay 0))
 
 (defun shell-scratch-create ()
   (interactive)
@@ -58,7 +61,7 @@
     (pop-to-buffer sh-buf)))
 
 (use-package bash-comp-capf
-    :hook (sh-mode-hook . bash-comp-capf-setup))
+  :hook (sh-mode-hook . bash-comp-capf-setup))
 
 (with-eval-after-load 'vterm
   (defun vterm-send-region-to-shell (beg end)
@@ -83,14 +86,14 @@
     (evil-collection-vterm-delete beg end type register))
   
   (local-leader-def
-      :keymaps '(sh-mode-map)
+    :keymaps '(sh-mode-map)
     "v" '(:ignore t :wk "Vterm")
     "v r" 'vterm-send-region-to-shell
     "v l" 'vterm-send-line-to-shell
     )
 
   (general-defs
-      :keymaps 'vterm-mode-map
+    :keymaps 'vterm-mode-map
     :states '(normal visual)
     "x" 'js/evil-vterm-delete-forward-char)
   )
@@ -99,22 +102,22 @@
   :straight t
   :config
   (add-to-list 'eglot-server-programs
-	       '(elvish-mode "elvish" "-lsp"))
+               '(elvish-mode "elvish" "-lsp"))
   (lsp-register-client
    (make-lsp-client
     :new-connection (lsp-stdio-connection '("elvish" "-lsp"))
     :activation-fn (lsp-activate-on "elvish")
     :server-id 'elvish-lsp))
   (add-to-list 'lsp-language-id-configuration
-	       '(elvish-mode . "elvish")))
+               '(elvish-mode . "elvish")))
 
 (use-package vterm-toggle
-    :straight t
-    :commands (vterm-toggle)
-    :general
-    ('prefix-utility-map
-     "d" 'vterm-toggle-insert-cd
-     "t" 'vterm-toggle))
+  :straight t
+  :commands (vterm-toggle)
+  :general
+  ('prefix-utility-map
+   "d" 'vterm-toggle-insert-cd
+   "t" 'vterm-toggle))
 
 (provide 'shell-conf)
 

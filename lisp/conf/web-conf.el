@@ -30,11 +30,13 @@
     :straight t
     :hook ((json-mode
             svelte-mode
+	    typescript-mode
             js2-jsx-mode)
            . lsp-deferred)
-    :init
-    (add-hook 'js2-mode-hook 'detect-js-workspace-type)
-    (add-hook 'typescript-mode-hook 'detect-js-workspace-type))
+    ;; :init
+    ;; (add-hook 'js2-mode-hook 'detect-js-workspace-type)
+    ;; (add-hook 'typescript-mode-hook 'detect-js-workspace-type)
+    )
 
 (use-package web-mode
     :straight t)

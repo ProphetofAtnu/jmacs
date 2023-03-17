@@ -16,8 +16,10 @@
          ("M-*" . tempel-insert))
   :general
   (tempel-map
-   "C-n" 'tempel-next
-   "C-p" 'tempel-previous)
+   "M-f" 'tempel-next
+   "M-n" 'tempel-next
+   "M-b" 'tempel-previous
+   "M-p" 'tempel-previous)
   :init
   (setq tempel-trigger-prefix ","))
 
