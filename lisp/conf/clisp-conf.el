@@ -55,7 +55,7 @@
   ;;   (company-mode 1))
   ;; (add-hook 'sly-mode-hook #'js/sly-company-hook)
   ;; (add-hook 'sly-mrepl-mode-hook #'js/sly-company-hook)
-  (setq sly-complete-symbol-function #'sly-simple-completions))
+  )
 
 ;; (use-package slime
 ;;   :straight t
