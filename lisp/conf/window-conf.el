@@ -28,7 +28,9 @@
     "\\*Process List\\*"
     "\\*sly-description\\*"
     "\\*cider-doc\\*"
-    "\\*helpful.*"))
+    "\\*helpful.*")
+    "Regex functions for buffers that will be marked as popups in the
+display-buffer-alist after running 'compile-buffer-display-alist'.")
 
 (defvar popup-reusable-buffers
   '(help-mode
@@ -36,7 +38,9 @@
     compilation-mode
     process-menu-mode
     ibuffer-mode
-    helpful-mode))
+    helpful-mode)
+  "Buffers that will be treated as reusable in the context of a
+popup. See buffer-parameter 'mode' for more info.")
 
 (defun build-bottom-buffer-params ()
   `((display-buffer-reuse-mode-window display-buffer-in-side-window)
@@ -69,6 +73,8 @@
       display-buffer-pop-up-window))))
 
 (defun compile-buffer-display-alist ()
+  "Combine generated popup display buffers with static alist entries
+to build the effective 'display-buffer-alist'."
   (setq display-buffer-alist
         (append (internal-build-popup-display-list)
                 literal-buffer-alist-entries)))
@@ -105,5 +111,11 @@
      )
     ('prefix-file-map
      "J" 'switch-window-then-dired))
+
+(defmacro mark-popup-reusable! (mode)
+  `(add-to-list 'popup-reusable-buffers ,mode))
+
+(defun mark-as-popup! (expr)
+  (cl-pushnew expr popup-buffer-identifiers :test 'equal))
 
 (provide 'window-conf)

@@ -3,11 +3,25 @@
 (use-package orderless
   :straight t
   :ensure t
-  :init
-  (setq completion-styles '(orderless partial-completion basic)
-        completion-category-defaults nil
-        completion-category-overrides nil))
+  ;; :init
+  ;; (setq completion-styles '(orderless partial-completion basic)
+  ;;       completion-category-defaults nil
+  ;;       completion-category-overrides nil)
+  )
 
+(use-package yasnippet
+  :straight t
+  :init
+  (yas-global-mode))
+
+(use-package hotfuzz
+  :straight t
+
+  :init
+  (setq completion-styles '(hotfuzz partial-completion basic)
+        completion-category-defaults nil
+        completion-category-overrides nil)
+  )
 
 (use-package tempel
   :straight t
@@ -34,7 +48,9 @@
   :init
   (setq corfu-auto t
         corfu-auto-delay 0.2
-        corfu-auto-prefix 2)
+        corfu-auto-prefix 2
+	corfu-quit-no-match t
+	corfu-quit-at-boundary t)
   (setq tab-always-indent 'complete)
   (defun corfu-enable-in-minibuffer ()
     "Enable Corfu in the minibuffer if `completion-at-point' is bound."

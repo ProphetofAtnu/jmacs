@@ -33,7 +33,8 @@
 (require 'global/global-which-key)
 (require 'global/global-tree-sitter)
 
-(require 'window-conf)
+(require 'window-conf) ;; TODO: Move to global configurations
+
 (require 'sexp-conf)
 (require 'emacs-lisp-conf)
 (require 'selectrum-conf)

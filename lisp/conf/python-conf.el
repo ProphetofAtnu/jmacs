@@ -27,6 +27,12 @@
 ;;   (add-hook 'python-mode-hook
 ;;             #'ext/treesit-python-setup))
 
+;; (use-package eglot
+;;   :straight t
+;;   :hook ((python-mode python-ts-mode) . eglot-ensure)
+;;   :config
+;;   (setq eglot-stay-out-of '(flymake)))
+
 (use-package python-black
   :straight t
   :general

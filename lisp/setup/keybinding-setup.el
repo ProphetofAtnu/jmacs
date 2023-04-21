@@ -95,8 +95,8 @@
 		   "o" 'occur)
 
 (define-prefix-map insert
-		   "y" 'yas-insert-snippet
-		   "a" 'yas-new-snippet
+		   ;; "y" 'yas-insert-snippet
+		   ;; "a" 'yas-new-snippet
 		   "r" 'insert-register
 		   "b" 'insert-buffer
 		   "!" 'auto-insert)

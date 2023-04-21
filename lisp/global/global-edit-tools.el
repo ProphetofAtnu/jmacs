@@ -2,15 +2,11 @@
 
 
 
-(use-package yasnippet
-  :straight t
-  :hook (emacs-startup . yas-global-mode)
-  :config
-  ;; (general-def
-  ;;     'yas-minor-mode-map
-  ;;     "SPC"
-  ;;   yas-maybe-expand)
-  )
+;; (use-package yasnippet
+;;   :straight t
+;;   :hook (emacs-startup . yas-global-mode)
+;;   :config
+;;   )
 
 (use-package insert-time
   :straight t

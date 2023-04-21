@@ -7,7 +7,8 @@
 
 (defvar js/lisprc-path (expand-file-name "tools/cl-init.lisp" user-emacs-directory))
 
-(use-package sly
+
+ (use-package sly
   :straight t
   :general
   (local-leader-def
@@ -41,21 +42,8 @@
     "u u" 'sly-unintern-symbol
     "u f" 'sly-undefine-function
     "u p" 'sly-delete-package
-    ;; end Stickers
-    )
-  :config
-  (sly-setup
-   '(sly-fancy sly-mrepl sly-scratch))
-  ;; (defun js/sly-company-hook ()
-  ;;   (sly-symbol-completion-mode -1)
-  ;;   (setq-local
-  ;;    company-frontends
-  ;;    '(company-pseudo-tooltip-unless-just-one-frontend
-  ;;      company-preview-if-just-one-frontend))
-  ;;   (company-mode 1))
-  ;; (add-hook 'sly-mode-hook #'js/sly-company-hook)
-  ;; (add-hook 'sly-mrepl-mode-hook #'js/sly-company-hook)
-  )
+    ))
+
 
 ;; (use-package slime
 ;;   :straight t

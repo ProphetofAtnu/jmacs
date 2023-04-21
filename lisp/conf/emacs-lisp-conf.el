@@ -12,8 +12,8 @@
   :straight t
   :commands (macrostep-mode))
 
-(defun yas-use-elisp-snippets ()
-  (setq-local yas--extra-modes '(emacs-lisp-mode)))
+;; (defun yas-use-elisp-snippets ()
+;;   (setq-local yas--extra-modes '(emacs-lisp-mode)))
 
 (use-package elisp-def
   :delight
@@ -42,7 +42,7 @@
   :commands (ielm)
   :config
   (setq ielm-dynamic-return nil)
-  (add-hook 'ielm-mode-hook #'yas-use-elisp-snippets)
+  ;; (add-hook 'ielm-mode-hook #'yas-use-elisp-snippets)
   (add-hook
    'ielm-mode-hook
    #'(lambda ()

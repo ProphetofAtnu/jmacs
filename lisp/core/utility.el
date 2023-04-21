@@ -7,11 +7,6 @@
 (require 'time-date)
 
 ;;; General Requirements from the "utils" folder
-(require 'buffer-tools)
-(require 'iter-tools)
-(require 'thread-tools)
-(require 'xml-tools)
-
 ;;;  Time functions
 (defun format-decoded-time (string time)
   (format-time-string string (encode-time time)))
