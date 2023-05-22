@@ -15,22 +15,7 @@
 
 (straight-use-package 'esup)
 
-(straight-use-package
- `(org-ext
-   :type nil
-   :local-repo ,(expand-file-name
-		 "util"
-		 user-emacs-directory)
-   :files ("org-ext.el")
-   :build t))
-
-(straight-use-package
- `(js-tools
-   :type nil
-   :local-repo ,(expand-file-name
-		 "util/tools"
-		 user-emacs-directory)
-   :build t))
-
+(use-local! org-ext "util" ("org-ext.el"))
+(use-local! js-tools "util/tools")
 
 (provide 'early/packages)

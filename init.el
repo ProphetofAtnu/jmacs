@@ -11,10 +11,10 @@
 (straight-use-package 'use-package)
 (require 'use-package)
 
+(require 'early/core)
 (require 'early/vars)
 (require 'early/packages)
 (require 'early/load-paths)
-(require 'early/core)
 (require 'early/interactive)
 
 (byte-recompile-directory (expand-file-name "util" user-emacs-directory) 0)

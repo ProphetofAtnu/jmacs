@@ -14,15 +14,6 @@
   :init
   (yas-global-mode))
 
-;; (use-package hotfuzz
-;;   :straight t
-
-;;   :init
-;;   (setq completion-styles '(hotfuzz partial-completion basic)
-;;         completion-category-defaults nil
-;;         completion-category-overrides nil)
-;;   )
-
 (use-package tempel
   :straight t
   :bind (("M-+" . tempel-complete)
