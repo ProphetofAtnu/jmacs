@@ -29,7 +29,7 @@
     "\\*sly-description\\*"
     "\\*cider-doc\\*"
     "\\*helpful.*")
-    "Regex functions for buffers that will be marked as popups in the
+  "Regex functions for buffers that will be marked as popups in the
 display-buffer-alist after running 'compile-buffer-display-alist'.")
 
 (defvar popup-reusable-buffers
@@ -42,6 +42,15 @@ display-buffer-alist after running 'compile-buffer-display-alist'.")
   "Buffers that will be treated as reusable in the context of a
 popup. See buffer-parameter 'mode' for more info.")
 
+(defun display-buffer-as-popup (buffer alist)
+  (display-buffer-in-side-window buffer
+                                 `(,alist
+                                   (window-parameters (close-on-quit . t))
+                                   (side . bottom)
+                                   (slot . -1)
+                                   (mode . ,popup-reusable-buffers)
+                                   (window-height . 0.25))))
+
 (defun build-bottom-buffer-params ()
   `((display-buffer-reuse-mode-window display-buffer-in-side-window)
     (window-parameters (close-on-quit . t))
@@ -53,7 +62,7 @@ popup. See buffer-parameter 'mode' for more info.")
 (defun internal-build-popup-display-list () 
   (let ((bparams (build-bottom-buffer-params)))
     (mapcar (lambda
-                (r)
+              (r)
               (cons r
                     bparams))
             popup-buffer-identifiers)))
@@ -77,7 +86,8 @@ popup. See buffer-parameter 'mode' for more info.")
 to build the effective 'display-buffer-alist'."
   (setq display-buffer-alist
         (append (internal-build-popup-display-list)
-                literal-buffer-alist-entries)))
+                literal-buffer-alist-entries
+                display-buffer-alist)))
 
 (add-hook 'emacs-startup-hook #'compile-buffer-display-alist)
 
@@ -99,23 +109,27 @@ to build the effective 'display-buffer-alist'."
 ;; (advice-remove 'keyboard-quit #'js/close-coq-windows-advice)
 
 (general-defs
-    :keymaps 'prefix-window-map
+  :keymaps 'prefix-window-map
   "r" 'rehome-window)
 
 (use-package switch-window
-    :straight t
-    :general
-    ('prefix-window-map
-     "f" 'switch-window-then-find-file
-     "b" 'switch-window-then-display-buffer
-     )
-    ('prefix-file-map
-     "J" 'switch-window-then-dired))
+  :straight t
+  :general
+  ('prefix-window-map
+   "f" 'switch-window-then-find-file
+   "b" 'switch-window-then-display-buffer
+   )
+  ('prefix-file-map
+   "J" 'switch-window-then-dired))
 
 (defmacro mark-popup-reusable! (mode)
   `(add-to-list 'popup-reusable-buffers ,mode))
 
 (defun mark-as-popup! (expr)
   (cl-pushnew expr popup-buffer-identifiers :test 'equal))
+
+(defmacro mark-as-popup-window! (regex)
+  `(add-to-list 'display-buffer-alist
+               '(,regex (display-buffer-reuse-mode-window display-buffer-as-popup))))
 
 (provide 'window-conf)

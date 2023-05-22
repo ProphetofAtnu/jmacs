@@ -15,12 +15,12 @@
 (use-package csv-mode
   :straight t)
 
-(use-package citre
-    :straight t
-    :defer t
-    :init
-    (require 'citre-config)
-    (setq citre-enable-capf-integration nil))
+;; (use-package citre
+;;     :straight t
+;;     :defer t
+;;     :init
+;;     (require 'citre-config)
+;;     (setq citre-enable-capf-integration nil))
 
 (defun dired-down-dir ()
   (interactive)
@@ -45,6 +45,14 @@
         :keymaps 'override
       "t" 'dirvish-side)
     (dirvish-override-dired-mode 1))
+
+(use-package plantuml-mode
+  :straight t
+  :config
+  (setq plantuml-jar-path (expand-file-name "var/plantuml/plantuml.jar"
+					    user-emacs-directory))
+  (setq plantuml-default-exec-mode 'jar)
+  )
 
 (evil-define-text-object evil-entire-buffer (count &optional beg end type)
   (flatten-list (bounds-of-thing-at-point 'buffer)))

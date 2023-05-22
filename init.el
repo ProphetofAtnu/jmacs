@@ -4,6 +4,7 @@
 
 (defvar native-comp-deferred-compilation-deny-list nil)
 
+;; (defvar org--built-in-p)
 
 (require 'early/bootstrap-straight)
 ;; Set up use-package
@@ -82,3 +83,5 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 (put 'set-goal-column 'disabled nil)
+
+(scroll-bar-mode -1)

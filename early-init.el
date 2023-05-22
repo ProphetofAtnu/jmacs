@@ -9,6 +9,7 @@
 (set-language-environment 'utf-8)
 (set-selection-coding-system 'utf-8)
 
+(defvar org--built-in-p nil)
 (setq
  gc-cons-threshold 100000000
  read-process-output-max (* 1024 1024))

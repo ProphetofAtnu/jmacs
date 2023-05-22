@@ -44,15 +44,17 @@
       "t" 'org-table-create-or-convert-from-region)
     :config
     (require 'org-ext)
-    (org-headline-emphasize-minor-mode 1)
     (setq org-src-preserve-indentation t)
     (setq org-confirm-babel-evaluate nil)
     (setq org-display-remote-inline-images 'download)
     (setq org-startup-with-inline-images t)
     (setq auto-save-default nil)
+    (defun js/org-emphasize-headline-enable-explicit ()
+      (org-headline-emphasize-minor-mode +1))
     (org-babel-do-load-languages 'shell t)
     (add-hook 'org-mode-hook (lambda ()
                                (auto-save-mode -1)))
+    (add-hook 'org-mode-hook #'js/org-emphasize-headline-enable-explicit)
     (add-hook 'org-mode-hook 'org-display-inline-images))
 
 (use-package org-download

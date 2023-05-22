@@ -13,4 +13,24 @@
 (straight-use-package 'zmq)
 (straight-use-package 'esup)
 
+(straight-use-package 'esup)
+
+(straight-use-package
+ `(org-ext
+   :type nil
+   :local-repo ,(expand-file-name
+		 "util"
+		 user-emacs-directory)
+   :files ("org-ext.el")
+   :build t))
+
+(straight-use-package
+ `(js-tools
+   :type nil
+   :local-repo ,(expand-file-name
+		 "util/tools"
+		 user-emacs-directory)
+   :build t))
+
+
 (provide 'early/packages)

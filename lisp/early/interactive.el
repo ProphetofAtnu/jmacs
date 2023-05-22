@@ -55,7 +55,9 @@
       minibuffer-follows-selected-frame nil
       tab-width 4
       byte-compile-warnings nil
+      scroll-bar-mode nil
       custom-file (expand-file-name "custom.el" user-emacs-directory))
+
 
 ;; Setup keybindings
 (require 'setup/keybinding-setup)

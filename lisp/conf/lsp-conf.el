@@ -32,7 +32,10 @@
   (setq lsp-log-io nil)
   (setq lsp-file-watch-threshold 5000)
   (setq lsp-completion-provider :none)
-  (setq lsp-prefer-flymake nil))
+  (setq lsp-prefer-flymake t)
+  (with-eval-after-load "flycheck"
+    (setq flycheck-display-errors-function nil))
+  (setq lsp-ui-sideline-enable nil))
 
 (use-package lsp-ui
   :straight t
@@ -105,7 +108,7 @@
 ;;     ("[" lsp-bridge-jump-to-prev-diagnostic "next")
 ;;     ("]" lsp-bridge-jump-to-next-diagnostic "prev")
 ;;     )
-  
+
 ;;   (local-leader-def
 ;;     :definer 'minor-mode
 ;;     :keymaps '(lsp-bridge-mode)

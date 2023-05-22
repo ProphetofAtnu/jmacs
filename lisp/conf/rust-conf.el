@@ -14,8 +14,9 @@
     "c" 'rustic-cargo-build
     "=" 'rustic-cargo-fmt)
   :config
-  (add-to-list 'evil-emacs-state-modes
-               'rustic-popup-mode))
+  (mark-as-popup-window! "\\*cargo-.*\\*")
+  (mark-popup-reusable! 'rustic-popup-mode)
+  (add-to-list 'evil-emacs-state-modes 'rustic-popup-mode))
 
 (use-package lsp-mode
   :straight t

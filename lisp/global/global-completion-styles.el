@@ -3,10 +3,10 @@
 (use-package orderless
   :straight t
   :ensure t
-  ;; :init
-  ;; (setq completion-styles '(orderless partial-completion basic)
-  ;;       completion-category-defaults nil
-  ;;       completion-category-overrides nil)
+  :init
+  (setq completion-styles '(orderless partial-completion basic)
+        completion-category-defaults nil
+        completion-category-overrides nil)
   )
 
 (use-package yasnippet
@@ -14,14 +14,14 @@
   :init
   (yas-global-mode))
 
-(use-package hotfuzz
-  :straight t
+;; (use-package hotfuzz
+;;   :straight t
 
-  :init
-  (setq completion-styles '(hotfuzz partial-completion basic)
-        completion-category-defaults nil
-        completion-category-overrides nil)
-  )
+;;   :init
+;;   (setq completion-styles '(hotfuzz partial-completion basic)
+;;         completion-category-defaults nil
+;;         completion-category-overrides nil)
+;;   )
 
 (use-package tempel
   :straight t
@@ -46,11 +46,12 @@
         ("S-TAB" . corfu-previous)
         ([backtab] . corfu-previous))
   :init
-  (setq corfu-auto t
-        corfu-auto-delay 0.2
-        corfu-auto-prefix 2
-	corfu-quit-no-match t
-	corfu-quit-at-boundary t)
+  ;; (setq
+  ;; corfu-auto t
+  ;; corfu-auto-delay 0.2
+  ;; corfu-auto-prefix 2
+  ;; corfu-quit-no-match t
+  ;; corfu-quit-at-boundary t)
   (setq tab-always-indent 'complete)
   (defun corfu-enable-in-minibuffer ()
     "Enable Corfu in the minibuffer if `completion-at-point' is bound."
@@ -112,6 +113,7 @@
     (when (where-is-internal #'completion-at-point (list (current-local-map)))
       (company-mode 1)))
   (delq 'company-semantic company-backends)
+  (delq 'company-echo-metadata-frontend company-frontends)
   (setq company-minimum-prefix-length 1
         company-idle-delay 0.1))
 
