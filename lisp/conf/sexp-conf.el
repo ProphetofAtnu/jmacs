@@ -10,6 +10,7 @@
           lisp-mode
           clojure-mode
           common-lisp-mode
+	  racket-mode
           scheme-mode)
          . lispy-mode)
   :init

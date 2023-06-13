@@ -12,6 +12,12 @@
 ;;   :straight t
 ;;   )
 
+(use-package meson-mode
+  :straight t)
+
+(use-package thrift-mode
+  :straight t)
+
 (use-package python
   :init
   (add-to-list 'auto-mode-alist '("\\.py[iw]?\\'" . python-ts-mode))
@@ -38,6 +44,14 @@
                   "--pch-storage=memory"))))
 
 (use-package cc-mode
+  :general
+  (general-defs
+    :keymaps '(c-mode-base-map ;; Should be enough to fix capf, buf I'm the ones that give me issues too.
+               c-mode-map c++-mode-map
+               java-mode-map objc-mode-map)
+    :states '(insert emacs)
+    "TAB" 'indent-for-tab-command
+    )
   :config
   (let ((cur (alist-get "java" c-style-alist
                         nil nil #'string=)))
@@ -50,6 +64,6 @@
   "-DCMAKE_EXPORT_COMPILE_COMMANDS=1")
 
 (add-to-list 'auto-mode-alist
-	     '("\\.mm\\'" . objc-mode))
+             '("\\.mm\\'" . objc-mode))
 
 (provide 'c-conf)
