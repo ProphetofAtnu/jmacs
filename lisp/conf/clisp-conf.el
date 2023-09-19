@@ -51,16 +51,24 @@
     "u p" 'sly-delete-package
     )
   :config
-  (require 'sly-fix)
-  (with-eval-after-load "sly-completion"
-    (fset 'sly--completion-function-wrapper
-	  #'js/sly--completion-function-wrapper))
+  ;; (require 'sly-fix)
+  ;; (with-eval-after-load "sly-completion"
+  ;;   (fset 'sly--completion-function-wrapper
+  ;; 	  #'js/sly--completion-function-wrapper))
   (setq sly-contribs
 	'(sly-fancy
 	  sly-mrepl
 	  sly-scratch
 	  sly-stickers))
-  (sly-setup))
+  (add-hook 'sly-mode-hook 'company-mode)
+  (defun js/disable-sly-completion ()
+    (setq-local tab-always-indent t)
+    (sly-symbol-completion-mode -1))
+
+  (sly-setup)
+  (add-hook 'sly-mode-hook 'js/disable-sly-completion 100)
+  (add-hook 'sly-mrepl-mode-hook 'js/disable-sly-completion 100)
+  )
 
 
 ;; (use-package slime-company

@@ -10,6 +10,10 @@
   (interactive)
   (ext/vterm-with-program "ipython"))
 
+(use-package pyvenv
+  :straight t
+  :defer t)
+
 (use-package lsp-pyright
   :straight t)
 

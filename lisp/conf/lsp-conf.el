@@ -1,5 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
+(define-prefix-map dap)
+
 (use-package lsp-mode
   :straight t
   :defer t
@@ -13,6 +15,7 @@
     "*" 'lsp-restart-workspace
     "`" 'lsp-treemacs-symbols
     "/" 'lsp-avy-lens
+    "d" (mount-prefix-map dap "Dap")
     "=" 'lsp-format-buffer)
   (general-defs
     :keymaps 'prefix-utility-map
@@ -21,11 +24,11 @@
   ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
   (defun override-lsp-defaults ()
     (setq-local completion-category-defaults nil))
-  (with-eval-after-load 'lsp-mode
-    (eval '(setf (lsp-session-folders
-                  (lsp-session))
-                 (cl-remove-if-not #'file-exists-p
-                                   (lsp-session-folders (lsp-session))))))
+  ;; (with-eval-after-load 'lsp-mode
+  ;;   (eval '(setf (lsp-session-folders
+  ;;                 (lsp-session))
+  ;;                (cl-remove-if-not #'file-exists-p
+  ;;                                  (lsp-session-folders (lsp-session))))))
 
   (add-hook 'lsp-completion-mode-hook #'override-lsp-defaults)
   (setq lsp-idle-delay 0.500)
@@ -48,8 +51,15 @@
 
 (use-package dap-mode
   :straight t
-  :hook (lsp-mode . dap-mode)
-  (lsp-mode . dap-ui-mode))
+  :hook
+  (lsp-mode . dap-mode)
+  (lsp-mode . dap-ui-mode)
+  :general
+  (general-defs
+    :keymaps 'prefix-dap-map
+    "d" 'dap-hydra)
+  :init
+  (setq dap-auto-configure-features '(sessions locals breakpoints expressions tooltip)))
 
 (use-package flycheck
   :straight t

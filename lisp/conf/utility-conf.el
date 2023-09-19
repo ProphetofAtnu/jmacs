@@ -12,6 +12,9 @@
                          (hexl-mode 1)
                          (current-buffer)))
 
+(use-package protobuf-mode
+  :straight t)
+
 (use-package csv-mode
   :straight t)
 

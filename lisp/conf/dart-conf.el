@@ -19,7 +19,7 @@
       "R" 'lsp-dart-dap-flutter-hot-restart)
     :config
     (add-hook 'dart-mode-hook 'lsp)
-    (setq lsp-dart-sdk-dir "/home/scaggj/git/install/flutter/bin/cache/dart-sdk")
+    (setq lsp-dart-sdk-dir "/home/scaggj/tools/flutter/bin/cache/dart-sdk")
     )
 
 (provide 'dart-conf)

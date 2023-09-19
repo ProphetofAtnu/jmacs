@@ -62,7 +62,8 @@
     :hook (org-mode . org-download-enable)
     :general
     (local-leader-def
-        :keymaps '(org-mode-map)
+      :keymaps 'org-mode-map
+      :major-modes t
       "d" '(:ignore t :wk "Download")
       "d c" 'org-download-clipboard
       "d s" 'org-download-screenshot)

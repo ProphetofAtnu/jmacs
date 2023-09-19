@@ -22,8 +22,8 @@
 ;;     (add-hook 'dante-mode-hook
 ;;               #'company-mode))
 
-(use-package lsp-haskell
-    :straight t)
+;; (use-package lsp-haskell
+;;     :straight t)
 
 (use-package lsp-mode
     :straight t

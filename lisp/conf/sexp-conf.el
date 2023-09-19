@@ -18,12 +18,16 @@
   (keymap-set lispy-mode-map-lispy "DEL" 'lispy-delete-backward-or-splice-or-slurp)
   (keymap-set lispy-mode-map-lispy "TAB" nil)
   (keymap-set lispy-mode-map "TAB" nil)
+  (general-defs
+    :keymaps '(lispy-mode-map)
+    :states '(normal)
+    "M-[" 'lispy-wrap-brackets
+    "M-]" 'lispy-wrap-brackets)
   (setq lispy-completion-method 'default
         lispy-close-quotes-at-end-p t
         lispy-colon-p nil)
   (add-to-list 'lispy-compat 'cider)
   (add-to-list 'lispy-compat 'macrostep))
-
 
 (use-package lispyville
   :straight t
