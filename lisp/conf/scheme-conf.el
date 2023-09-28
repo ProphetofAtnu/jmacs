@@ -19,21 +19,27 @@
 (defconst geiser-gambit-minimum-version "4.9.3")
 
 (use-package geiser-chez
-    :straight t)
+  :straight t
+  :after (geiser))
 
 (use-package geiser-guile
-    :straight t)
+  :straight t
+  :after (geiser))
 
 (use-package geiser-gambit
-    :straight t)
+  :straight t
+  :after (geiser))
 
 (use-package geiser-chicken
-    :straight t)
+  :straight t
+  :after (geiser))
 
 (use-package geiser-gauche
-    :straight t)
+  :straight t
+  :after (geiser))
 
 (use-package geiser-racket
-    :straight t)
+  :straight t
+  :after (geiser))
 
 (provide 'scheme-conf)

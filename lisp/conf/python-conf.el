@@ -14,8 +14,9 @@
   :straight t
   :defer t)
 
-(use-package lsp-pyright
-  :straight t)
+(use-package pipenv
+  :straight t
+  :defer t)
 
 (use-package lsp-mode
   :straight t
@@ -26,6 +27,10 @@
    lsp-pylsp-plugins-pydocstyle-enabled nil
    lsp-pylsp-plugins-flake8-enabled nil)
   )
+
+(use-package lsp-pyright
+  :straight t
+  :after (lsp-mode))
 
 ;; (with-eval-after-load "python"
 ;;   (add-hook 'python-mode-hook

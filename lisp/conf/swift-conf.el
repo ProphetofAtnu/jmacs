@@ -12,11 +12,11 @@
 
 (use-package swift-mode
     :straight t
+    :mode ("\\.swift\\'" . swift-mode)
     :config
     (require 'projectile)
     (add-to-list 'projectile-project-root-files
                  "Package.swift")
-    :config
     (require 'lsp-sourcekit)
     (add-to-list 'lsp-file-watch-ignored-directories
 		 "[/\\\\]\\.build\\'"))

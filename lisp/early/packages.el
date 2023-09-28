@@ -13,9 +13,9 @@
 (straight-use-package 'zmq)
 (straight-use-package 'esup)
 
-(straight-use-package 'esup)
-
 (use-local! org-ext "util" ("org-ext.el"))
+(use-local! proc-ext "util" ("proc-ext.el"))
 (use-local! js-tools "util/tools")
+(use-local! buflog "lisp/packages/buflog")
 
 (provide 'early/packages)

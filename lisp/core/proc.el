@@ -2,6 +2,15 @@
 
 (require 'iter-tools)
 
+(defun on-dead-sentinel (fn)
+  (let ((has-run nil))
+    (lambda (proc evt)
+      (if (process-live-p proc)
+	  nil
+	(unless has-run
+	  (setf has-run t)
+	  (funcall fn proc evt))))))
+
 (defun proc--make-iterator-process-args ()
   (let* ((stack nil)
          (done nil))

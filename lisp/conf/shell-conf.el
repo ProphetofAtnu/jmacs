@@ -98,18 +98,18 @@
     "x" 'js/evil-vterm-delete-forward-char)
   )
 
-(use-package elvish-mode
-  :straight t
-  :config
-  (add-to-list 'eglot-server-programs
-               '(elvish-mode "elvish" "-lsp"))
-  (lsp-register-client
-   (make-lsp-client
-    :new-connection (lsp-stdio-connection '("elvish" "-lsp"))
-    :activation-fn (lsp-activate-on "elvish")
-    :server-id 'elvish-lsp))
-  (add-to-list 'lsp-language-id-configuration
-               '(elvish-mode . "elvish")))
+;; (use-package elvish-mode
+;;   :straight t
+;;   :config
+;;   (add-to-list 'eglot-server-programs
+;;                '(elvish-mode "elvish" "-lsp"))
+;;   (lsp-register-client
+;;    (make-lsp-client
+;;     :new-connection (lsp-stdio-connection '("elvish" "-lsp"))
+;;     :activation-fn (lsp-activate-on "elvish")
+;;     :server-id 'elvish-lsp))
+;;   (add-to-list 'lsp-language-id-configuration
+;;                '(elvish-mode . "elvish")))
 
 (use-package vterm-toggle
   :straight t

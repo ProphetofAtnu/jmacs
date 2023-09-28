@@ -5,7 +5,6 @@
 
 (use-package rustic
   :straight t
-  :demand t
   :general
   (local-leader-def
     :keymaps '(rustic-mode-map)

@@ -1,10 +1,12 @@
 ;;; -*- lexical-binding: t; -*-
 
 (use-package glsl-mode
-  :straight t)
+  :straight t
+  :defer t)
 
 (use-package cmake-mode
   :straight t
+  :defer t
   :init
   (setenv "CMAKE_EXPORT_COMPILE_COMMANDS" "1"))
 
@@ -13,15 +15,18 @@
 ;;   )
 
 (use-package meson-mode
-  :straight t)
+  :straight t
+  :defer t)
 
 (use-package thrift-mode
-  :straight t)
+  :straight t
+  :defer t)
 
-(use-package python
-  :init
-  (add-to-list 'auto-mode-alist '("\\.py[iw]?\\'" . python-ts-mode))
-  (add-to-list 'interpreter-mode-alist '("python[0-9.]*" . python-ts-mode)))
+;; (use-package python
+;;   :defer t
+;;   :init
+;;   (add-to-list 'auto-mode-alist '("\\.py[iw]?\\'" . python-ts-mode))
+;;   (add-to-list 'interpreter-mode-alist '("python[0-9.]*" . python-ts-mode)))
 
 (use-package lsp-mode
   :straight t
@@ -33,6 +38,11 @@
   :config
   (setq lsp-lens-enable nil)
   (remove-hook 'lsp-mode-hook #'lsp-lens-mode)
+  )
+
+(use-package lsp-clangd
+  :after (lsp-mode)
+  :config
   (require 'lsp-clangd)
   (setq lsp-clients-clangd-args
         (append lsp-clients-clangd-args

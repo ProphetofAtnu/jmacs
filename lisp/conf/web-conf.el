@@ -42,7 +42,9 @@
     :straight t)
 
 (use-package svelte-mode
-    :straight t)
+  :straight t
+  :defer t
+  :mode ("\\.svelte\\'" . svelte-mode))
 
 (use-package json-mode
     :straight t)

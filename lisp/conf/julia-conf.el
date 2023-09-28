@@ -1,12 +1,12 @@
 ;; -*- lexical-binding: t; -*-
 
 (use-package julia-snail
-  :straight t)
+  :straight t
+  :after (julia-mode))
 
 (use-package lsp-julia
   :straight t
   :hook (julia-mode . lsp)
-  :init
   :config
   (setq lsp-julia-package-dir nil
         lsp-julia-flags (list
@@ -15,6 +15,7 @@
 
 (use-package julia-mode
   :straight t
+  :mode ("\\.jl\\'" . julia-mode)
   :config
   (require 'lsp-julia))
 

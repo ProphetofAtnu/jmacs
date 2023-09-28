@@ -42,6 +42,7 @@
 
 (use-package lsp-ui
   :straight t
+  :after (lsp-mode)
   :hook (lsp-mode . (lambda ()
                       (lsp-ui-mode)
                       (setq-local evil-lookup-func 'lsp-describe-thing-at-point))))
@@ -72,6 +73,7 @@
 
 (use-package eglot
   :straight t
+  :defer t
   :config
   (setq eglot-autoshutdown t)
   (defun eglot-setup () 
@@ -97,6 +99,12 @@
 (defun js/disable-company-and-corfu-locally ()
   (company-mode -1)
   (corfu-mode -1))
+
+
+;; (use-package lsp-bridge
+;;   :straight '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
+;;             :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
+;;             :build (:not compile)))
 
 ;; (use-package acm
 ;;   :straight t

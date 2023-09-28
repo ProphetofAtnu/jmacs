@@ -138,7 +138,8 @@
      "g" 'consult-grep)
     (prefix-help-map
      "a" 'consult-apropos
-     "m" 'consult-man)
+     "m" 'consult-man
+     "I" 'consult-info)
     (prefix-jump-map
      "m" 'consult-mark
      "M" 'consult-global-mark

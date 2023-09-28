@@ -60,23 +60,13 @@
 
 
 ;; Setup keybindings
-(require 'setup/keybinding-setup)
-
-(use-package exec-path-from-shell
-  :straight t
-  :hook (emacs-startup . exec-path-from-shell-initialize)
-  :init
-  (setq exec-path-from-shell-variables
-        '("LDFLAGS" "CPPFLAGS" "PATH" "MANPATH")))
-
-(require 'autorevert)
-(add-hook 'emacs-startup-hook
-          'global-auto-revert-mode)
-
+(use-package setup/keybinding-setup)
 
 (with-eval-after-load 'prog-mode
   (add-hook 'prog-mode-hook 'prettify-symbols-mode))
 
+(use-package autorevert
+  :hook (emacs-startup . global-auto-revert-mode))
 
 (use-package tab-bar
   :config
@@ -92,7 +82,7 @@
 
 (use-package popup
   :straight t
-  :demand t)
+  :defer 1)
 
 (use-package exec-path-from-shell
   :straight t

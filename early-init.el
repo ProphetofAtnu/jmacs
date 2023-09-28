@@ -1,8 +1,10 @@
 ;; -*- lexical-binding: t; -*-
 
 (when (getenv "EMACS_STARTUP_PROFILE")
-  (require 'profiler)
-  (profiler-start 'cpu))
+  ;; (require 'profiler)
+  ;; (profiler-start 'cpu)
+  (require 'elp)
+  (elp-instrument-function 'require))
 
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)

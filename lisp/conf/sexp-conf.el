@@ -13,7 +13,6 @@
 	  racket-mode
           scheme-mode)
          . lispy-mode)
-  :init
   :config
   (keymap-set lispy-mode-map-lispy "DEL" 'lispy-delete-backward-or-splice-or-slurp)
   (keymap-set lispy-mode-map-lispy "TAB" nil)
