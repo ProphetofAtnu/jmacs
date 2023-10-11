@@ -16,6 +16,7 @@
     :init
     (defvar org-directory "~/org")
     (define-prefix-map org-table)
+    (define-prefix-map org-babel)
     :general
     (local-leader-def
         :keymaps '(org-mode-map)
@@ -33,7 +34,10 @@
       "c d" 'org-decrypt-entry
       "z" 'org-add-note
       "n" 'org-narrow-to-element
-      "t" (mount-prefix-map org-table "Table"))
+      "'" 'org-edit-special
+      "t" (mount-prefix-map org-table "Table")
+      "b" (mount-prefix-map org-babel "Babel")
+      )
     (general-defs
         :keymaps 'prefix-org-table-map
       "c" 'org-table-insert-column
@@ -56,6 +60,7 @@
                                (auto-save-mode -1)))
     (add-hook 'org-mode-hook #'js/org-emphasize-headline-enable-explicit)
     (add-hook 'org-mode-hook 'org-display-inline-images))
+
 
 (use-package org-download
     :straight t
@@ -95,4 +100,34 @@
   (setq deft-directory
         (expand-file-name "deft" org-directory)))
   
+(use-package ob
+  :after (org)
+  :general
+  (general-defs
+    :keymaps 'prefix-org-babel-map
+    "I"	'org-babel-view-src-block-info
+    "a"	'org-babel-sha1-hash
+    "b"	'org-babel-execute-buffer
+    "c"	'org-babel-check-src-block
+    "d"	'org-babel-demarcate-block
+    "e"	'org-babel-execute-maybe
+    "f"	'org-babel-tangle-file
+    "g"	'org-babel-goto-named-src-block
+    "i"	'org-babel-lob-ingest
+    "j"	'org-babel-insert-header-arg
+    "k"	'org-babel-remove-result-one-or-many
+    "l"	'org-babel-load-in-session
+    "n"	'org-babel-next-src-block
+    "o"	'org-babel-open-src-block-result
+    "p"	'org-babel-previous-src-block
+    "r"	'org-babel-goto-named-result
+    "s"	'org-babel-execute-subtree
+    "t"	'org-babel-tangle
+    "u"	'org-babel-goto-src-block-head
+    "v"	'org-babel-expand-src-block
+    "x"	'org-babel-do-key-sequence-in-edit-buffer
+    "z"	'org-babel-switch-to-session-with-code
+    "h"	'org-babel-mark-block
+    ))
+
 (provide 'org-conf)

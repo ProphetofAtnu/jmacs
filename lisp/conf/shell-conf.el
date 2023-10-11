@@ -18,6 +18,10 @@
   :general
   (:keymaps '(eat-mode-map)
             "M-DEL" 'eat-self-input)
+  :init
+  (defvar eat-sixel-aspect-ratio 1.0)
+  (with-eval-after-load "eshell"
+    (eat-eshell-mode +1))
   :config
   ;; (setq eat-default-cursor-type '(bar nil nil))
   )
@@ -32,7 +36,8 @@
 
 (use-package eshell
   :init
-  (add-hook 'eshell-load-hook #'eat-eshell-mode))
+  ;; (add-hook 'eshell-load-hook #'eat-eshell-mode)
+  )
 
 (use-package pcomplete-extension
   :straight t)
@@ -118,6 +123,10 @@
   ('prefix-utility-map
    "d" 'vterm-toggle-insert-cd
    "t" 'vterm-toggle))
+
+(use-package mistty
+  :straight t
+  :commands (mistty))
 
 (provide 'shell-conf)
 

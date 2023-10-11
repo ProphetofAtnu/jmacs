@@ -43,7 +43,7 @@
 (use-package window-conf) ;; TODO: Move to global configurations
 (use-package sexp-conf)
 (use-package emacs-lisp-conf)
-(use-package selectrum-conf)
+(use-package vertico-conf)
 (use-package lsp-conf)
 (use-package java-conf)
 (use-package clojure-conf)

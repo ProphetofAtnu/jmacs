@@ -29,12 +29,13 @@
   ;;                 (lsp-session))
   ;;                (cl-remove-if-not #'file-exists-p
   ;;                                  (lsp-session-folders (lsp-session))))))
-
   (add-hook 'lsp-completion-mode-hook #'override-lsp-defaults)
+  (add-hook 'lsp-mode-hook #'company-mode)
   (setq lsp-idle-delay 0.500)
   (setq lsp-log-io nil)
   (setq lsp-file-watch-threshold 5000)
   (setq lsp-completion-provider :none)
+  (setq lsp-keep-workspace-alive nil)
   (setq lsp-prefer-flymake t)
   (with-eval-after-load "flycheck"
     (setq flycheck-display-errors-function nil))

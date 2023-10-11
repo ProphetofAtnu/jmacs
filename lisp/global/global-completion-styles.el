@@ -44,6 +44,7 @@
   ;; corfu-quit-no-match t
   ;; corfu-quit-at-boundary t)
   (setq tab-always-indent 'complete)
+
   (defun corfu-enable-in-minibuffer ()
     "Enable Corfu in the minibuffer if `completion-at-point' is bound."
     (when (where-is-internal #'completion-at-point (list (current-local-map)))
@@ -98,7 +99,10 @@
   ;; (add-hook 'emacs-startup-hook
   ;;           'global-company-mode)
   :config
-  (add-hook 'company-mode-hook (lambda () (corfu-mode -1)))
+  (add-hook 'company-mode-hook (lambda ()
+                                 (corfu-mode -1)
+                                 (setq-local tab-always-indent t))
+            )
   (defun company-enable-in-minibuffer ()
     "Enable Corfu in the minibuffer if `completion-at-point' is bound."
     (when (where-is-internal #'completion-at-point (list (current-local-map)))
@@ -106,6 +110,6 @@
   (delq 'company-semantic company-backends)
   (delq 'company-echo-metadata-frontend company-frontends)
   (setq company-minimum-prefix-length 1
-        company-idle-delay 0.1))
+        company-idle-delay 0.2))
 
 (provide 'global/global-completion-styles)

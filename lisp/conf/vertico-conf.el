@@ -156,6 +156,7 @@
     (setq
      consult-fontify-preserve nil
      xref-show-xrefs-function 'consult-xref
+     ; consult-project-function nil
      consult-preview-key "M-."))
 
 (use-package consult-projectile
@@ -216,4 +217,4 @@
 (use-package affe
     :straight t)
 
-(provide 'selectrum-conf)
+(provide 'vertico-conf)

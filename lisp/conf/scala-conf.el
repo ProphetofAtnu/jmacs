@@ -2,6 +2,12 @@
 ;; Enable defer and ensure by default for use-package
 ;; Keep auto-save/backup files separate from source code:  https://github.com/scalameta/metals/issues/1027
 ;; Enable scala-mode for highlighting, indentation and motion commands
+
+(use-package lsp-mode
+  :straight t
+  ;; Optional - enable lsp-mode automatically in scala files
+  :hook  (scala-mode . lsp))
+
 (use-package scala-mode
   :straight t
   :interpreter
@@ -24,17 +30,6 @@
 
 (use-package lsp-metals
   :straight t
-  :defer t
-  :custom
-  ;; Metals claims to support range formatting by default but it supports range
-  ;; formatting of multiline strings only. You might want to disable it so that
-  ;; emacs can use indentation provided by scala-mode.
-  (lsp-metals-server-args '("-J-Dmetals.allow-multiline-string-formatting=off"))
-  :hook (scala-mode . lsp))
-
-(use-package lsp-mode
-  :straight t
-  ;; Optional - enable lsp-mode automatically in scala files
-  :hook  (scala-mode . lsp))
+  :defer t)
 
 (provide 'scala-conf)
